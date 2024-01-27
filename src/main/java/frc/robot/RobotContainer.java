@@ -4,6 +4,10 @@
 // 1/24/24 Kaden
 //added shoot subsystem and constant shooting using voltage
 
+// 1/26/24 Kaden
+//added velocity shooting controls
+//TODO: get vision subsystem framework and a sample rotation command
+
 package frc.robot;
 
 import java.util.function.Supplier;
@@ -43,8 +47,10 @@ public class RobotContainer {
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value); //map to button 7 for two squares
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton getIntoDistance = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton brakeMotors = new JoystickButton(driver, XboxController.Button.kB.value);
     private final JoystickButton shootVolts = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+    private final JoystickButton shootVelocitySlow = new JoystickButton(driver, XboxController.Axis.kLeftTrigger.value);
+    private final JoystickButton shootVelocity = new JoystickButton(driver, XboxController.Axis.kRightTrigger.value);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
@@ -79,10 +85,13 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
-        // getIntoDistance.onTrue(new GetIntoRange(vision, s_Swerve, poseSupplier, camera));
-        getIntoDistance.onTrue(new InstantCommand(() -> shoot.brakeMotors()));
-        getIntoDistance.onFalse(new InstantCommand(() -> shoot.coastMotors()));
 
+        brakeMotors.onTrue(new InstantCommand(() -> shoot.brakeMotors()));
+        brakeMotors.onFalse(new InstantCommand(() -> shoot.coastMotors()));
+
+        //using velocity vs. voltage helps with shooting at a constant, rather than it deviating when battery is over/under charged
+        shootVelocity.onTrue(new InstantCommand(() -> shoot.setMotorVelocity(5, false)));
+        shootVelocitySlow.onTrue(new InstantCommand(() -> shoot.setMotorVelocity(5, true)));
 
         // shootVolts.onTrue(new InstantCommand(() -> shoot.setMotorVolts(-8)));
         shootVolts.onTrue(new InstantCommand(() -> shoot.setSplitMotorVolts(-10,-10)));
