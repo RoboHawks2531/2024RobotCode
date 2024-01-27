@@ -8,6 +8,9 @@
 //added velocity shooting controls
 //TODO: get vision subsystem framework and a sample rotation command
 
+// 1/27/24 Kaden
+//added a vision rotation command and buttons to activate
+
 package frc.robot;
 
 import java.util.function.Supplier;
@@ -48,16 +51,21 @@ public class RobotContainer {
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value); //map to button 7 for two squares
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton brakeMotors = new JoystickButton(driver, XboxController.Button.kB.value);
+
+    /* Shooting Controls */
     private final JoystickButton shootVolts = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
     private final JoystickButton shootVelocitySlow = new JoystickButton(driver, XboxController.Axis.kLeftTrigger.value);
     private final JoystickButton shootVelocity = new JoystickButton(driver, XboxController.Axis.kRightTrigger.value);
+
+    /* Vision Controls */
+    private final JoystickButton rotateToTarget = new JoystickButton(driver, 7); //maps to the two squares on controller
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final Vision vision = new Vision();
     private final Shoot shoot = new Shoot();
 
-    private Supplier<Pose2d> poseSupplier;
+    // private Supplier<Pose2d> poseSupplier;
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -86,17 +94,19 @@ public class RobotContainer {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
+        /* Debug Buttons */
         brakeMotors.onTrue(new InstantCommand(() -> shoot.brakeMotors()));
         brakeMotors.onFalse(new InstantCommand(() -> shoot.coastMotors()));
 
+        /* Shooting Commands */
         //using velocity vs. voltage helps with shooting at a constant, rather than it deviating when battery is over/under charged
         shootVelocity.onTrue(new InstantCommand(() -> shoot.setMotorVelocity(5, false)));
         shootVelocitySlow.onTrue(new InstantCommand(() -> shoot.setMotorVelocity(5, true)));
-
-        // shootVolts.onTrue(new InstantCommand(() -> shoot.setMotorVolts(-8)));
         shootVolts.onTrue(new InstantCommand(() -> shoot.setSplitMotorVolts(-10,-10)));
         shootVolts.onFalse(new InstantCommand(() -> shoot.setMotorVolts(0)));
-    
+
+        /* Vision Commands */
+        rotateToTarget.whileTrue(new RotateToTarget(s_Swerve, vision));
     }
 
     /**

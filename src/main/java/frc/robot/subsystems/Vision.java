@@ -1,3 +1,6 @@
+// 1/27/24 Kaden
+// added getPitch and getYaw methods to aid vision aiming
+
 package frc.robot.subsystems;
 
 import org.photonvision.PhotonCamera;
@@ -25,6 +28,7 @@ public class Vision extends SubsystemBase{
 
     public double getDistanceMethod() {
         var result = limelight.getLatestResult();
+
         if (result.hasTargets()) {
             return PhotonUtils.calculateDistanceToTargetMeters(
                 cameraHeight, targetHeight, cameraPitchRadians, Units.degreesToRadians(result.getBestTarget().getPitch()));
@@ -37,6 +41,15 @@ public class Vision extends SubsystemBase{
 
         if (result.hasTargets()) {
             result.getBestTarget().getYaw();
+        }
+        return 0;
+    }
+
+    public double getPitch() {
+        var result = limelight.getLatestResult();
+
+        if (result.hasTargets()) {
+            result.getBestTarget().getPitch();
         }
         return 0;
     }

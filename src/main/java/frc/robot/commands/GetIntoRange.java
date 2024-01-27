@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
 
+@Deprecated 
 public class GetIntoRange extends Command{
     private Vision vision;
     private Swerve swerve;
