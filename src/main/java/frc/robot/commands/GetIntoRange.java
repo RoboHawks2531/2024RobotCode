@@ -1,6 +1,8 @@
-package frc.robot.commands;
+// 1/27/24 Kaden
+// changed some pose2d commands so that its reading from the swerve modules, this still probably wont work
 
-import java.util.function.Supplier;
+
+package frc.robot.commands;
 
 import org.photonvision.PhotonCamera;
 
@@ -8,23 +10,26 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
-
+ 
 @Deprecated 
 public class GetIntoRange extends Command{
     private Vision vision;
     private Swerve swerve;
-    private Supplier<Pose2d> poseProvider;
     private PhotonCamera camera;
 
     private static TrapezoidProfile.Constraints xConstraints = new TrapezoidProfile.Constraints(3, 1);
@@ -37,10 +42,9 @@ public class GetIntoRange extends Command{
     private ProfiledPIDController yController = new ProfiledPIDController(0, 0, 0, yConstraints);
     private ProfiledPIDController rotController = new ProfiledPIDController(0, 0, 0, rotConstraints);
 
-    public GetIntoRange(Vision vision, Swerve swerve, Supplier<Pose2d> poseProvider, PhotonCamera camera) {
+    public GetIntoRange(Vision vision, Swerve swerve, PhotonCamera camera) {
         this.vision = vision;
         this.swerve = swerve;
-        this.poseProvider = poseProvider;
         this.camera = camera;
 
 
@@ -53,7 +57,7 @@ public class GetIntoRange extends Command{
 
     @Override
     public void initialize() {
-        var robotPose = poseProvider.get();
+        var robotPose = swerve.getPose();
         rotController.reset(robotPose.getRotation().getRadians());
         xController.reset(robotPose.getX());
         yController.reset(robotPose.getY());    
@@ -62,7 +66,7 @@ public class GetIntoRange extends Command{
 
     @Override
     public void execute() {
-        var robotPose2d = poseProvider.get();
+        var robotPose2d = swerve.getPose();
         var robotPose = new Pose3d(
             robotPose2d.getX(),
             robotPose2d.getY(),
@@ -82,7 +86,6 @@ public class GetIntoRange extends Command{
             xController.setGoal(goalPose.getX());
             yController.setGoal(goalPose.getY());
             rotController.setGoal(goalPose.getRotation().getAngle());
-           
         }
 
         var xSpeed = xController.calculate(robotPose.getX());
@@ -104,8 +107,8 @@ public class GetIntoRange extends Command{
         }
 
         swerve.drive(
-            new Translation2d(xSpeed, ySpeed), robotPose2d.getRotation().getRadians(), false, true);
-    }
+            new Translation2d(xSpeed, ySpeed), rotSpeed, false, true);
+        }
 
         @Override
         public void end(boolean interrupted) {
