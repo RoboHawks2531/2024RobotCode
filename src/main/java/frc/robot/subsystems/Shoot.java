@@ -14,8 +14,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-// import com.ctre.phoenix.motorcontrol.can.TalonFX;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -29,15 +27,12 @@ public class Shoot extends SubsystemBase {
   public Shoot() {
     motor1.setInverted(false);
     motor2.setInverted(true);
-    // pivotMotor.setInverted(false);
 
     motor1.setNeutralMode(NeutralModeValue.Coast);
     motor2.setNeutralMode(NeutralModeValue.Coast);
-    // pivotMotor.setNeutralMode(NeutralModeValue.Brake);
 
     motor1.getConfigurator().apply(new TalonFXConfiguration());
     motor2.getConfigurator().apply(new TalonFXConfiguration());
-    // pivotMotor.getConfigurator().apply(new TalonFXConfiguration());
 
     // PIDController shootingPIDController = new PIDController(0.2, 0.002, 0);
 
@@ -48,8 +43,8 @@ public class Shoot extends SubsystemBase {
       slot0Configs.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
       slot0Configs.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
       slot0Configs.kP = 0.11; // An error of 1 rps results in 0.11 V output
-      slot0Configs.kI = 0.0; 
-      slot0Configs.kD = 0.0;
+      slot0Configs.kI = 0.0;  // Integral value
+      slot0Configs.kD = 0.0;  // Derivative value
 
       var motionMagicConfigs = talonFXConfigs.MotionMagic;
 
@@ -60,7 +55,7 @@ public class Shoot extends SubsystemBase {
       motor2.getConfigurator().apply(talonFXConfigs);
   }
 
-  @Deprecated
+  @Deprecated // Doesnt need to exist because we shouldnt use percent outputs anymore since v6
   public Command RunMotors(double speed) {
     return run(
         () -> {
@@ -68,7 +63,8 @@ public class Shoot extends SubsystemBase {
         });
   }
 
-  @Deprecated
+  @Deprecated // This just doesnt need to be here when we have the Voltage Methods
+              // This was only made because of testing how to run as a velocity
   public Command RunMotorVoltage(double rpm) {
     return run(() -> {
       setMotorVolts(RPMToVolts(rpm));
@@ -76,12 +72,13 @@ public class Shoot extends SubsystemBase {
     });
   }
 
-
+  @Deprecated // No point in running off percents anymore
   public void setMotorSpeed(double speed) {
     motor1.set(speed);
     motor2.set(speed);
   }
 
+  @Deprecated // Same reason as before
   public void setSplitMotorSpeed(double one, double two) {
     motor1.set(one);
     motor2.set(two);
@@ -97,13 +94,15 @@ public class Shoot extends SubsystemBase {
     motor2.setVoltage(voltage);
   }
 
-  
   public void setMotorVelocity(double rps, boolean wantSlow) {
     final MotionMagicVelocityVoltage request = new MotionMagicVelocityVoltage(0);
 
     //if user wants slower shooting, assigns the acceleration to lower, if not, goes to default acceleration
     double acceleration = wantSlow ? 100 : 0;
     request.Acceleration = acceleration;
+
+    double velocity = wantSlow ? 0.06 : 0;
+    request.Velocity = velocity;
 
     motor1.setControl(request.withVelocity(rps));
     motor2.setControl(request.withVelocity(rps));
@@ -121,16 +120,14 @@ public class Shoot extends SubsystemBase {
   }
 
   public double getRPMfromVelocity1() {
-    // return (motor1.getVelocity().getValueAsDouble() * 600) / 2048; //real formula
     return (motor1.getVelocity().getValueAsDouble() * 600) / 2048;
   }
 
   public double getRPMfromVelocity2() {
-    // return (motor2.getVelocity().getValueAsDouble() * 600) / 2048; //real formula
     return (motor2.getVelocity().getValueAsDouble()  * 600) / 2048;
   }
 
-  @Deprecated
+  @Deprecated //this just shouldnt be used as a way to consistantly shoot, theres better options
   public double RPMToVolts(double TargetRPM) {
     //Formula: VConstant = (AppliedVolts / VelocityatVolts) 
     double velocityConstant = 16 / 4500; //Sample Numbers -> vc = 0.002667
