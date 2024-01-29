@@ -55,9 +55,9 @@ public class Elevator extends SubsystemBase{
     }
 
     //this will be used in case the motion magic doesnt work how I want it to
-    public void setMotors() {
-        powerMotor1.set(0);
-        powerMotor2.set(0);
+    public void setMotors(double speed1, double speed2) {
+        powerMotor1.set(speed1);
+        powerMotor2.set(speed2);
     }
 
     public double getEncoder1() {
