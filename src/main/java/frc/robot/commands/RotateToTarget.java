@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
@@ -39,11 +40,11 @@ public class RotateToTarget extends Command{
             rotSpeed = rotationPID.calculate(vision.getYaw());
         } rotSpeed = 0;
         
-        swerve.drive(null, rotSpeed, false, true);
+        swerve.drive(new Translation2d(), rotSpeed, false, true);
     }   
 
     @Override
     public void end(boolean interrupted) {
-        swerve.drive(null, 0, false, false);
+        swerve.drive(new Translation2d(), 0, false, false);
     }
 }

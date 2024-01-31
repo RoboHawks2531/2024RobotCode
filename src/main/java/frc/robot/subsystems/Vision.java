@@ -11,11 +11,12 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Vision extends SubsystemBase{
 
-    private PhotonCamera limelight = new PhotonCamera("2531limelight");
+    private PhotonCamera limelight = new PhotonCamera("2531Limelight");
 
     double cameraHeight = Units.inchesToMeters(0); //how hight is camera off the ground?
     double targetHeight = Units.inchesToMeters(0); //how high is the target off the ground(all april tags are the same)?
@@ -40,7 +41,7 @@ public class Vision extends SubsystemBase{
         var result = limelight.getLatestResult();
 
         if (result.hasTargets()) {
-            result.getBestTarget().getYaw();
+            return result.getBestTarget().getYaw();
         }
         return 0;
     }
@@ -49,7 +50,16 @@ public class Vision extends SubsystemBase{
         var result = limelight.getLatestResult();
 
         if (result.hasTargets()) {
-            result.getBestTarget().getPitch();
+            return result.getBestTarget().getPitch();
+        }
+        return 0;
+    }
+
+    public double getSkew() {
+        var result = limelight.getLatestResult();
+
+        if (result.hasTargets()) {
+            return result.getBestTarget().getSkew();
         }
         return 0;
     }
@@ -64,5 +74,10 @@ public class Vision extends SubsystemBase{
     //     }
     //     return new Transform2d();
     // }
-
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("camera yaw", getYaw());
+        SmartDashboard.putNumber("camera pitch", getPitch());
+        SmartDashboard.putNumber("camera skew", getSkew());
+    }
 }

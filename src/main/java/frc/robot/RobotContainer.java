@@ -21,6 +21,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -40,7 +42,7 @@ public class RobotContainer {
     /* Controllers */
     private final XboxController driver = new XboxController(0);
 
-    private PhotonCamera camera = new PhotonCamera("2531Limelight");
+    private PhotonCamera camera = new PhotonCamera("2531photonvision_Port_1182_Output_MJPEG_Server");
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -82,6 +84,7 @@ public class RobotContainer {
 
         // Configure the button bindings
         configureButtonBindings();
+
     }
 
     /**
