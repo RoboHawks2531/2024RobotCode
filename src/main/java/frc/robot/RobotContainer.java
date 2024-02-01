@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -69,6 +70,8 @@ public class RobotContainer {
 
     // private Supplier<Pose2d> poseSupplier;
 
+    private final SendableChooser<Command> autoChooser = new SendableChooser<>();
+
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -85,6 +88,14 @@ public class RobotContainer {
         // Configure the button bindings
         configureButtonBindings();
 
+
+        autoChooser.addOption("Example Auto", new exampleAuto(s_Swerve));
+
+        autoChooser.addOption("Sequential Testing Auto", new SequentialTestingAuto(s_Swerve));
+
+        autoChooser.addOption("Aim And Shoot Auto", new AimAndShoot(s_Swerve, vision, shoot));
+
+        SmartDashboard.putData(autoChooser);
     }
 
     /**
@@ -119,6 +130,6 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return new exampleAuto(s_Swerve);
+        return autoChooser.getSelected();
     }
 }

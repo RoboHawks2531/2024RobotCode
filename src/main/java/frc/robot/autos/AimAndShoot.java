@@ -21,7 +21,7 @@ public class AimAndShoot extends SequentialCommandGroup{
     private Vision vision;
     private Shoot shoot;
 
-    public AimAndShoot() {
+    public AimAndShoot(Swerve swerve, Vision vision, Shoot shoot) {
         new ParallelCommandGroup(       //Runs Aiming and 'Reving' at the same time to save time
             new RotateToTarget(swerve, vision), //activates the vision aiming for at most 1.1 seconds
             new RunCommand(() -> shoot.setMotorVelocity(5, false)) //
