@@ -43,7 +43,7 @@ public class RobotContainer {
     /* Controllers */
     private final XboxController driver = new XboxController(0);
 
-    private PhotonCamera camera = new PhotonCamera("2531photonvision_Port_1182_Output_MJPEG_Server");
+    private PhotonCamera camera = new PhotonCamera("2531Limelight");
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
