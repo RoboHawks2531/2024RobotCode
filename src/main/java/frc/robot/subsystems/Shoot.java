@@ -16,11 +16,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Shoot extends SubsystemBase {
   
-  private TalonFX motor1 = new TalonFX(31);
-  private TalonFX motor2 = new TalonFX(22);
+  private TalonFX motor1 = new TalonFX(Constants.DeviceConstants.leftShooterMotor);
+  private TalonFX motor2 = new TalonFX(Constants.DeviceConstants.rightShooterMotor);
 
   // private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.02, 0.02, 0.02);
 

@@ -156,8 +156,17 @@ public final class Constants {
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
 
+    public static class DeviceConstants {
+        public static final int leftShooterMotor = 31;
+        public static final int rightShooterMotor = 22;
+        public static final int leftElevatorMotor = 0;
+        public static final int rightElevatorMotor = 0;
+        public static final int intakePivotMotor = 0;
+        public static final int intakePowerMotor = 0;
+    }
 
-     public static class VisionConstants {
+
+    public static class VisionConstants {
 
     public static final String LimelightName = "2531limelight";
     

@@ -13,11 +13,12 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Elevator extends SubsystemBase{
 
-    private TalonFX powerMotor1 = new TalonFX(0); //adjust to actual ID
-    private TalonFX powerMotor2 = new TalonFX(0); //adjust to actual ID
+    private TalonFX powerMotor1 = new TalonFX(Constants.DeviceConstants.leftElevatorMotor); //adjust to actual ID
+    private TalonFX powerMotor2 = new TalonFX(Constants.DeviceConstants.rightElevatorMotor); //adjust to actual ID
 
     public Elevator() {
         var talonFXConfigs = new TalonFXConfiguration();
@@ -33,6 +34,7 @@ public class Elevator extends SubsystemBase{
 
         // set Motion Magic settings
         var motionMagicConfigs = talonFXConfigs.MotionMagic;
+        
         motionMagicConfigs.MotionMagicCruiseVelocity = 30; // Target cruise velocity of 80 rps
         motionMagicConfigs.MotionMagicAcceleration = 60; // Target acceleration of 160 rps/s (0.5 seconds)
         motionMagicConfigs.MotionMagicJerk = 1600; // Target jerk of 1600 rps/s/s (0.1 seconds)
