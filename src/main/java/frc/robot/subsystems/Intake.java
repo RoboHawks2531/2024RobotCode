@@ -4,6 +4,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,6 +19,9 @@ public class Intake extends SubsystemBase{
     private DigitalInput intakeLimitSwitch = new DigitalInput(0);
 
     public Intake() {
+        pivotMotor.setNeutralMode(NeutralModeValue.Brake);
+        powerMotor.setNeutralMode(NeutralModeValue.Brake);
+
         var talonFXConfigs = new TalonFXConfiguration();
 
         //this was just taken from ctre cause its what we need

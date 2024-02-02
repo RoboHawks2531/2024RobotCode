@@ -27,6 +27,10 @@ public class IntakeSetpointCommand extends Command{
         double speed = pidController.calculate(intake.getPivotEncoder());
 
         intake.setPivotSpeed(speed);
+
+        if (pidController.atSetpoint()) {
+
+        }
     }
 
     @Override

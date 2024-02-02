@@ -45,6 +45,10 @@ public class RobotContainer {
 
     private PhotonCamera camera = new PhotonCamera("2531Limelight");
 
+    /* Driver button usage ($ means used)
+     * A,X,Y$,B$, Left Bumper$, Right Bumper$, Left Trigger$, Right Trigger$, Menu, Two Squares$
+     */
+
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
@@ -53,7 +57,11 @@ public class RobotContainer {
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value); //map to button 7 for two squares
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton brakeMotors = new JoystickButton(driver, XboxController.Button.kB.value);
+
+    private final JoystickButton intakeSource = new JoystickButton(driver, XboxController.Button.kB.value);
+    private final JoystickButton intakeGround = new JoystickButton(driver, XboxController.Button.kA.value);
+    private final JoystickButton intakeStore = new JoystickButton(driver, XboxController.Button.kX.value);
+    // private final JoystickButton brakeMotors = new JoystickButton(driver, XboxController.Button.kB.value);
 
     /* Shooting Controls */
     private final JoystickButton shootVolts = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
@@ -67,6 +75,7 @@ public class RobotContainer {
     private final Swerve s_Swerve = new Swerve();
     private final Vision vision = new Vision();
     private final Shoot shoot = new Shoot();
+    private final Intake intake = new Intake();
 
     // private Supplier<Pose2d> poseSupplier;
 
@@ -93,7 +102,7 @@ public class RobotContainer {
 
         autoChooser.addOption("Sequential Testing Auto", new SequentialTestingAuto(s_Swerve));
 
-        autoChooser.addOption("Aim And Shoot Auto", new AimAndShoot(s_Swerve, vision, shoot));
+        autoChooser.addOption("Aim And Shoot Auto", new AimAndShoot(s_Swerve, vision, shoot, intake));
 
         SmartDashboard.putData(autoChooser);
     }
@@ -104,8 +113,8 @@ public class RobotContainer {
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
         /* Debug Buttons */
-        brakeMotors.onTrue(new InstantCommand(() -> shoot.brakeMotors()));
-        brakeMotors.onFalse(new InstantCommand(() -> shoot.coastMotors()));
+        // brakeMotors.onTrue(new InstantCommand(() -> shoot.brakeMotors()));
+        // brakeMotors.onFalse(new InstantCommand(() -> shoot.coastMotors()));
 
         /* Shooting Commands */
         //using velocity vs. voltage helps with shooting at a constant, rather than it deviating when battery is over/under charged

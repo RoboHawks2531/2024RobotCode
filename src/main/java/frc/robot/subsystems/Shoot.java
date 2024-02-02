@@ -23,17 +23,22 @@ public class Shoot extends SubsystemBase {
   private TalonFX motor1 = new TalonFX(Constants.DeviceConstants.leftShooterMotor);
   private TalonFX motor2 = new TalonFX(Constants.DeviceConstants.rightShooterMotor);
 
+  private TalonFX indexMotor = new TalonFX(0);
+
   // private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.02, 0.02, 0.02);
 
   public Shoot() {
     motor1.setInverted(false);
     motor2.setInverted(true);
+    indexMotor.setInverted(false);
 
     motor1.setNeutralMode(NeutralModeValue.Coast);
     motor2.setNeutralMode(NeutralModeValue.Coast);
+    indexMotor.setNeutralMode(NeutralModeValue.Brake);
 
     motor1.getConfigurator().apply(new TalonFXConfiguration());
     motor2.getConfigurator().apply(new TalonFXConfiguration());
+    indexMotor.getConfigurator().apply(new TalonFXConfiguration());
 
     // PIDController shootingPIDController = new PIDController(0.2, 0.002, 0);
 
@@ -54,35 +59,6 @@ public class Shoot extends SubsystemBase {
 
       motor1.getConfigurator().apply(talonFXConfigs);
       motor2.getConfigurator().apply(talonFXConfigs);
-  }
-
-  @Deprecated // Doesnt need to exist because we shouldnt use percent outputs anymore since v6
-  public Command RunMotors(double speed) {
-    return run(
-        () -> {
-         setMotorSpeed(speed);
-        });
-  }
-
-  @Deprecated // This just doesnt need to be here when we have the Voltage Methods
-              // This was only made because of testing how to run as a velocity
-  public Command RunMotorVoltage(double rpm) {
-    return run(() -> {
-      setMotorVolts(RPMToVolts(rpm));
-      System.out.println("Motor1 RPM = " + getRPMfromVelocity1() + "Motor2 RPM" + getRPMfromVelocity2());
-    });
-  }
-
-  @Deprecated // No point in running off percents anymore
-  public void setMotorSpeed(double speed) {
-    motor1.set(speed);
-    motor2.set(speed);
-  }
-
-  @Deprecated // Same reason as before
-  public void setSplitMotorSpeed(double one, double two) {
-    motor1.set(one);
-    motor2.set(two);
   }
 
   public void setSplitMotorVolts(double one, double two) {
@@ -108,6 +84,10 @@ public class Shoot extends SubsystemBase {
     motor1.setControl(request.withVelocity(rps));
     motor2.setControl(request.withVelocity(rps));
 
+  }
+
+  public void setIndexMotorVolts(double volts) {
+    indexMotor.setVoltage(volts);
   }
 
   public void brakeMotors() {
