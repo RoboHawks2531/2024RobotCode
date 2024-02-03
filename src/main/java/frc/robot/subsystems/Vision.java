@@ -6,8 +6,11 @@
 
 package frc.robot.subsystems;
 
+import java.util.List;
+
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -43,10 +46,26 @@ public class Vision extends SubsystemBase{
     public double getYaw() {
         var result = limelight.getLatestResult();
 
+        List<PhotonTrackedTarget> targets = result.getTargets();
+        PhotonTrackedTarget target = result.getBestTarget();
+
         if (result.hasTargets()) {
-            return result.getBestTarget().getYaw();
+            // targets.add(result.getBestTarget());
+            // return targets.get(0).getYaw(); //this will hopefully filter the multitargets and pick one to aim at
+            return target.getYaw(); //This should be the one to take the better target and go to that, actually this might do the same thing as before
+
+            // return result.getBestTarget().getYaw();
         }
         return 0;
+    }
+
+    public void takeSnapshot() {
+        var result = limelight.getLatestResult();
+        PhotonTrackedTarget target = result.getBestTarget();
+        
+        if (result.hasTargets()) {
+            limelight.takeOutputSnapshot();
+        }
     }
 
     public double getPitch() {
