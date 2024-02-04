@@ -165,6 +165,11 @@ public final class Constants {
         public static final int intakePowerMotor = 0;
     }
 
+    public static class ShootingConstants {
+        public static final int targetShootingRPM = 3000;
+        
+    }
+
 
     public static class VisionConstants {
 

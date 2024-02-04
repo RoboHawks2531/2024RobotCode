@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.commands.Vision.RotateToTarget;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shoot;
@@ -26,14 +27,13 @@ public class AimAndShoot extends SequentialCommandGroup{
         new ParallelRaceGroup(
             new RunCommand(() -> intake.moveToSetpoint(0)),
             new RotateToTarget(swerve, vision), //activates the vision aiming for at most 0.5 seconds
-            new RunCommand(() -> shoot.setMotorVelocity(50, false))
+            new RunCommand(() -> shoot.setMotorVelocity(Constants.ShootingConstants.targetShootingRPM, false))
         ).withTimeout(.5);
+        // new ParallelCommandGroup(
+        //     new RunCommand(() -> shoot.setMotorVelocity(Constants.ShootingConstants.targetShootingRPM, false)) //Runs Aiming and 'Reving' at the same time to save time
+        // ).withTimeout(.8);
         new ParallelCommandGroup(
-            new RunCommand(() -> shoot.setMotorVelocity(50, false)) //Runs Aiming and 'Reving' at the same time to save time
-            
-        ).withTimeout(.8);
-        new ParallelCommandGroup(
-            new RunCommand(() -> shoot.setMotorVelocity(50, false)),
+            new RunCommand(() -> shoot.setMotorVelocity(Constants.ShootingConstants.targetShootingRPM, false)),
             new RunCommand(() -> shoot.setIndexMotorVolts(2)),
             new RunCommand(() -> intake.setPowerVelocity(-3, false))
         );

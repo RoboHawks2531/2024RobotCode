@@ -44,10 +44,20 @@ public class Shoot extends SubsystemBase {
 
     var talonFXConfigs = new TalonFXConfiguration();
 
+    // var slot0Configs = talonFXConfigs.Slot0;
+    //   slot0Configs.kS = 0.25; //Adds volts to overcome static friction
+    //   slot0Configs.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
+    //   slot0Configs.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
+    //   slot0Configs.kP = 0.11; // An error of 1 rps results in 0.11 V output
+    //   slot0Configs.kI = 0.0;  // Integral value
+    //   slot0Configs.kD = 0.0;  // Derivative value
+
+    //the v and a values were taken from revCalc(reca.le) for a flywheel operating at 3000 rpm
+    // this should theoretically take 0.72s to rev to 3k rpm
     var slot0Configs = talonFXConfigs.Slot0;
       slot0Configs.kS = 0.25; //Adds volts to overcome static friction
-      slot0Configs.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
-      slot0Configs.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
+      slot0Configs.kV = 0.24; // A velocity target of 1 rps results in 0.12 V output
+      slot0Configs.kA = 0.60; // An acceleration of 1 rps/s requires 0.01 V output
       slot0Configs.kP = 0.11; // An error of 1 rps results in 0.11 V output
       slot0Configs.kI = 0.0;  // Integral value
       slot0Configs.kD = 0.0;  // Derivative value
@@ -71,7 +81,7 @@ public class Shoot extends SubsystemBase {
     motor2.setVoltage(voltage);
   }
 
-  public void setMotorVelocity(double rps, boolean wantSlow) {
+  public void setMotorVelocity(double rpm, boolean wantSlow) {
     final MotionMagicVelocityVoltage request = new MotionMagicVelocityVoltage(0);
 
     //if user wants slower shooting, assigns the acceleration to lower, if not, goes to default acceleration
@@ -80,6 +90,8 @@ public class Shoot extends SubsystemBase {
 
     double velocity = wantSlow ? 0.06 : 0;
     request.Velocity = velocity;
+
+    double rps = rpm * 60;
 
     motor1.setControl(request.withVelocity(rps));
     motor2.setControl(request.withVelocity(rps));
