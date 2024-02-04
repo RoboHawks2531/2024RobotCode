@@ -19,7 +19,7 @@ public class IntakeSetpointCommand extends Command{
 
     @Override
     public void initialize() {
-        
+        // pidController.reset();
     }
 
     @Override

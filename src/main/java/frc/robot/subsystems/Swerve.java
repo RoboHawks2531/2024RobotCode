@@ -120,6 +120,10 @@ public class Swerve extends SubsystemBase {
         }
     }
 
+    public double getGyroDouble() {
+        return gyro.getYaw().getValueAsDouble();
+    }
+
     @Override
     public void periodic(){
         swerveOdometry.update(getGyroYaw(), getModulePositions());

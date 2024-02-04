@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
+import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Transform2d;
@@ -24,8 +25,8 @@ public class Vision extends SubsystemBase{
 
     private PhotonCamera limelight = new PhotonCamera("2531Limelight");
 
-    double cameraHeight = Units.inchesToMeters(0); //how hight is camera off the ground?
-    double targetHeight = Units.inchesToMeters(0); //how high is the target off the ground(all april tags are the same)?
+    double cameraHeight = Units.inchesToMeters(4); //how hight is camera off the ground?
+    double targetHeight = Units.inchesToMeters(53.88); //how high is the target off the ground(all april tags are the same)?
     double cameraPitchRadians = Units.degreesToRadians(0); //what is the cameras angle from level?
     double goalRangeMeters = Units.feetToMeters(3); //target goal distance for getting in range of a target
 
@@ -44,15 +45,16 @@ public class Vision extends SubsystemBase{
     }
 
     public double getYaw() {
+        limelight.setLED(VisionLEDMode.kOn);
         var result = limelight.getLatestResult();
 
         List<PhotonTrackedTarget> targets = result.getTargets();
         PhotonTrackedTarget target = result.getBestTarget();
-
+        
         if (result.hasTargets()) {
             // targets.add(result.getBestTarget());
             // return targets.get(0).getYaw(); //this will hopefully filter the multitargets and pick one to aim at
-            return target.getYaw(); //This should be the one to take the better target and go to that, actually this might do the same thing as before
+            return target.getYaw(); //This should be the one to take the better target and go to that.. actually this might do the same thing as before
 
             // return result.getBestTarget().getYaw();
         }
@@ -78,6 +80,7 @@ public class Vision extends SubsystemBase{
     }
 
     public double getSkew() {
+        
         var result = limelight.getLatestResult();
 
         if (result.hasTargets()) {

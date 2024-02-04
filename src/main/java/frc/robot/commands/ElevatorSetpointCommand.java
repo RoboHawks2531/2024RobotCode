@@ -29,6 +29,8 @@ public class ElevatorSetpointCommand extends Command{
     @Override
     public void initialize() {
         //womp womp
+        // pidController1.reset();
+        // pidController2.reset();
     }
 
     @Override
