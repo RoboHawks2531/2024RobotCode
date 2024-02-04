@@ -2,7 +2,7 @@
 // added this in case we need to use it instead of the motion magic stuff
 
 
-package frc.robot.commands;
+package frc.robot.commands.Elevator;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;

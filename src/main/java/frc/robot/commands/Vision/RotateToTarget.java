@@ -2,7 +2,7 @@
 //created this command
 
 
-package frc.robot.commands;
+package frc.robot.commands.Vision;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
