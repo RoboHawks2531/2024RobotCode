@@ -70,6 +70,14 @@ public class Vision extends SubsystemBase{
         }
     }
 
+    public void setCameraLEDS(boolean on) {
+        if (on) {
+            limelight.setLED(VisionLEDMode.kOn);
+        } else if (!on) {
+            limelight.setLED(VisionLEDMode.kDefault);
+        } 
+    }
+
     public double getPitch() {
         var result = limelight.getLatestResult();
 

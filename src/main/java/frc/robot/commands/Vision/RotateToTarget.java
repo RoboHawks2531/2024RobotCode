@@ -35,13 +35,9 @@ public class RotateToTarget extends Command{
 
     @Override
     public void execute() {
-            // double rotSpeed = rotationPID.calculate(vision.getYaw(), 1);
-            // double rotSpeed = rotationPID.calculate(swerve.getGyroDouble(), vision.getYaw()); //maybe... just maybe...
-            // rotationPID.setSetpoint(Math.toDegrees(Math.atan2(-2, vision.getDistanceMethod())));
-            // double rotation = MathUtil.clamp(rotationPID.calculate(vision.getYaw()), -maxPower, maxPower);
-            double rotation = rotationPID.calculate(vision.getYaw(), 0.1);
+        vision.setCameraLEDS(true); // only here for funsies
+        double rotation = rotationPID.calculate(vision.getYaw(), 0.1);
 
-        
         swerve.drive(new Translation2d(), rotation, false, true);
     }   
 
@@ -52,7 +48,6 @@ public class RotateToTarget extends Command{
 
     @Override
     public boolean isFinished() {
-        // return rotationPID.atSetpoint();
         return false;
     }
 }
