@@ -163,11 +163,25 @@ public final class Constants {
         public static final int rightElevatorMotor = 0;
         public static final int intakePivotMotor = 0;
         public static final int intakePowerMotor = 0;
+        public static final int indexMotorID = 0; //change to real id
     }
 
     public static class ShootingConstants {
         public static final int targetShootingRPM = 3000;
         
+    }
+
+    public static class ElevatorConstants {
+        public static final double manualSpeed = 0.2;
+        public static final double highSetpoint = 100; //change to real number
+        public static final double midSetpoint = 100; //change to real number
+        public static final double lowSetpoint = 100; //change to real number
+    }
+
+    public static class IntakeConstants {
+        public static final double sourceSetpoint = 0;
+        public static final double groundSetpoint = 0;
+        public static final double ampSetpoint = 0;
     }
 
 

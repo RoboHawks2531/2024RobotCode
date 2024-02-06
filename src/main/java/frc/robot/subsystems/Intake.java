@@ -87,7 +87,8 @@ public class Intake extends SubsystemBase{
         return !intakeLimitSwitch.get();
     }
 
-    public void setIntakeAndSetpoint(double rps, double setpoint) {
+    public void setIntakeAndSetpoint(double rpm, double setpoint) {
+        double rps = rpm * 60;
         setPowerVelocity(rps, false);
         moveToSetpoint(setpoint);
     }

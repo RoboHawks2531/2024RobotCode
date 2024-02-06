@@ -25,7 +25,7 @@ public class AutoIntakeLift extends Command {
     boolean hasNote = intake.getLimitSwitch();
 
     if (hasNote) {
-        intake.setIntakeAndSetpoint(-0.2, 0);
+        intake.setIntakeAndSetpoint(0.2, 0);
     } else if (!hasNote) {
         intake.setIntakeAndSetpoint(0.5, setpoint);
     } 

@@ -13,7 +13,7 @@ public class IntakeSetpointCommand extends Command{
         this.intake = intake;
         this.setpoint = setpoint;
 
-        pidController.setSetpoint(setpoint);
+        // pidController.setSetpoint(setpoint);
         pidController.setTolerance(0);
     }
 
@@ -24,18 +24,16 @@ public class IntakeSetpointCommand extends Command{
 
     @Override
     public void execute() {
-        double speed = pidController.calculate(intake.getPivotEncoder());
+        double speed = pidController.calculate(intake.getPivotEncoder(), setpoint);
 
         intake.setPivotSpeed(speed);
-
-        if (pidController.atSetpoint()) {
-
-        }
     }
 
     @Override
     public void end(boolean interrupted) {
-        intake.setPivotSpeed(0);
+        // intake.setPivotSpeed(0);
+        double reverseSpeed = pidController.calculate(intake.getPivotEncoder(), 0);
+        intake.setPivotSpeed(reverseSpeed);
     }
     
     @Override
