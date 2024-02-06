@@ -17,9 +17,7 @@ public class RotateToTarget extends Command{
     private Swerve swerve;
     private Vision vision;
 
-    private PIDController rotationPID = new PIDController(0.02, 0.002, 0);
-
-    private double maxPower;
+    private PIDController rotationPID = new PIDController(0.1, 0, 0);
 
     public RotateToTarget(Swerve swerve, Vision vision) {
         this.swerve = swerve;
@@ -32,15 +30,16 @@ public class RotateToTarget extends Command{
 
     @Override
     public void initialize() {
-        rotationPID.reset();
+        // rotationPID.reset();
     }
 
     @Override
     public void execute() {
             // double rotSpeed = rotationPID.calculate(vision.getYaw(), 1);
             // double rotSpeed = rotationPID.calculate(swerve.getGyroDouble(), vision.getYaw()); //maybe... just maybe...
-            rotationPID.setSetpoint(Math.toDegrees(Math.atan2(-2, vision.getDistanceMethod())));
-            double rotation = MathUtil.clamp(rotationPID.calculate(vision.getYaw()), -maxPower, maxPower);
+            // rotationPID.setSetpoint(Math.toDegrees(Math.atan2(-2, vision.getDistanceMethod())));
+            // double rotation = MathUtil.clamp(rotationPID.calculate(vision.getYaw()), -maxPower, maxPower);
+            double rotation = rotationPID.calculate(vision.getYaw(), 0.1);
 
         
         swerve.drive(new Translation2d(), rotation, false, true);
