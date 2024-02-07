@@ -5,12 +5,18 @@
 
 package frc.robot;
 
+import static edu.wpi.first.math.util.Units.degreesToRadians;
+
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -140,8 +146,8 @@ public final class Constants {
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
     
-        public static final double kPXController = 1;
-        public static final double kPYController = 1;
+        public static final double kPXController = 2;
+        public static final double kPYController = 2;
         public static final double kPThetaController = 1;
     
         /* Constraint for the motion profilied robot angle controller */
@@ -149,4 +155,56 @@ public final class Constants {
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
+
+    public static class DeviceConstants {
+        public static final int leftShooterMotor = 0;
+        public static final int rightShooterMotor = 22;
+        public static final int leftElevatorMotor = 0;
+        public static final int rightElevatorMotor = 0;
+        public static final int intakePivotMotor = 31;
+        public static final int intakePowerMotor = 0;
+        public static final int indexMotorID = 0; //change to real id
+    }
+
+    public static class ShootingConstants {
+        public static final int targetShootingRPM = 3000;
+        
+    }
+
+    public static class ElevatorConstants {
+        public static final double manualSpeed = 0.2;
+        public static final double highSetpoint = 100; //change to real number
+        public static final double midSetpoint = 100; //change to real number
+        public static final double lowSetpoint = 100; //change to real number
+    }
+
+    public static class IntakeConstants {
+        public static final double sourceSetpoint = 0;
+        public static final double groundSetpoint = 0;
+        public static final double ampSetpoint = 0;
+    }
+
+
+    public static class VisionConstants {
+
+    public static final String LimelightName = "2531limelight";
+    
+    /** Physical location of the camera on the robot, relative to the center of the robot. */
+    public static final Transform3d LimelightToRobot = new Transform3d(
+        new Translation3d(-0.11, -0.015, -0.895),
+        new Rotation3d(degreesToRadians(-90.0), degreesToRadians(34.6), 0.0));
+
+    public static final String HIGH_LIMELIGHT_NAME = "limelight-high";
+    
+    public static final double FieldLengthMeters= 16.54175;
+    public static final double FieldWidthMeters = 8.0137;
+
+    // Pose on the opposite side of the field. Use with `relativeTo` to flip a pose to the opposite alliance
+    public static final Pose2d FlippingPose = new Pose2d(
+        new Translation2d(FieldLengthMeters, FieldWidthMeters),
+        new Rotation2d(Math.PI));
+
+    /** Minimum target ambiguity. Targets with higher ambiguity will be discarded */
+    public static final double ApriltagAmbiguityThreshold = 0.2;
+  }
 }
