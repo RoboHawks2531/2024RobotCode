@@ -27,9 +27,9 @@ public class IntakePowerCommand extends Command{
     @Override
     public void end(boolean interrupted) {
         if (volts > 0) {
-            intake.setPowerVolts(1);
+            intake.setPowerVolts(0.5);
         } else {
-            intake.setPowerVolts(-1);
+            intake.setPowerVolts(-0.5);
         }
     }
 

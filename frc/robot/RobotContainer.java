@@ -32,8 +32,10 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.autos.*;
 import frc.robot.commands.Defaults.TeleopSwerve;
+import frc.robot.commands.Elevator.ElevatorSetpointCommand;
 import frc.robot.commands.Intake.IntakePowerCommand;
 import frc.robot.commands.Intake.IntakeSetpointCommand;
+import frc.robot.commands.Intake.ManualPivotIntake;
 import frc.robot.commands.Shoot.AimAndShoot;
 import frc.robot.commands.Vision.RotateToTarget;
 import frc.robot.subsystems.*;
@@ -47,21 +49,22 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Controllers */
     private final XboxController driver = new XboxController(0);
+    private final XboxController operator = new XboxController(1);
 
-    private PhotonCamera camera = new PhotonCamera("2531Limelight");
+    // private PhotonCamera camera = new PhotonCamera("2531Limelight");
 
     /* Driver button usage ($ means used)
-     * A$,X$,Y$,B$, Left Bumper$, Right Bumper$, Left Trigger$, Right Trigger$, Menu, Two Squares$
+     * A$,X$,Y$,B$, Left Bumper$, Right Bumper$, Left Trigger$, Right Trigger$, Menu$, Two Squares$
      */
+
+    /* Driver Buttons */
+    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kBack.value); //map to button 7 for two squares
+    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kStart.value); //map to button __ for menu
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
-
-    /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value); //map to button 7 for two squares
-    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value); //map to button __ for menu
 
     /* Intake Buttons */
     private final JoystickButton intakeSource = new JoystickButton(driver, XboxController.Button.kB.value);
@@ -70,22 +73,23 @@ public class RobotContainer {
 
     private final JoystickButton intakeSuck = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton intakeSpit = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-    private final JoystickButton intakeUp = new JoystickButton(driver, XboxController.Axis.kLeftTrigger.value);
-    private final JoystickButton intakeDown = new JoystickButton(driver, XboxController.Axis.kRightTrigger.value);
-    // private final JoystickButton intakeUp = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    // private final JoystickButton intakeDown = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+
+    private final JoystickButton intakePivotUp = new JoystickButton(driver, XboxController.Axis.kRightTrigger.value);
+    private final JoystickButton intakePivotDown = new JoystickButton(driver, XboxController.Axis.kLeftTrigger.value);
 
     // private final JoystickButton brakeMotors = new JoystickButton(driver, XboxController.Button.kB.value);
 
     /* Elevator Buttons */
-
+    private final JoystickButton elevatorHighSetpoint = new JoystickButton(operator, XboxController.Button.kY.value);
+    private final JoystickButton elevatorMidSetpoint = new JoystickButton(operator, XboxController.Button.kX.value);
+    private final JoystickButton elevatorStoreSetpoint = new JoystickButton(operator, XboxController.Button.kA.value);
 
     /* Shooting Controls */
-    private final JoystickButton shootVolts = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+    // private final JoystickButton shootVolts = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
     // private final JoystickButton shootVelocitySlow = new JoystickButton(driver, XboxController.Axis.kLeftTrigger.value);
-    private final JoystickButton shootNoneAim = new JoystickButton(driver, XboxController.Axis.kLeftTrigger.value);
+    // private final JoystickButton shootNoneAim = new JoystickButton(driver, XboxController.Axis.kLeftTrigger.value);
     // private final JoystickButton shootVelocity = new JoystickButton(driver, XboxController.Axis.kRightTrigger.value);
-    private final JoystickButton shootAiming = new JoystickButton(driver, XboxController.Axis.kRightTrigger.value);
+    // private final JoystickButton shootAiming = new JoystickButton(driver, XboxController.Axis.kRightTrigger.value);
 
     /* Vision Controls */
     private final JoystickButton rotateToTarget = new JoystickButton(driver, 7); //this will be changes to zero gyro
@@ -136,6 +140,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        zeroGyro.onTrue(new InstantCommand(() -> intake.zeroPivotEncoder()));
 
         /* Debug Buttons */
         // brakeMotors.onTrue(new InstantCommand(() -> shoot.brakeMotors()));
@@ -145,43 +150,50 @@ public class RobotContainer {
         //using velocity vs. voltage helps with shooting at a constant, rather than it deviating when battery is over/under charged
         // shootVelocity.onTrue(new InstantCommand(() -> shoot.setMotorVelocity(5, false)));
         
-        shootNoneAim.whileTrue(new InstantCommand(() -> shoot.setMotorVelocity(5, false)));
-        shootAiming.whileTrue(new AimAndShoot(s_Swerve, vision, shoot, intake));
+        // shootNoneAim.whileTrue(new InstantCommand(() -> shoot.setMotorVelocity(5, false)));
+        // shootAiming.whileTrue(new AimAndShoot(s_Swerve, vision, shoot, intake));
         // shootVelocitySlow.onTrue(new InstantCommand(() -> shoot.setMotorVelocity(5, true)));
 
-        shootVolts.onTrue(new InstantCommand(() -> shoot.setSplitMotorVolts(-10,-10)));
-        shootVolts.onFalse(new InstantCommand(() -> shoot.setMotorVolts(0)));
+        // shootVolts.onTrue(new InstantCommand(() -> shoot.setSplitMotorVolts(-10,-10)));
+        // shootVolts.onFalse(new InstantCommand(() -> shoot.setMotorVolts(0)));
 
         /* Intake Commands */
-        intakeStore.onTrue(new ParallelCommandGroup(
-            new IntakeSetpointCommand(intake, 0),
-            new IntakePowerCommand(intake, 2)
+        intakeStore.onTrue(new ParallelCommandGroup( // kX
+            new IntakeSetpointCommand(intake, 0)
+            // new IntakePowerCommand(intake, 2)
         ));
 
-        intakeGround.onTrue(new ParallelCommandGroup(
-            new IntakeSetpointCommand(intake, -25),
-            new IntakePowerCommand(intake, 3)
+        intakeGround.onTrue(new ParallelCommandGroup( // kA
+            new IntakeSetpointCommand(intake, -95)
+            // new IntakePowerCommand(intake, 3)
         ));
 
-        intakeSource.onTrue(new ParallelCommandGroup(
-            new IntakeSetpointCommand(intake, -10),
-            new IntakePowerCommand(intake, 3)
+        intakeSource.onTrue(new ParallelCommandGroup( // kB
+            new IntakeSetpointCommand(intake, -25)
+            // new IntakePowerCommand(intake, 3)
         ));
 
-        intakeUp.whileTrue(new InstantCommand(() -> intake.setPivotSpeed(-0.2))); 
-        intakeDown.whileTrue(new InstantCommand(() -> intake.setPivotSpeed(0.2)));
-        intakeUp.whileFalse(new InstantCommand(() -> intake.setPivotSpeed(0)));
-        intakeDown.whileFalse(new InstantCommand(() -> intake.setPivotSpeed(0)));
+        intakePivotUp.whileTrue(new ManualPivotIntake(intake, 0.2)); //right trigger
+        intakePivotDown.whileTrue(new ManualPivotIntake(intake, -0.2)); // left trigger
 
         //uncomment these when we remove the debug shooting commands
-        // intakeSuck.whileTrue(new IntakePowerCommand(intake, 1));
-        // intakeSpit.whileTrue(new IntakePowerCommand(intake, -1));
+        // intakeSuck.whileTrue(new IntakePowerCommand(intake, 2));
+        // intakeSpit.whileTrue(new IntakePowerCommand(intake, -2));
+        // intakeSpit.whileFalse(new IntakePowerCommand(intake, 0));
+        // intakeSuck.whileFalse(new IntakePowerCommand(intake, 0));
+        
+        //uncomment these when we remove the debug shooting commands
+        intakeSuck.whileTrue(new IntakePowerCommand(intake, 2)); // left bumper
+        intakeSpit.whileTrue(new IntakePowerCommand(intake, -2)); // right bumper
 
         /* Elevator Commands */
+        elevatorStoreSetpoint.onTrue(new ElevatorSetpointCommand(elevator, 0)); // kA
+        elevatorMidSetpoint.onTrue(new ElevatorSetpointCommand(elevator, 25)); // kX
+        elevatorHighSetpoint.onTrue(new ElevatorSetpointCommand(elevator, 50)); //kY
 
 
         /* Vision Commands */
-        rotateToTarget.whileTrue(new RotateToTarget(s_Swerve, vision));
+        // rotateToTarget.whileTrue(new RotateToTarget(s_Swerve, vision));
     }
 
     public Command getAutonomousCommand() {

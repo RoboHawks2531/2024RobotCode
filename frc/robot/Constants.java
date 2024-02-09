@@ -158,7 +158,7 @@ public final class Constants {
 
     public static class DeviceConstants {
         public static final int leftShooterMotor = 0;
-        public static final int rightShooterMotor = 22;
+        public static final int rightShooterMotor = 0;
         public static final int leftElevatorMotor = 0;
         public static final int rightElevatorMotor = 0;
         public static final int intakePivotMotor = 31;
