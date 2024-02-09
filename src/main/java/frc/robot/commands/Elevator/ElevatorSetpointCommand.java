@@ -20,10 +20,13 @@ public class ElevatorSetpointCommand extends Command{
         this.elevator = elevator;
         this.setpoint = setpoint;
 
-        addRequirements(elevator);
+        // addRequirements(elevator);
 
         pidController1.setSetpoint(setpoint);
         pidController2.setSetpoint(setpoint);
+
+        pidController1.setIZone(15);
+        pidController2.setIZone(15);
     }
 
     @Override

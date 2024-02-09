@@ -111,6 +111,6 @@ public class Vision extends SubsystemBase{
     public void periodic() {
         SmartDashboard.putNumber("camera yaw", getYaw());
         SmartDashboard.putNumber("camera pitch", getPitch());
-        SmartDashboard.putNumber("camera skew", getSkew());
+        // SmartDashboard.putNumber("camera skew", getSkew());
     }
 }
