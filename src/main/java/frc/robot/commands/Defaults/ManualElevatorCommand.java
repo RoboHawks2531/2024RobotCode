@@ -11,13 +11,11 @@ import frc.robot.subsystems.Elevator;
 public class ManualElevatorCommand extends Command{
     
     private Elevator elevator;
-    private DoubleSupplier upSupplier;
-    private DoubleSupplier downSupplier;
+    private DoubleSupplier Supplier;
 
-    public ManualElevatorCommand(Elevator elevator, DoubleSupplier upSupplier, DoubleSupplier downSupplier) {
+    public ManualElevatorCommand(Elevator elevator, DoubleSupplier Supplier) {
         this.elevator = elevator;
-        this.upSupplier = upSupplier;
-        this.downSupplier = downSupplier;
+        this.Supplier = Supplier;
 
         addRequirements(elevator);
     }
@@ -25,16 +23,9 @@ public class ManualElevatorCommand extends Command{
 
     @Override
     public void execute() {
-        double upSpeed = MathUtil.applyDeadband(upSupplier.getAsDouble(), Constants.stickDeadband);
-        double downSpeed = MathUtil.applyDeadband(downSupplier.getAsDouble(), Constants.stickDeadband);
-
-        if (upSpeed > 0) {
-            elevator.setMotors(upSpeed * Constants.ElevatorConstants.manualSpeed, upSpeed * Constants.ElevatorConstants.manualSpeed);
-        } else if (downSpeed > 0) {
-            elevator.setMotors(downSpeed * Constants.ElevatorConstants.manualSpeed, downSpeed * Constants.ElevatorConstants.manualSpeed);
-        } else if (upSpeed > 0 && downSpeed > 0) {
-            elevator.setMotors(0, 0);
-        }
+        double speed = MathUtil.applyDeadband(Supplier.getAsDouble(), Constants.stickDeadband);
+   
+        elevator.setMotors(speed * Constants.ElevatorConstants.manualSpeed, speed * Constants.ElevatorConstants.manualSpeed);
     }
 
     @Override

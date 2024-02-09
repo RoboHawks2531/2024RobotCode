@@ -15,6 +15,7 @@ public class IntakeSetpointCommand extends Command{
 
         // pidController.setSetpoint(setpoint);
         pidController.setTolerance(0);
+        pidController.setIZone(3);
     }
 
     @Override
