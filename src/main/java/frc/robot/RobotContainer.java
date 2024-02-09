@@ -36,6 +36,7 @@ import frc.robot.commands.Defaults.TeleopSwerve;
 import frc.robot.commands.Elevator.ElevatorSetpointCommand;
 import frc.robot.commands.Intake.IntakePowerCommand;
 import frc.robot.commands.Intake.IntakeSetpointCommand;
+import frc.robot.commands.Intake.ManualPivotIntake;
 import frc.robot.commands.Shoot.AimAndShoot;
 import frc.robot.commands.Vision.RotateToTarget;
 import frc.robot.subsystems.*;
@@ -63,8 +64,8 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value); //map to button 7 for two squares
-    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value); //map to button __ for menu
+    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kBack.value); //map to button 7 for two squares
+    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kStart.value); //map to button __ for menu
 
     /* Intake Buttons */
     private final JoystickButton intakeSource = new JoystickButton(driver, XboxController.Button.kB.value);
@@ -92,7 +93,7 @@ public class RobotContainer {
     // private final JoystickButton shootAiming = new JoystickButton(driver, XboxController.Axis.kRightTrigger.value);
 
     /* Vision Controls */
-    private final JoystickButton rotateToTarget = new JoystickButton(driver, 7); //this will be changes to zero gyro
+    private final JoystickButton rotateToTarget = new JoystickButton(driver, 7); //this will be changed to zero gyro
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
@@ -115,6 +116,13 @@ public class RobotContainer {
                 () -> robotCentric.getAsBoolean()
             )
         );
+        
+        elevator.setDefaultCommand(
+            new ManualElevatorCommand(
+                elevator,
+                () -> -operator.getLeftY()
+            )
+        );
 
         // Configure the button bindings
         configureButtonBindings();
@@ -126,17 +134,12 @@ public class RobotContainer {
 
         autoChooser.addOption("Aim And Shoot Auto", new AimAndShoot(s_Swerve, vision, shoot, intake));
 
+        autoChooser.addOption("Red Alliance Auto", new RedAllianceTestAuto(s_Swerve, vision));
+
         SmartDashboard.putData(autoChooser);
 
         intake.zeroPivotEncoder();
-        elevator.zeroMotorEncoders();
-
-        elevator.setDefaultCommand(
-            new ManualElevatorCommand(
-                elevator,
-                () -> -operator.getLeftY()
-            )
-        );
+        elevator.zeroMotorEncoders(); 
     }
 
 
@@ -166,26 +169,35 @@ public class RobotContainer {
         ));
 
         intakeGround.whileTrue(new ParallelCommandGroup(
-            new IntakeSetpointCommand(intake, 50),
+            new IntakeSetpointCommand(intake, -100),
             new IntakePowerCommand(intake, 1.5)
         ));
 
         intakeSource.whileTrue(new ParallelCommandGroup(
-            new IntakeSetpointCommand(intake, 25)
+            new IntakeSetpointCommand(intake, -55)
             // new IntakePowerCommand(intake, 3)
         ));
 
+        /* Debug intake pivoting */
+        // intakePivotUp.whileTrue(new InstantCommand(() -> intake.setPivotSpeed(0.2)));
+        // intakePivotDown.whileTrue(new InstantCommand(() -> intake.setPivotSpeed(-0.2)));
+        // intakePivotUp.whileFalse(new InstantCommand(() -> intake.setPivotSpeed(0)));
+        // intakePivotDown.whileFalse(new InstantCommand(() -> intake.setPivotSpeed(0)));
+
+        intakePivotUp.whileTrue(new ManualPivotIntake(intake, 0.2)); //right trigger
+        intakePivotDown.whileTrue(new ManualPivotIntake(intake, -0.2)); // left trigger
+        
         //uncomment these when we remove the debug shooting commands
-        // intakeSuck.whileTrue(new IntakePowerCommand(intake, 3));
-        // intakeSpit.whileTrue(new IntakePowerCommand(intake, -3));
+        intakeSuck.whileTrue(new IntakePowerCommand(intake, 2)); // left bumper
+        intakeSpit.whileTrue(new IntakePowerCommand(intake, -2)); // right bumper
 
         /* Elevator Commands */
-        elevatorStoreSetpoint.onTrue(new ElevatorSetpointCommand(elevator, 0));
-        elevatorMidSetpoint.onTrue(new ElevatorSetpointCommand(elevator, 25));
-        elevatorHighSetpoint.onTrue(new ElevatorSetpointCommand(elevator, 50));
+        elevatorStoreSetpoint.onTrue(new ElevatorSetpointCommand(elevator, 0)); // kA
+        elevatorMidSetpoint.onTrue(new ElevatorSetpointCommand(elevator, 25)); // kX
+        elevatorHighSetpoint.onTrue(new ElevatorSetpointCommand(elevator, 50)); //kY
 
         /* Vision Commands */
-        rotateToTarget.whileTrue(new RotateToTarget(s_Swerve, vision));
+        // rotateToTarget.whileTrue(new RotateToTarget(s_Swerve, vision));
     }
 
     public Command getAutonomousCommand() {

@@ -157,13 +157,13 @@ public final class Constants {
     }
 
     public static class DeviceConstants {
-        public static final int leftShooterMotor = 31;
-        public static final int rightShooterMotor = 22;
+        public static final int leftShooterMotor = 0;
+        public static final int rightShooterMotor = 0;
         public static final int leftElevatorMotor = 0;
         public static final int rightElevatorMotor = 0;
-        public static final int intakePivotMotor = 0;
-        public static final int intakePowerMotor = 0;
-        public static final int indexMotorID = 0; //change to real id
+        public static final int intakePivotMotor = 31;
+        public static final int intakePowerMotor = 22;
+        public static final int indexMotorID = 0;
     }
 
     public static class ShootingConstants {
@@ -180,8 +180,8 @@ public final class Constants {
 
     public static class IntakeConstants {
         public static final double sourceSetpoint = 0;
-        public static final double groundSetpoint = 0;
-        public static final double ampSetpoint = 0;
+        public static final double groundSetpoint = -100;
+        public static final double ampSetpoint = -55;
     }
 
 
