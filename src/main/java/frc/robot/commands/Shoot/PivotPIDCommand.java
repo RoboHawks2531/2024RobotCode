@@ -40,6 +40,6 @@ public class PivotPIDCommand extends Command{
 
     @Override
     public boolean isFinished() {
-        return false;
+        return pidController.atSetpoint();
     }
 }

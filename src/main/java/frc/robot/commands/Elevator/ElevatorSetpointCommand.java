@@ -46,4 +46,9 @@ public class ElevatorSetpointCommand extends Command{
     public void end(boolean interrupted) {
         elevator.setMotors(0, 0);
     }
+
+    @Override
+    public boolean isFinished() {
+        return pidController1.atSetpoint() && pidController2.atSetpoint();
+    }
 }

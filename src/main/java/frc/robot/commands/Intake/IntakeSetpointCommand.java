@@ -12,7 +12,7 @@ import frc.robot.subsystems.Intake;
 public class IntakeSetpointCommand extends Command{
     private Intake intake;
     private double setpoint;
-    private PIDController pidController = new PIDController(0.015, 0.0005, 0);
+    private PIDController pidController = new PIDController(0.020, 0.0005, 0);
     private ArmFeedforward feedforward = new ArmFeedforward(0, 0, 0);
 
     public IntakeSetpointCommand(Intake intake, double setpoint) {
@@ -22,6 +22,7 @@ public class IntakeSetpointCommand extends Command{
         // pidController.setSetpoint(setpoint);
         pidController.setTolerance(0);
         pidController.setIZone(3);
+        addRequirements(intake);
     }
 
     @Override
@@ -47,6 +48,6 @@ public class IntakeSetpointCommand extends Command{
     
     @Override
     public boolean isFinished() {
-        return false;
+        return pidController.atSetpoint();
     }
 }

@@ -21,7 +21,7 @@ public class PivotShootVertically extends Command{
 
     @Override
     public void execute() {
-        double verticalOffset = 10;
+        // double verticalOffset = 10;
         double targetHeight = Units.feetToMeters(6);
 
         //were going to assume that the zero position is 180 degrees flush for the shooter.
