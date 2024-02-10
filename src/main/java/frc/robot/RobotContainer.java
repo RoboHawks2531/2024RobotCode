@@ -39,6 +39,7 @@ import frc.robot.commands.Intake.IntakePowerCommand;
 import frc.robot.commands.Intake.IntakeSetpointCommand;
 import frc.robot.commands.Intake.ManualPivotIntake;
 import frc.robot.commands.Shoot.AimAndShoot;
+import frc.robot.commands.Shoot.PivotShootVertically;
 import frc.robot.commands.Vision.RotateToTarget;
 import frc.robot.subsystems.*;
 
@@ -123,6 +124,10 @@ public class RobotContainer {
                 elevator,
                 () -> -operator.getLeftY()
             )
+        );
+
+        shoot.setDefaultCommand(
+            new PivotShootVertically(shoot, vision)
         );
 
         // Configure the button bindings

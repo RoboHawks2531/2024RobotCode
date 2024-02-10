@@ -32,7 +32,7 @@ public class IntakeSetpointCommand extends Command{
     @Override
     public void execute() {
         double speed = pidController.calculate(intake.getPivotEncoder(), setpoint);
-        double ffSpeed = feedforward.calculate(intake.getPivotEncoder(), 0.5);
+        double ffSpeed = feedforward.calculate(2, 2, 2);
 
         // intake.setPivotSpeed(speed);
         intake.setPivotVolts(speed + ffSpeed);

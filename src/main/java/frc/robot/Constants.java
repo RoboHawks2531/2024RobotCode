@@ -164,6 +164,7 @@ public final class Constants {
         public static final int intakePivotMotor = 31;
         public static final int intakePowerMotor = 22;
         public static final int indexMotorID = 0;
+        public static final int shootPivotMotor = 0;
     }
 
     public static class ShootingConstants {

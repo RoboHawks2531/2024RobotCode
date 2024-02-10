@@ -78,6 +78,12 @@ public class Vision extends SubsystemBase{
         } 
     }
 
+    public boolean hasTarget() {
+        var result = limelight.getLatestResult();
+
+        return result.hasTargets();
+    }
+
     public double getPitch() {
         var result = limelight.getLatestResult();
 
