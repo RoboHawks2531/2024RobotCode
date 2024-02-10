@@ -73,6 +73,10 @@ public class Intake extends SubsystemBase{
         return pivotMotor.getPosition().getValueAsDouble();
     }
 
+    public void setPivotVolts(double volts) {
+        pivotMotor.setVoltage(volts);
+    }
+
     public void moveToSetpoint(double setpoint) {
         final MotionMagicVoltage request = new MotionMagicVoltage(0);
 
