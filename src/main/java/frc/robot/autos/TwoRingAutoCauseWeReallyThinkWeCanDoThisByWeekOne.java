@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.commands.Intake.AutoIntakeLift;
-import frc.robot.commands.Vision.RotateToTarget;
+import frc.robot.commands.Shoot.AimAndShoot;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shoot;
 import frc.robot.subsystems.Swerve;
@@ -35,10 +35,10 @@ public class TwoRingAutoCauseWeReallyThinkWeCanDoThisByWeekOne extends Sequentia
 
         addCommands(
             new AimAndShoot(swerve, vision, shoot, intake),
-            // new AutoIntakeLift(intake, Constants.IntakeConstants.groundSetpoint),
-            // new RunCommand(() -> swerve.zeroHeading()).withTimeout(0.1),
+            new AutoIntakeLift(intake, Constants.IntakeConstants.groundSetpoint),
+            new RunCommand(() -> swerve.zeroHeading()).withTimeout(0.1),
             new ParallelRaceGroup(
-                // new InstantCommand(() -> swerve.drive(new Translation2d(0.15/ 20 , 0), 0, false, true), swerve),
+                new InstantCommand(() -> swerve.drive(new Translation2d(0.15/ 20 , 0), 0, false, true), swerve),
                 new InstantCommand(() -> swerve.drive(new Translation2d(0.15/ 20,0), 0, false, true), swerve).withTimeout(3)
                 
                 

@@ -35,7 +35,7 @@ public class RotateToTarget extends Command{
 
     @Override
     public void execute() {
-        vision.setCameraLEDS(true); // only here for funsies
+        // vision.setCameraLEDS(true); // only here for funsies
         double rotation = rotationPID.calculate(vision.getYaw(), 0.1);
 
         swerve.drive(new Translation2d(), rotation, false, true);

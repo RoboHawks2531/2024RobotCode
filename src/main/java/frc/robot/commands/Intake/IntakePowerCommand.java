@@ -26,11 +26,13 @@ public class IntakePowerCommand extends Command{
 
     @Override
     public void end(boolean interrupted) {
-        if (volts > 0) {
-            intake.setPowerVolts(0.5);
-        } else {
-            intake.setPowerVolts(-0.5);
-        }
+        // if (volts > 0) {
+        //     intake.setPowerVolts(0.2);
+        // } else {
+        //     intake.setPowerVolts(-0.2);
+        // }
+        // intake.setPivotVolts(volts / 2);
+        intake.setPowerVolts(0);
     }
 
     @Override

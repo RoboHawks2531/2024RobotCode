@@ -23,7 +23,9 @@ public class Shoot extends SubsystemBase {
   private TalonFX motor1 = new TalonFX(Constants.DeviceConstants.leftShooterMotor);
   private TalonFX motor2 = new TalonFX(Constants.DeviceConstants.rightShooterMotor);
 
-  private TalonFX indexMotor = new TalonFX(0);
+  private TalonFX indexMotor = new TalonFX(Constants.DeviceConstants.indexMotorID);
+
+  private TalonFX pivotMotor = new TalonFX(Constants.DeviceConstants.shootPivotMotor);
 
   // private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.02, 0.02, 0.02);
 
@@ -31,14 +33,17 @@ public class Shoot extends SubsystemBase {
     motor1.setInverted(false);
     motor2.setInverted(true);
     indexMotor.setInverted(false);
+    pivotMotor.setInverted(false);
 
     motor1.setNeutralMode(NeutralModeValue.Coast);
     motor2.setNeutralMode(NeutralModeValue.Coast);
     indexMotor.setNeutralMode(NeutralModeValue.Brake);
+    pivotMotor.setNeutralMode(NeutralModeValue.Brake);
 
     motor1.getConfigurator().apply(new TalonFXConfiguration());
     motor2.getConfigurator().apply(new TalonFXConfiguration());
     indexMotor.getConfigurator().apply(new TalonFXConfiguration());
+    pivotMotor.getConfigurator().apply(new TalonFXConfiguration());
 
     // PIDController shootingPIDController = new PIDController(0.2, 0.002, 0);
 
@@ -102,6 +107,22 @@ public class Shoot extends SubsystemBase {
     indexMotor.setVoltage(volts);
   }
 
+  public void setPivotMotorVolts(double volts) {
+    pivotMotor.setVoltage(volts);
+  }
+
+  public void setPivotMotorSpeed(double speed) {
+    pivotMotor.set(speed);
+  }
+
+  public double getPivotEncoder() {
+    return pivotMotor.getPosition().getValueAsDouble();
+  }
+
+  public void zeroPivotEncoder() {
+    pivotMotor.setPosition(0);
+  }
+
   public void brakeMotors() {
     motor1.setNeutralMode(NeutralModeValue.Brake);
     motor2.setNeutralMode(NeutralModeValue.Brake);
@@ -120,14 +141,6 @@ public class Shoot extends SubsystemBase {
     return (motor2.getVelocity().getValueAsDouble()  * 600) / 2048;
   }
 
-  @Deprecated //this just shouldnt be used as a way to consistantly shoot, theres better options
-  public double RPMToVolts(double TargetRPM) {
-    //Formula: VConstant = (AppliedVolts / VelocityatVolts) 
-    double velocityConstant = 16 / 4500; //Sample Numbers -> vc = 0.002667
-    return velocityConstant * TargetRPM;
-  }
-
-
   public static double InchesToRPM(double inches) {
     return inches * 7.47 + 3800.0;
   }
@@ -136,5 +149,6 @@ public class Shoot extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Motor 1 RPM", getRPMfromVelocity1());
     SmartDashboard.putNumber("Motor 2 RPM", getRPMfromVelocity2());
+    SmartDashboard.putNumber("Pivot Encoder", getPivotEncoder());
   }
 }

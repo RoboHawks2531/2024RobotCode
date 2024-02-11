@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.Shoot.PivotShootVertically;
 import frc.robot.commands.Vision.RotateToTarget;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shoot;
@@ -23,7 +24,8 @@ public class AimAndShoot extends SequentialCommandGroup{
     // private Shoot shoot;
 
     public AimAndShoot(Swerve swerve, Vision vision, Shoot shoot, Intake intake) {
-        new ParallelCommandGroup(       //Runs Aiming and 'Reving' at the same time to save time
+        new ParallelCommandGroup(    //Runs Aiming and 'Reving' at the same time to save time
+            new PivotShootVertically(shoot, vision),
             new RotateToTarget(swerve, vision), //activates the vision aiming for at most 1.1 seconds
             new RunCommand(() -> shoot.setMotorVelocity(5, false)) //
         ).withTimeout(.5);

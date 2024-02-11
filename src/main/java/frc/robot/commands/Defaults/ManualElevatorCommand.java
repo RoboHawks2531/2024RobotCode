@@ -24,8 +24,8 @@ public class ManualElevatorCommand extends Command{
     @Override
     public void execute() {
         double speed = MathUtil.applyDeadband(Supplier.getAsDouble(), Constants.stickDeadband);
-        
-        elevator.setMotors(speed, speed);
+   
+        elevator.setMotors(speed * Constants.ElevatorConstants.manualSpeed, speed * Constants.ElevatorConstants.manualSpeed);
     }
 
     @Override

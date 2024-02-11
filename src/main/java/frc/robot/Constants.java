@@ -146,8 +146,8 @@ public final class Constants {
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
     
-        public static final double kPXController = 2;
-        public static final double kPYController = 2;
+        public static final double kPXController = 1;
+        public static final double kPYController = 1;
         public static final double kPThetaController = 1;
     
         /* Constraint for the motion profilied robot angle controller */
@@ -162,8 +162,9 @@ public final class Constants {
         public static final int leftElevatorMotor = 0;
         public static final int rightElevatorMotor = 0;
         public static final int intakePivotMotor = 31;
-        public static final int intakePowerMotor = 0;
-        public static final int indexMotorID = 0; //change to real id
+        public static final int intakePowerMotor = 22;
+        public static final int indexMotorID = 0;
+        public static final int shootPivotMotor = 0;
     }
 
     public static class ShootingConstants {
@@ -180,8 +181,8 @@ public final class Constants {
 
     public static class IntakeConstants {
         public static final double sourceSetpoint = 0;
-        public static final double groundSetpoint = 0;
-        public static final double ampSetpoint = 0;
+        public static final double groundSetpoint = -100;
+        public static final double ampSetpoint = -55;
     }
 
 
