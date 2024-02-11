@@ -11,7 +11,7 @@ public class IntakePowerCommand extends Command{
         this.intake = intake;
         this.volts = volts;
 
-        addRequirements(intake);
+        // addRequirements(intake); //uncomment this if its being overruled by other commands
     }
 
     @Override

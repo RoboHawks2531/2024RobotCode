@@ -33,9 +33,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.autos.*;
-import frc.robot.commands.Defaults.ManualElevatorCommand;
 import frc.robot.commands.Defaults.TeleopSwerve;
+import frc.robot.commands.Elevator.ElevatorClimbCommand;
 import frc.robot.commands.Elevator.ElevatorSetpointCommand;
+import frc.robot.commands.Elevator.ManualElevatorCommand;
 import frc.robot.commands.Intake.IntakePowerCommand;
 import frc.robot.commands.Intake.IntakeSetpointCommand;
 import frc.robot.commands.Intake.ManualPivotIntake;
@@ -54,8 +55,8 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {
     /* Controllers */
-    private final CommandXboxController driver = new CommandXboxController(0);
-    private final XboxController operator = new XboxController(1);
+    public static final CommandXboxController driver = new CommandXboxController(0);
+    public static final CommandXboxController operator = new CommandXboxController(1);
 
     // private PhotonCamera camera = new PhotonCamera("2531Limelight");
 
@@ -90,9 +91,9 @@ public class RobotContainer {
     // private final JoystickButton brakeMotors = new JoystickButton(driver, XboxController.Button.kB.value);
 
     /* Elevator Buttons */
-    private final JoystickButton elevatorHighSetpoint = new JoystickButton(operator, XboxController.Button.kY.value);
-    private final JoystickButton elevatorMidSetpoint = new JoystickButton(operator, XboxController.Button.kX.value);
-    private final JoystickButton elevatorStoreSetpoint = new JoystickButton(operator, XboxController.Button.kA.value);
+    // private final JoystickButton elevatorHighSetpoint = new JoystickButton(operator, XboxController.Button.kY.value);
+    // private final JoystickButton elevatorMidSetpoint = new JoystickButton(operator, XboxController.Button.kX.value);
+    // private final JoystickButton elevatorStoreSetpoint = new JoystickButton(operator, XboxController.Button.kA.value);
 
     /* Shooting Controls */
     // private final JoystickButton shootVolts = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
@@ -126,13 +127,6 @@ public class RobotContainer {
             )
         );
         
-        elevator.setDefaultCommand(
-            new ManualElevatorCommand(
-                elevator,
-                () -> -operator.getLeftY()
-            )
-        );
-
         shoot.setDefaultCommand(
             new PivotShootVertically(shoot, vision)
         );
@@ -179,12 +173,12 @@ public class RobotContainer {
 
         /* Intake Commands */
         driver.x().onTrue(new ParallelCommandGroup(
-            new IntakeSetpointCommand(intake, 0)
+            new IntakeSetpointCommand(intake, -1)
             // new IntakePowerCommand(intake, 2)
         ));
 
         driver.a().onTrue(new ParallelCommandGroup(
-            new IntakeSetpointCommand(intake, -100),
+            new IntakeSetpointCommand(intake, -115),
             new IntakePowerCommand(intake, 1.5)
         ));
 
@@ -202,9 +196,12 @@ public class RobotContainer {
         driver.leftBumper().whileTrue(new IntakePowerCommand(intake, -2)); // right bumper
 
         /* Elevator Commands */
-        elevatorStoreSetpoint.onTrue(new ElevatorSetpointCommand(elevator, 0)); // kA
-        elevatorMidSetpoint.onTrue(new ElevatorSetpointCommand(elevator, 25)); // kX
-        elevatorHighSetpoint.onTrue(new ElevatorSetpointCommand(elevator, 50)); //kY
+        operator.a().onTrue(new ElevatorSetpointCommand(elevator, 0));
+        operator.b().onTrue(new ElevatorSetpointCommand(elevator, 25));
+        operator.y().onTrue(new ElevatorSetpointCommand(elevator, 50));
+
+        operator.back().toggleOnTrue(new ManualElevatorCommand(elevator));
+        operator.start().toggleOnTrue(new ElevatorClimbCommand(elevator));
 
         /* Vision Commands */
         // rotateToTarget.whileTrue(new RotateToTarget(s_Swerve, vision));

@@ -180,8 +180,8 @@ public final class Constants {
     }
 
     public static class IntakeConstants {
-        public static final double sourceSetpoint = 0;
-        public static final double groundSetpoint = -100;
+        public static final double sourceSetpoint = -1;
+        public static final double groundSetpoint = -115;
         public static final double ampSetpoint = -55;
     }
 
