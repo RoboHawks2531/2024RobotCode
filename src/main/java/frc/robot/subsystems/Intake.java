@@ -22,7 +22,7 @@ public class Intake extends SubsystemBase{
         pivotMotor.setNeutralMode(NeutralModeValue.Brake);
         powerMotor.setNeutralMode(NeutralModeValue.Brake);
 
-        pivotMotor.setInverted(true);
+        powerMotor.setInverted(true);
 
         var talonFXConfigs = new TalonFXConfiguration();
 
@@ -73,6 +73,10 @@ public class Intake extends SubsystemBase{
 
     public double getPivotEncoder() {
         return pivotMotor.getPosition().getValueAsDouble();
+    }
+
+    public void setPivotVolts(double volts) {
+        pivotMotor.setVoltage(volts);
     }
 
     public void moveToSetpoint(double setpoint) {

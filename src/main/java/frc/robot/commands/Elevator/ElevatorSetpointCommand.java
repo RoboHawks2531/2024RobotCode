@@ -21,12 +21,10 @@ public class ElevatorSetpointCommand extends Command{
         this.setpoint = setpoint;
 
         // addRequirements(elevator);
-
+        pidController1.setIZone(0);
+        pidController2.setIZone(0);
         pidController1.setSetpoint(setpoint);
         pidController2.setSetpoint(setpoint);
-
-        pidController1.setIZone(15);
-        pidController2.setIZone(15);
     }
 
     @Override
@@ -47,5 +45,10 @@ public class ElevatorSetpointCommand extends Command{
     @Override
     public void end(boolean interrupted) {
         elevator.setMotors(0, 0);
+    }
+
+    @Override
+    public boolean isFinished() {
+        return pidController1.atSetpoint() && pidController2.atSetpoint();
     }
 }
