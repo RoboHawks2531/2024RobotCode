@@ -124,8 +124,8 @@ public class RobotContainer {
         // driver.rightTrigger(0.3).whileTrue(new AimAndShoot(s_Swerve, vision, shoot, intake));
         // driver.leftTrigger(0.3).whileTrue(new AuxShoot(intake, shoot));
 
-        driver.rightTrigger(0.3).whileFalse(new ResetShooter(intake, shoot));
-        driver.leftTrigger(0.3).whileFalse(new ResetShooter(intake, shoot));
+        // driver.rightTrigger(0.3).whileFalse(new ResetShooter(intake, shoot));
+        // driver.leftTrigger(0.3).whileFalse(new ResetShooter(intake, shoot));
 
         // shootVelocity.onTrue(new InstantCommand(() -> shoot.setMotorVelocity(5, false)));
         
@@ -135,6 +135,8 @@ public class RobotContainer {
 
         // shootVolts.onTrue(new InstantCommand(() -> shoot.setSplitMotorVolts(-10,-10)));
         // shootVolts.onFalse(new InstantCommand(() -> shoot.setMotorVolts(0)));
+        driver.back().whileTrue(new InstantCommand(() -> shoot.setSplitMotorVolts(3, 3)));
+        driver.back().whileFalse(new InstantCommand(() -> shoot.setSplitMotorVolts(0, 0)));
 
         /* Intake Commands */
         driver.x().onTrue(new ParallelCommandGroup(

@@ -23,6 +23,7 @@ public class ResetShooter extends Command{
         intake.setPowerVolts(0);
         shoot.setIndexMotorVolts(0);
         shoot.setPivotMotorSpeed(0);
+        shoot.setSplitMotorVolts(0, 0);
     }
 
     @Override
