@@ -13,16 +13,25 @@ public class ElevatorSetpointCommand extends Command{
     private Elevator elevator;
     private PIDController pidController1 = new PIDController(0.12, 0.012, 0);
     private PIDController pidController2 = new PIDController(0.12, 0.012, 0);
-
+    
     private double setpoint;
+    
+
+    //this is here incase we want to tell it to move to a certain distance using meters instead of ticks
+    private final double circumference = 0.5 * Math.PI; // meters
+    private final double gearRatio = 75.0 / 1.0; // output / input
+    private final double encoderResolution = 2048.0; // ticks / output
+    private final double tick2Meters = setpoint * (circumference / (gearRatio * encoderResolution));
+    private final double meters2Tick = setpoint * (gearRatio * encoderResolution / circumference);
+
 
     public ElevatorSetpointCommand(Elevator elevator, double setpoint) {
         this.elevator = elevator;
         this.setpoint = setpoint;
 
         // addRequirements(elevator);
-        pidController1.setIZone(0);
-        pidController2.setIZone(0);
+        pidController1.setIZone(20);
+        pidController2.setIZone(20);
         pidController1.setSetpoint(setpoint);
         pidController2.setSetpoint(setpoint);
     }
