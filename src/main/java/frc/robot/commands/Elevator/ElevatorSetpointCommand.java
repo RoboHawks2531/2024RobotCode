@@ -21,8 +21,8 @@ public class ElevatorSetpointCommand extends Command{
         this.setpoint = setpoint;
 
         // addRequirements(elevator);
-        pidController1.setIZone(0);
-        pidController2.setIZone(0);
+        pidController1.setIZone(20);
+        pidController2.setIZone(20);
         pidController1.setSetpoint(setpoint);
         pidController2.setSetpoint(setpoint);
     }
@@ -30,8 +30,8 @@ public class ElevatorSetpointCommand extends Command{
     @Override
     public void initialize() {
         //womp womp
-        // pidController1.reset();
-        // pidController2.reset();
+        pidController1.reset();
+        pidController2.reset();
     }
 
     @Override

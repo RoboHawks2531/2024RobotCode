@@ -11,8 +11,8 @@ public class IndexNote extends ParallelCommandGroup{
     
     public IndexNote(Intake intake, Shoot shoot) {
         addCommands(
-            new InstantCommand(() -> intake.setPowerVolts(2)),
-            new InstantCommand(() -> shoot.setMotorVolts(1.5))
+            new InstantCommand(() -> intake.setPowerVolts(16)),
+            new InstantCommand(() -> shoot.setIndexMotorVolts(3))
         );
     }
 }

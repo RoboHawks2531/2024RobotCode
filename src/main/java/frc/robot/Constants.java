@@ -157,14 +157,14 @@ public final class Constants {
     }
 
     public static class DeviceConstants {
-        public static final int leftShooterMotor = 33;
-        public static final int rightShooterMotor = 5;
-        public static final int leftElevatorMotor = 28;
-        public static final int rightElevatorMotor = 13;
+        public static final int leftShooterMotor = 34;
+        public static final int rightShooterMotor = 33;
+        public static final int leftElevatorMotor = 0;
+        public static final int rightElevatorMotor = 0;
         public static final int intakePivotMotor = 31;
         public static final int intakePowerMotor = 21;
-        public static final int indexMotorID = 0;
-        public static final int shootPivotMotor = 0;
+        public static final int indexMotorID = 22;
+        public static final int shootPivotMotor = 30;
     }
 
     public static class ShootingConstants {

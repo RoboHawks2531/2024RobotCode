@@ -24,11 +24,10 @@ public class PivotShootVertically extends Command{
         // double verticalOffset = 10;
         double targetHeight = Units.feetToMeters(6);
 
-        //were going to assume that the zero position is 180 degrees flush for the shooter.
         if (vision.hasTarget()) {
           new PivotPIDCommand(shoot, Math.tan(targetHeight / vision.getDistanceMethod()));  
         } else {
-            new PivotPIDCommand(shoot, -10);
+            new PivotPIDCommand(shoot, 0);
         }
         
     }

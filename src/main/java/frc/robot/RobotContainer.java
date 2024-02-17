@@ -36,6 +36,7 @@ import frc.robot.autos.*;
 import frc.robot.commands.Defaults.TeleopSwerve;
 // import frc.robot.commands.Elevator.ElevatorClimbCommand;
 import frc.robot.commands.Elevator.ElevatorSetpointCommand;
+// import frc.robot.commands.Elevator.MoveElevator;
 // import frc.robot.commands.Elevator.ManualElevatorCommand;
 import frc.robot.commands.Intake.IntakePowerCommand;
 import frc.robot.commands.Intake.IntakeSetpointCommand;
@@ -81,15 +82,15 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        s_Swerve.setDefaultCommand(
-            new TeleopSwerve(
-                s_Swerve, 
-                () -> -driver.getRawAxis(translationAxis), 
-                () -> -driver.getRawAxis(strafeAxis), 
-                () -> -driver.getRawAxis(rotationAxis), 
-                () -> driver.start().getAsBoolean()
-            )
-        );
+        // s_Swerve.setDefaultCommand(
+        //     new TeleopSwerve(
+        //         s_Swerve, 
+        //         () -> -driver.getRawAxis(translationAxis), 
+        //         () -> -driver.getRawAxis(strafeAxis), 
+        //         () -> -driver.getRawAxis(rotationAxis), 
+        //         () -> driver.start().getAsBoolean()
+        //     )
+        // );
         
         shoot.setDefaultCommand(
             new PivotShootVertically(shoot, vision)
@@ -135,17 +136,20 @@ public class RobotContainer {
 
         // shootVolts.onTrue(new InstantCommand(() -> shoot.setSplitMotorVolts(-10,-10)));
         // shootVolts.onFalse(new InstantCommand(() -> shoot.setMotorVolts(0)));
-        driver.back().whileTrue(new InstantCommand(() -> shoot.setSplitMotorVolts(3, 3)));
-        driver.back().whileFalse(new InstantCommand(() -> shoot.setSplitMotorVolts(0, 0)));
+
+        // driver.back().whileTrue(new InstantCommand(() -> shoot.setSplitMotorVolts(3, 3)));
+        // driver.back().whileFalse(new InstantCommand(() -> shoot.setSplitMotorVolts(0, 0)));
+        driver.back().whileFalse(new ResetShooter(intake, shoot));
+        driver.back().whileTrue(new AuxShoot(intake, shoot));
 
         /* Intake Commands */
         driver.x().onTrue(new ParallelCommandGroup(
-            new IntakeSetpointCommand(intake, -1)
+            new IntakeSetpointCommand(intake, 0)
             // new IntakePowerCommand(intake, 2)
         ));
 
         driver.a().onTrue(new ParallelCommandGroup(
-            new IntakeSetpointCommand(intake, -115)
+            new IntakeSetpointCommand(intake, -119)
             // new IntakePowerCommand(intake, 3)
         ));
 
@@ -164,8 +168,15 @@ public class RobotContainer {
         driver.leftTrigger(0.5).whileTrue(new ManualPivotIntake(intake, -0.15)); // Intake Pivot Down
         
         /* Intake Power */
-        driver.rightBumper().whileTrue(new IntakePowerCommand(intake, 5)); // left bumper
+        driver.rightBumper().whileTrue(new IntakePowerCommand(intake, 4)); // left bumper
         driver.leftBumper().whileTrue(new IntakePowerCommand(intake, -3)); // right bumper
+
+        driver.povLeft().whileTrue(new ParallelCommandGroup(
+            new InstantCommand(() -> shoot.setIndexMotorVolts(6)),
+            new InstantCommand(() -> shoot.setMotorVelocity(-1000, false))
+        ));
+
+        driver.povLeft().whileFalse(new ResetShooter(intake, shoot));
 
         /* Elevator Commands */
         // operator.a().onTrue(new ElevatorSetpointCommand(elevator, 0));
@@ -177,6 +188,9 @@ public class RobotContainer {
 
         /* Vision Commands */
         // rotateToTarget.whileTrue(new RotateToTarget(s_Swerve, vision));
+        // driver.povUp().whileTrue(new MoveElevator(elevator, 0.2));
+        // driver.povDown().whileTrue(new MoveElevator(elevator, -0.2));
+        
     }
 
     public Command getAutonomousCommand() {

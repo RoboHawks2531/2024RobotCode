@@ -24,6 +24,9 @@ public class Elevator extends SubsystemBase{
     public Elevator() {
         powerMotor1.setNeutralMode(NeutralModeValue.Brake);
         powerMotor2.setNeutralMode(NeutralModeValue.Brake);
+
+        powerMotor1.setInverted(false);
+        powerMotor2.setInverted(false);
         
         var talonFXConfigs = new TalonFXConfiguration();
 

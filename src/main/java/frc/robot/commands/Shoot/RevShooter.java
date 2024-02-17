@@ -17,5 +17,6 @@ public class RevShooter extends Command{
     @Override
     public void execute() {
         shoot.setMotorVelocity(rpm, false);
+        // shoot.setSplitMotorVolts(rpm, rpm);
     }
 }

@@ -31,7 +31,7 @@ public class Shoot extends SubsystemBase {
 
   public Shoot() {
     motor1.setInverted(false);
-    motor2.setInverted(true);
+    motor2.setInverted(false);
     indexMotor.setInverted(false);
     pivotMotor.setInverted(false);
 
@@ -77,7 +77,7 @@ public class Shoot extends SubsystemBase {
   }
 
   public void setSplitMotorVolts(double one, double two) {
-    motor1.setVoltage(one);
+    motor1.setVoltage(-one);
     motor2.setVoltage(two);
   }
 
@@ -99,7 +99,7 @@ public class Shoot extends SubsystemBase {
     double rps = rpm * 60;
 
     motor1.setControl(request.withVelocity(rps));
-    motor2.setControl(request.withVelocity(rps));
+    motor2.setControl(request.withVelocity(-rps));
 
   }
 

@@ -48,13 +48,13 @@ public class Vision extends SubsystemBase{
         limelight.setLED(VisionLEDMode.kOn);
         var result = limelight.getLatestResult();
 
-        List<PhotonTrackedTarget> targets = result.getTargets();
+        // List<PhotonTrackedTarget> targets = result.getTargets();
         PhotonTrackedTarget target = result.getBestTarget();
         
         if (result.hasTargets()) {
             // targets.add(result.getBestTarget());
             // return targets.get(0).getYaw(); //this will hopefully filter the multitargets and pick one to aim at
-            return target.getYaw(); //This should be the one to take the better target and go to that.. actually this might do the same thing as before
+            return target.getYaw(); //This should be the one to take the better target and go to that
 
             // return result.getBestTarget().getYaw();
         }
@@ -103,16 +103,6 @@ public class Vision extends SubsystemBase{
         return 0;
     }
 
-    // public Transform2d translationMethod() {
-    //     var result = limelight.getLatestResult();
-    //     var target = result.getBestTarget();
-    //     Transform2d pose = target.getCameraToTarget();
-
-    //     if (result.hasTargets()) {
-    //         return  result.getBestTarget().getBestCameraToTarget();
-    //     }
-    //     return new Transform2d();
-    // }
     @Override
     public void periodic() {
         SmartDashboard.putNumber("camera yaw", getYaw());

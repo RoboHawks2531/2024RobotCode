@@ -35,11 +35,11 @@ public class AutoIntakeLift extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    intake.setPowerVolts(-2);
+    intake.setPowerVolts(-1);
   }
 
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }
