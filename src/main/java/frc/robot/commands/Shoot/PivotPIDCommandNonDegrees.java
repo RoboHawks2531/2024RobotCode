@@ -5,16 +5,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.math.Conversions;
 import frc.robot.subsystems.Shoot;
 
-public class PivotPIDCommand extends Command{
+public class PivotPIDCommandNonDegrees extends Command{
     
     private Shoot shoot;
-    private double setpointDegrees;
+    private double setpoint;
 
     private PIDController pidController = new PIDController(0.015, 0, 0);
 
-    public PivotPIDCommand(Shoot shoot, double setpointDegrees) {
+    public PivotPIDCommandNonDegrees(Shoot shoot, double setpoint) {
         this.shoot = shoot;
-        this.setpointDegrees = setpointDegrees;
+        this.setpoint = setpoint;
 
         // addRequirements(shoot);
 
@@ -28,7 +28,7 @@ public class PivotPIDCommand extends Command{
 
     @Override
     public void execute() {
-        double speed = pidController.calculate(Conversions.falconToDegrees(shoot.getPivotEncoder(), .008), setpointDegrees);
+        double speed = pidController.calculate(shoot.getPivotEncoder(), setpoint);
 
         shoot.setPivotMotorSpeed(speed);
     }

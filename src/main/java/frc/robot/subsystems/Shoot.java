@@ -74,6 +74,8 @@ public class Shoot extends SubsystemBase {
 
       motor1.getConfigurator().apply(talonFXConfigs);
       motor2.getConfigurator().apply(talonFXConfigs);
+
+      indexMotor.getConfigurator().apply(talonFXConfigs);
   }
 
   public void setSplitMotorVolts(double one, double two) {
@@ -98,13 +100,22 @@ public class Shoot extends SubsystemBase {
 
     double rps = rpm * 60;
 
-    motor1.setControl(request.withVelocity(rps));
-    motor2.setControl(request.withVelocity(-rps));
+    // motor1.setControl(request.withVelocity(rps));
+    // motor2.setControl(request.withVelocity(-rps)); original code
+
+    motor1.setControl(request.withVelocity(-rps));
+    motor2.setControl(request.withVelocity(rps)); //flipped code
 
   }
 
   public void setIndexMotorVolts(double volts) {
     indexMotor.setVoltage(volts);
+  }
+
+  public void setIndexMotorVelocity(double rpm) {
+    final MotionMagicVelocityVoltage request = new MotionMagicVelocityVoltage(0);
+
+    indexMotor.setControl(request.withVelocity(rpm * 60));
   }
 
   public void setPivotMotorVolts(double volts) {

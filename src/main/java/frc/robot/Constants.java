@@ -168,7 +168,11 @@ public final class Constants {
     }
 
     public static class ShootingConstants {
-        public static final int targetShootingRPM = 3000;
+        // public static final int targetShootingRPM = -6800;
+        public static final int targetShootingRPM = 6800; //flipped velocity
+        public static final int targetShootingAmpTarget = 1500;
+        public static final double indexFeedVelocity = 2000;
+        public static final double indexHoldVelocity= 1000;
         
     }
 
@@ -180,9 +184,12 @@ public final class Constants {
     }
 
     public static class IntakeConstants {
-        public static final double sourceSetpoint = -1;
-        public static final double groundSetpoint = -115;
-        public static final double ampSetpoint = -55;
+        public static final double sourceSetpoint = -33;
+        public static final double groundSetpoint = -119;
+        public static final double ampSetpoint = -30.8;
+
+        public static final double intakeSpitVelocity = -2000;
+        public static final double intakeSuckVelocity = 2000;
     }
 
 

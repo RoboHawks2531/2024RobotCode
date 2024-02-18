@@ -46,7 +46,7 @@ public class Intake extends SubsystemBase{
     }
 
 
-    public void setPowerVelocity(double rps, boolean wantSlow) {
+    public void setPowerVelocity(double rpm, boolean wantSlow) {
         final MotionMagicVelocityVoltage request = new MotionMagicVelocityVoltage(0);
 
         //if user wants slower shooting, assigns the acceleration to lower, if not, goes to default acceleration
@@ -56,7 +56,7 @@ public class Intake extends SubsystemBase{
         double velocity = wantSlow ? 0.06 : 0;
         request.Velocity = velocity;
 
-        powerMotor.setControl(request.withVelocity(rps));
+        powerMotor.setControl(request.withVelocity(rpm * 60));
     }
 
     public void setPowerVolts(double volts) {

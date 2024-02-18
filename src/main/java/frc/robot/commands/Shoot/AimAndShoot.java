@@ -20,10 +20,6 @@ import frc.robot.subsystems.Vision;
 
 public class AimAndShoot extends SequentialCommandGroup{
 
-    // private Swerve swerve;
-    // private Vision vision;
-    // private Shoot shoot;
-
     public AimAndShoot(Swerve swerve, Vision vision, Shoot shoot, Intake intake) {
         new ParallelCommandGroup(
             new IntakeSetpointCommand(intake, 0),

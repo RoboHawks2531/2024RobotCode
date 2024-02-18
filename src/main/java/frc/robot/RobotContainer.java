@@ -42,6 +42,7 @@ import frc.robot.commands.Intake.IntakePowerCommand;
 import frc.robot.commands.Intake.IntakeSetpointCommand;
 import frc.robot.commands.Intake.ManualPivotIntake;
 import frc.robot.commands.Shoot.AimAndShoot;
+import frc.robot.commands.Shoot.AmpShoot;
 import frc.robot.commands.Shoot.AuxShoot;
 import frc.robot.commands.Shoot.PivotShootVertically;
 import frc.robot.commands.Shoot.ResetShooter;
@@ -109,6 +110,7 @@ public class RobotContainer {
 
         intake.zeroPivotEncoder();
         elevator.zeroMotorEncoders(); 
+        shoot.zeroPivotEncoder();
         
         // Configure the button bindings
         configureButtonBindings();
@@ -149,17 +151,17 @@ public class RobotContainer {
         ));
 
         driver.a().onTrue(new ParallelCommandGroup(
-            new IntakeSetpointCommand(intake, -119)
+            new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint)
             // new IntakePowerCommand(intake, 3)
         ));
 
         driver.b().onTrue(new ParallelCommandGroup(
-            new IntakeSetpointCommand(intake, -33)
+            new IntakeSetpointCommand(intake, Constants.IntakeConstants.sourceSetpoint)
             // new IntakePowerCommand(intake, 3)
         ));
 
         driver.y().onTrue(new ParallelCommandGroup(
-            new IntakeSetpointCommand(intake, -30.8)
+            new IntakeSetpointCommand(intake, Constants.IntakeConstants.ampSetpoint)
             // new IntakePowerCommand(intake, rotationAxis) //it dont need this tbh
         ));
 
@@ -168,15 +170,21 @@ public class RobotContainer {
         driver.leftTrigger(0.5).whileTrue(new ManualPivotIntake(intake, -0.15)); // Intake Pivot Down
         
         /* Intake Power */
-        driver.rightBumper().whileTrue(new IntakePowerCommand(intake, 4)); // left bumper
-        driver.leftBumper().whileTrue(new IntakePowerCommand(intake, -3)); // right bumper
+        // driver.rightBumper().whileTrue(new IntakePowerCommand(intake, 4)); // left bumper
+        // driver.leftBumper().whileTrue(new IntakePowerCommand(intake, -3)); // right bumper
+        driver.leftBumper().whileTrue(new InstantCommand(() -> intake.setPowerVelocity(Constants.IntakeConstants.intakeSuckVelocity, false)));
+        driver.leftBumper().whileTrue(new InstantCommand(() -> intake.setPowerVelocity(Constants.IntakeConstants.intakeSpitVelocity, false)));
 
         driver.povLeft().whileTrue(new ParallelCommandGroup(
-            new InstantCommand(() -> shoot.setIndexMotorVolts(6)),
-            new InstantCommand(() -> shoot.setMotorVelocity(-1000, false))
+            // new InstantCommand(() -> shoot.setIndexMotorVolts(6)),
+            new InstantCommand(() -> shoot.setIndexMotorVelocity(Constants.ShootingConstants.indexFeedVelocity)),
+            new InstantCommand(() -> shoot.setMotorVelocity(-Constants.ShootingConstants.targetShootingAmpTarget, false))
         ));
 
+        driver.povRight().whileTrue(new AmpShoot(shoot, intake));
+
         driver.povLeft().whileFalse(new ResetShooter(intake, shoot));
+        driver.povRight().whileFalse(new ResetShooter(intake, shoot));
 
         /* Elevator Commands */
         // operator.a().onTrue(new ElevatorSetpointCommand(elevator, 0));
