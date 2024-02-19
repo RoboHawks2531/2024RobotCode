@@ -16,7 +16,7 @@ public class AmpShoot extends SequentialCommandGroup {
           new ParallelCommandGroup(
             new InstantCommand(() -> shoot.setIndexMotorVolts(Constants.ShootingConstants.indexHoldVolts)),
             new InstantCommand(() -> intake.setPowerVolts(5)) 
-          ),
+          ).withTimeout(0.2),
         //   new PivotPIDCommand(shoot, 30) //this is going to have to be tuned, if its being wacky use other PID Command
           new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp).withTimeout(0.7),
           new ParallelCommandGroup(
@@ -25,5 +25,4 @@ public class AmpShoot extends SequentialCommandGroup {
           ).withTimeout(1.5)
         );
     }
-    
 }

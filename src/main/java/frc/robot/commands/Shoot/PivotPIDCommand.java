@@ -30,7 +30,7 @@ public class PivotPIDCommand extends Command{
     public void execute() {
         double speed = pidController.calculate(Conversions.falconToDegrees(shoot.getPivotEncoder(), .008), setpointDegrees);
 
-        shoot.setPivotMotorSpeed(speed);
+        shoot.setPivotMotorSpeed(-speed);
     }
 
     @Override

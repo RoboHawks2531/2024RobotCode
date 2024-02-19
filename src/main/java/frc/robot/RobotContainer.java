@@ -94,14 +94,16 @@ public class RobotContainer {
         //     )
         // );
         
-        shoot.setDefaultCommand(
-            new PivotShootVertically(shoot, vision)
-        );
+        // shoot.setDefaultCommand(
+        //     new PivotShootVertically(shoot, vision)
+        // );
 
         
         autoChooser.addOption("Example Auto", new exampleAuto(s_Swerve));
 
         autoChooser.addOption("Sequential Testing Auto", new SequentialTestingAuto(s_Swerve));
+
+        autoChooser.addOption("Shoot then Back up Auto", new ShootThenBackUp(s_Swerve, shoot, intake));
 
         // autoChooser.addOption("Aim And Shoot Auto", new AimAndShoot(s_Swerve, vision, shoot, intake));
 
@@ -126,29 +128,14 @@ public class RobotContainer {
 
         /* Shooting Commands */
         //using velocity vs. voltage helps with shooting at a constant, rather than it deviating when battery is over/under charged
-        // driver.rightTrigger(0.3).whileTrue(new AimAndShoot(s_Swerve, vision, shoot, intake));
-        // driver.leftTrigger(0.3).whileTrue(new AuxShoot(intake, shoot));
 
-        // driver.rightTrigger(0.3).whileFalse(new ResetShooter(intake, shoot));
-        // driver.leftTrigger(0.3).whileFalse(new ResetShooter(intake, shoot));
-
-        // shootVelocity.onTrue(new InstantCommand(() -> shoot.setMotorVelocity(5, false)));
-        
-        // shootNoneAim.whileTrue(new InstantCommand(() -> shoot.setMotorVelocity(5, false)));
-        // shootAiming.whileTrue(new AimAndShoot(s_Swerve, vision, shoot, intake));
-        // // shootVelocitySlow.onTrue(new InstantCommand(() -> shoot.setMotorVelocity(5, true)));
-
-        // shootVolts.onTrue(new InstantCommand(() -> shoot.setSplitMotorVolts(-10,-10)));
-        // shootVolts.onFalse(new InstantCommand(() -> shoot.setMotorVolts(0)));
-
-        // driver.back().whileTrue(new InstantCommand(() -> shoot.setSplitMotorVolts(3, 3)));
-        // driver.back().whileFalse(new InstantCommand(() -> shoot.setSplitMotorVolts(0, 0)));
         driver.back().whileFalse(new ResetShooter(intake, shoot));
         driver.back().whileTrue(new AuxShoot(intake, shoot));
 
         /* Intake Commands */
         driver.x().onTrue(new ParallelCommandGroup(
-            new IntakeSetpointCommand(intake, 0)
+            new IntakeSetpointCommand(intake, 0),
+            new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore)
             // new IntakePowerCommand(intake, 2)
         ));
 
@@ -172,22 +159,33 @@ public class RobotContainer {
         driver.leftTrigger(0.5).whileTrue(new ManualPivotIntake(intake, -0.15)); // Intake Pivot Down
         
         /* Intake Power */
-        // driver.rightBumper().whileTrue(new IntakePowerCommand(intake, 4)); // left bumper
-        // driver.leftBumper().whileTrue(new IntakePowerCommand(intake, -3)); // right bumper
+        driver.rightBumper().whileTrue(new IntakePowerCommand(intake, 4)); // left bumper
+        driver.leftBumper().whileTrue(new IntakePowerCommand(intake, -3)); // right bumper
 
-        driver.rightBumper().onTrue(new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp)); //one stack of milk please
-        driver.leftBumper().onTrue(new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore));
+        // driver.povLeft().whileTrue(new ParallelCommandGroup(
+        //     new InstantCommand(() -> shoot.setIndexMotorVolts(6)),
+        //     // new InstantCommand(() -> shoot.setIndexMotorVelocity(Constants.ShootingConstants.indexFeedVelocity)),
+        //     new InstantCommand(() -> shoot.setMotorVelocity(-Constants.ShootingConstants.targetShootingAmpTarget, false))
+        // ));
 
-        driver.povLeft().whileTrue(new ParallelCommandGroup(
-            new InstantCommand(() -> shoot.setIndexMotorVolts(6)),
-            // new InstantCommand(() -> shoot.setIndexMotorVelocity(Constants.ShootingConstants.indexFeedVelocity)),
-            new InstantCommand(() -> shoot.setMotorVelocity(-Constants.ShootingConstants.targetShootingAmpTarget, false))
-        ));
+        driver.povRight().onTrue(new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp)); //one stack of milk please
+        driver.povLeft().onTrue(new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore));
 
-        driver.povRight().whileTrue(new AmpShoot(shoot, intake));
 
-        driver.povLeft().whileFalse(new ResetShooter(intake, shoot));
-        driver.povRight().whileFalse(new ResetShooter(intake, shoot));
+        driver.povUp().whileTrue(new AmpShoot(shoot, intake));
+        driver.povUp().whileFalse(new ResetShooter(intake, shoot));
+
+        driver.povDown().onTrue(
+            new ParallelCommandGroup(
+            new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotIntake),
+            // new InstantCommand(() -> shoot.setMotorVelocity(-500, false))
+            new InstantCommand(() -> shoot.setIndexMotorVolts(2))
+            )
+        );
+
+        driver.povDown().onFalse(new ResetShooter(intake, shoot));
+            
+        // driver.povRight().whileFalse(new ResetShooter(intake, shoot));
 
         /* Elevator Commands */
         // operator.a().onTrue(new ElevatorSetpointCommand(elevator, 0));

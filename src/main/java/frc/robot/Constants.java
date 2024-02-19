@@ -174,7 +174,10 @@ public final class Constants {
         public static final double indexFeedVolts = 9;
         public static final double indexHoldVolts = 4;
         public static final double pivotStore = 0.27;
-        public static final double pivotAmp = -64;
+        public static final double pivotAmp = -64; //OUT IS NEGATIVE DO NOT PUT ANY POSITIVES OR IT BREAKS
+        public static final double pivotIntake = -100;
+
+        /* When Adjusting the pivot setpoints, only use negative numbers */
     }
 
     public static class ElevatorConstants {

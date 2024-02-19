@@ -12,6 +12,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -35,8 +36,8 @@ public class Shoot extends SubsystemBase {
     indexMotor.setInverted(false);
     pivotMotor.setInverted(true);
 
-    motor1.setNeutralMode(NeutralModeValue.Coast);
-    motor2.setNeutralMode(NeutralModeValue.Coast);
+    motor1.setNeutralMode(NeutralModeValue.Brake);
+    motor2.setNeutralMode(NeutralModeValue.Brake);
     indexMotor.setNeutralMode(NeutralModeValue.Brake);
     pivotMotor.setNeutralMode(NeutralModeValue.Brake);
 

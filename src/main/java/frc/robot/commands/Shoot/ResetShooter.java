@@ -1,6 +1,7 @@
 package frc.robot.commands.Shoot;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shoot;
 
@@ -24,6 +25,7 @@ public class ResetShooter extends Command{
         shoot.setIndexMotorVolts(0);
         shoot.setPivotMotorSpeed(0);
         shoot.setSplitMotorVolts(0, 0);
+        new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore);
     }
 
     @Override
