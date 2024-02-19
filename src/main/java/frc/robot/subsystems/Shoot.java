@@ -33,7 +33,7 @@ public class Shoot extends SubsystemBase {
     motor1.setInverted(false);
     motor2.setInverted(false);
     indexMotor.setInverted(false);
-    pivotMotor.setInverted(false);
+    pivotMotor.setInverted(true);
 
     motor1.setNeutralMode(NeutralModeValue.Coast);
     motor2.setNeutralMode(NeutralModeValue.Coast);
@@ -156,10 +156,11 @@ public class Shoot extends SubsystemBase {
     return inches * 7.47 + 3800.0;
   }
 
+
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Motor 1 RPM", getRPMfromVelocity1());
     SmartDashboard.putNumber("Motor 2 RPM", getRPMfromVelocity2());
-    SmartDashboard.putNumber("Pivot Encoder", getPivotEncoder());
+    SmartDashboard.putNumber("Shoot Pivot Encoder", getPivotEncoder());
   }
 }

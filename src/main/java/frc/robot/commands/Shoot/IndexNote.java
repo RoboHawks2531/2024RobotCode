@@ -12,10 +12,10 @@ public class IndexNote extends ParallelCommandGroup{
     
     public IndexNote(Intake intake, Shoot shoot) {
         addCommands(
-            // new InstantCommand(() -> intake.setPowerVolts(16)),
-            new InstantCommand(() -> intake.setPowerVelocity(Constants.IntakeConstants.intakeSpitVelocity, false)),
-            // new InstantCommand(() -> shoot.setIndexMotorVolts(3))
-            new InstantCommand(() -> shoot.setIndexMotorVelocity(1000))
+            new InstantCommand(() -> intake.setPowerVolts(10)),
+            // new InstantCommand(() -> intake.setPowerVelocity(Constants.IntakeConstants.intakeSpitVelocity, false)),
+            new InstantCommand(() -> shoot.setIndexMotorVolts(Constants.ShootingConstants.indexFeedVolts))
+            // new InstantCommand(() -> shoot.setIndexMotorVelocity(2000))
         );
     }
 }

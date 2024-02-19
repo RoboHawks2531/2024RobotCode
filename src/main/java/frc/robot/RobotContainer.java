@@ -44,6 +44,7 @@ import frc.robot.commands.Intake.ManualPivotIntake;
 import frc.robot.commands.Shoot.AimAndShoot;
 import frc.robot.commands.Shoot.AmpShoot;
 import frc.robot.commands.Shoot.AuxShoot;
+import frc.robot.commands.Shoot.PivotPIDCommandNonDegrees;
 import frc.robot.commands.Shoot.PivotShootVertically;
 import frc.robot.commands.Shoot.ResetShooter;
 import frc.robot.commands.Vision.RotateToTarget;
@@ -121,6 +122,7 @@ public class RobotContainer {
         /* Driver Buttons */
         driver.start().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         driver.start().onTrue(new InstantCommand(() -> intake.zeroPivotEncoder()));
+        driver.start().onTrue(new InstantCommand(() -> shoot.zeroPivotEncoder()));
 
         /* Shooting Commands */
         //using velocity vs. voltage helps with shooting at a constant, rather than it deviating when battery is over/under charged
@@ -172,12 +174,13 @@ public class RobotContainer {
         /* Intake Power */
         // driver.rightBumper().whileTrue(new IntakePowerCommand(intake, 4)); // left bumper
         // driver.leftBumper().whileTrue(new IntakePowerCommand(intake, -3)); // right bumper
-        driver.leftBumper().whileTrue(new InstantCommand(() -> intake.setPowerVelocity(Constants.IntakeConstants.intakeSuckVelocity, false)));
-        driver.leftBumper().whileTrue(new InstantCommand(() -> intake.setPowerVelocity(Constants.IntakeConstants.intakeSpitVelocity, false)));
+
+        driver.rightBumper().onTrue(new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp)); //one stack of milk please
+        driver.leftBumper().onTrue(new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore));
 
         driver.povLeft().whileTrue(new ParallelCommandGroup(
-            // new InstantCommand(() -> shoot.setIndexMotorVolts(6)),
-            new InstantCommand(() -> shoot.setIndexMotorVelocity(Constants.ShootingConstants.indexFeedVelocity)),
+            new InstantCommand(() -> shoot.setIndexMotorVolts(6)),
+            // new InstantCommand(() -> shoot.setIndexMotorVelocity(Constants.ShootingConstants.indexFeedVelocity)),
             new InstantCommand(() -> shoot.setMotorVelocity(-Constants.ShootingConstants.targetShootingAmpTarget, false))
         ));
 

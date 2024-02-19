@@ -171,9 +171,10 @@ public final class Constants {
         // public static final int targetShootingRPM = -6800;
         public static final int targetShootingRPM = 6800; //flipped velocity
         public static final int targetShootingAmpTarget = 1500;
-        public static final double indexFeedVelocity = 2000;
-        public static final double indexHoldVelocity= 1000;
-        
+        public static final double indexFeedVolts = 9;
+        public static final double indexHoldVolts = 4;
+        public static final double pivotStore = 0.27;
+        public static final double pivotAmp = -64;
     }
 
     public static class ElevatorConstants {
@@ -185,11 +186,11 @@ public final class Constants {
 
     public static class IntakeConstants {
         public static final double sourceSetpoint = -33;
-        public static final double groundSetpoint = -119;
+        public static final double groundSetpoint = -120;
         public static final double ampSetpoint = -30.8;
 
-        public static final double intakeSpitVelocity = -2000;
-        public static final double intakeSuckVelocity = 2000;
+        public static final double intakeSpitVolts = 5;
+        public static final double intakeSuckVolts = -4;
     }
 
 
