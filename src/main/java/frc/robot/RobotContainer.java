@@ -17,6 +17,7 @@ import java.util.function.Supplier;
 
 import org.photonvision.PhotonCamera;
 
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -96,7 +97,7 @@ public class RobotContainer {
         
         // shoot.setDefaultCommand(
         //     new PivotShootVertically(shoot, vision)
-        // );
+        // ); //I do not trust this
 
         
         autoChooser.addOption("Example Auto", new exampleAuto(s_Swerve));
@@ -159,8 +160,8 @@ public class RobotContainer {
         driver.leftTrigger(0.5).whileTrue(new ManualPivotIntake(intake, -0.15)); // Intake Pivot Down
         
         /* Intake Power */
-        driver.rightBumper().whileTrue(new IntakePowerCommand(intake, 4)); // left bumper
-        driver.leftBumper().whileTrue(new IntakePowerCommand(intake, -3)); // right bumper
+        driver.rightBumper().whileTrue(new IntakePowerCommand(intake, 4));
+        driver.leftBumper().whileTrue(new IntakePowerCommand(intake, -3));
 
         // driver.povLeft().whileTrue(new ParallelCommandGroup(
         //     new InstantCommand(() -> shoot.setIndexMotorVolts(6)),

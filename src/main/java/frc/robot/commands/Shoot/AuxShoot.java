@@ -16,6 +16,7 @@ public class AuxShoot extends SequentialCommandGroup{
             new ParallelCommandGroup(
                 new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore), // re-add this if we start using the pivot again
                 new IntakeSetpointCommand(intake, -3.6),
+                new InstantCommand(() -> intake.setPowerVolts(-2)),
                 new InstantCommand(() -> shoot.setIndexMotorVolts(8)),
                 // new InstantCommand(() -> shoot.setIndexMotorVelocity(Constants.ShootingConstants.indexFeedVelocity)),
                 new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM)
