@@ -106,6 +106,8 @@ public class RobotContainer {
 
         autoChooser.addOption("Shoot then Back up Auto", new ShootThenBackUp(s_Swerve, shoot, intake));
 
+        autoChooser.addOption("Two Note Auto", new TestingTwoNoteAuto(s_Swerve, vision, shoot, intake));
+
         // autoChooser.addOption("Aim And Shoot Auto", new AimAndShoot(s_Swerve, vision, shoot, intake));
 
         // autoChooser.addOption("Red Alliance Auto", new RedAllianceTestAuto(s_Swerve, vision));
@@ -126,12 +128,6 @@ public class RobotContainer {
         driver.start().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         driver.start().onTrue(new InstantCommand(() -> intake.zeroPivotEncoder()));
         driver.start().onTrue(new InstantCommand(() -> shoot.zeroPivotEncoder()));
-
-        /* Shooting Commands */
-        //using velocity vs. voltage helps with shooting at a constant, rather than it deviating when battery is over/under charged
-
-        driver.back().whileFalse(new ResetShooter(intake, shoot));
-        driver.back().whileTrue(new AuxShoot(intake, shoot));
 
         /* Intake Commands */
         driver.x().onTrue(new ParallelCommandGroup(
@@ -163,15 +159,15 @@ public class RobotContainer {
         driver.rightBumper().whileTrue(new IntakePowerCommand(intake, 4));
         driver.leftBumper().whileTrue(new IntakePowerCommand(intake, -3));
 
-        // driver.povLeft().whileTrue(new ParallelCommandGroup(
-        //     new InstantCommand(() -> shoot.setIndexMotorVolts(6)),
-        //     // new InstantCommand(() -> shoot.setIndexMotorVelocity(Constants.ShootingConstants.indexFeedVelocity)),
-        //     new InstantCommand(() -> shoot.setMotorVelocity(-Constants.ShootingConstants.targetShootingAmpTarget, false))
-        // ));
-
+        /* Shooting Pivot Commands */
         driver.povRight().onTrue(new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp)); //one stack of milk please
         driver.povLeft().onTrue(new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore));
 
+         /* Shooting Commands */
+        //using velocity vs. voltage helps with shooting at a constant, rather than it deviating when battery is over/under charged
+
+        driver.back().whileFalse(new ResetShooter(intake, shoot));
+        driver.back().whileTrue(new AuxShoot(intake, shoot));
 
         driver.povUp().whileTrue(new AmpShoot(shoot, intake));
         driver.povUp().whileFalse(new ResetShooter(intake, shoot));

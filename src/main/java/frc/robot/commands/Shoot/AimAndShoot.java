@@ -21,19 +21,11 @@ import frc.robot.subsystems.Vision;
 public class AimAndShoot extends SequentialCommandGroup{
 
     public AimAndShoot(Swerve swerve, Vision vision, Shoot shoot, Intake intake) {
-        new ParallelCommandGroup(
-            new IntakeSetpointCommand(intake, 0),
-            new RotateToTarget(swerve, vision), //activates the vision aiming for at most 0.5 seconds
-            new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM)
-        ).withTimeout(.5);
-        // new ParallelCommandGroup(
-        //     new RunCommand(() -> shoot.setMotorVelocity(Constants.ShootingConstants.targetShootingRPM, false)) //Runs Aiming and 'Reving' at the same time to save time
-        // ).withTimeout(.8);
-        new ParallelCommandGroup(
-            new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM),
-            new IndexNote(intake, shoot)
-            // new RunCommand(() -> shoot.setIndexMotorVolts(2)),
-            // new RunCommand(() -> intake.setPowerVelocity(-3, false))
+        addCommands(
+            new ParallelRaceGroup(
+                 new RotateToTarget(swerve, vision),
+                 new AuxShoot(intake, shoot)
+            )
         );
     }
     
