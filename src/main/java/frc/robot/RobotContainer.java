@@ -137,13 +137,13 @@ public class RobotContainer {
         ));
 
         driver.a().onTrue(new ParallelCommandGroup(
-            new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint)
-            // new IntakePowerCommand(intake, 3)
+            new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint),
+            new IntakePowerCommand(intake, -3)
         ));
 
         driver.b().onTrue(new ParallelCommandGroup(
-            new IntakeSetpointCommand(intake, Constants.IntakeConstants.sourceSetpoint)
-            // new IntakePowerCommand(intake, 3)
+            new IntakeSetpointCommand(intake, Constants.IntakeConstants.sourceSetpoint),
+            new IntakePowerCommand(intake, -3)
         ));
 
         driver.y().onTrue(new ParallelCommandGroup(
@@ -156,8 +156,8 @@ public class RobotContainer {
         // driver.leftTrigger(0.5).whileTrue(new ManualPivotIntake(intake, -0.15)); // Intake Pivot Down
         
         /* Intake Power */
-        driver.rightBumper().whileTrue(new IntakePowerCommand(intake, 4));
-        driver.leftBumper().whileTrue(new IntakePowerCommand(intake, -3));
+        // driver.rightBumper().whileTrue(new IntakePowerCommand(intake, 4));
+        // driver.leftBumper().whileTrue(new IntakePowerCommand(intake, -3));
 
         /* Shooting Pivot Commands */
         // driver.povRight().onTrue(new PivotPIDCommandNonDegrees(shoot, -65)); //one stack of milk please
