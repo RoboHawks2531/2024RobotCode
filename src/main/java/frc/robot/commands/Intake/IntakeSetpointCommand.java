@@ -13,8 +13,7 @@ public class IntakeSetpointCommand extends Command{
     private Intake intake;
     private double setpoint;
     // private PIDController pidController = new PIDController(0.40, 0.015, 0);
-    private PIDController pidController = new PIDController(0.43, 0.015, 0);
-    // private ArmFeedforward feedforward = new ArmFeedforward(0.1, 0.1, 0.1);
+    private PIDController pidController = new PIDController(0.42, 0.015, 0);
 
     public IntakeSetpointCommand(Intake intake, double setpoint) {
         this.intake = intake;
@@ -34,17 +33,13 @@ public class IntakeSetpointCommand extends Command{
     @Override
     public void execute() {
         double speed = pidController.calculate(intake.getPivotEncoder(), setpoint);
-        // double ffSpeed = feedforward.calculate(setpoint, 2, 2);
 
-        // intake.setPivotSpeed(speed);
         intake.setPivotVolts(speed);
     }
 
     @Override
     public void end(boolean interrupted) {
         intake.setPivotSpeed(0);
-        // double reverseSpeed = pidController.calculate(intake.getPivotEncoder(), 0);
-        // intake.setPivotSpeed(reverseSpeed);
     }
     
     @Override

@@ -108,6 +108,8 @@ public class RobotContainer {
 
         autoChooser.addOption("Two Note Auto", new TestingTwoNoteAuto(s_Swerve, vision, shoot, intake));
 
+        autoChooser.addOption("Aim and Shoot", new AimAndShoot(s_Swerve, vision, shoot, intake));
+
         // autoChooser.addOption("Aim And Shoot Auto", new AimAndShoot(s_Swerve, vision, shoot, intake));
 
         // autoChooser.addOption("Red Alliance Auto", new RedAllianceTestAuto(s_Swerve, vision));
@@ -160,7 +162,7 @@ public class RobotContainer {
         driver.leftBumper().whileTrue(new IntakePowerCommand(intake, -3));
 
         /* Shooting Pivot Commands */
-        driver.povRight().onTrue(new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp)); //one stack of milk please
+        driver.povRight().onTrue(new PivotPIDCommandNonDegrees(shoot, -65)); //one stack of milk please
         driver.povLeft().onTrue(new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore));
 
          /* Shooting Commands */

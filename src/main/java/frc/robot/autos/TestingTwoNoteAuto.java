@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.commands.Intake.IntakePowerCommand;
 import frc.robot.commands.Intake.IntakeSetpointCommand;
+import frc.robot.commands.Shoot.AimAndShoot;
 import frc.robot.commands.Vision.RotateToHeading;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shoot;

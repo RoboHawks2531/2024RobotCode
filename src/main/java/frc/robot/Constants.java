@@ -171,7 +171,7 @@ public final class Constants {
         // public static final int targetShootingRPM = -6800;
         public static final int targetShootingRPM = 6800; //flipped velocity
         public static final int targetShootingAmpTarget = 1500;
-        public static final double indexFeedVolts = 12;
+        public static final double indexFeedVolts = 10;
         public static final double indexHoldVolts = 4;
         public static final double pivotStore = 0.27;
         public static final double pivotAmp = -64; //OUT IS NEGATIVE DO NOT PUT ANY POSITIVES OR IT BREAKS
@@ -189,8 +189,8 @@ public final class Constants {
 
     public static class IntakeConstants {
         public static final double sourceSetpoint = -33;
-        public static final double groundSetpoint = -120;
-        public static final double ampSetpoint = -30.8;
+        public static final double groundSetpoint = -122;
+        public static final double ampSetpoint = -44;
 
         public static final double intakeSpitVolts = 5;
         public static final double intakeSuckVolts = -4;
@@ -205,8 +205,6 @@ public final class Constants {
     public static final Transform3d LimelightToRobot = new Transform3d(
         new Translation3d(-0.11, -0.015, -0.895),
         new Rotation3d(degreesToRadians(-90.0), degreesToRadians(34.6), 0.0));
-
-    public static final String HIGH_LIMELIGHT_NAME = "limelight-high";
     
     public static final double FieldLengthMeters= 16.54175;
     public static final double FieldWidthMeters = 8.0137;
