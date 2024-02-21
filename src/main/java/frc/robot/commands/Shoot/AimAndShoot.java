@@ -7,7 +7,6 @@ package frc.robot.commands.Shoot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
@@ -22,7 +21,8 @@ public class AimAndShoot extends SequentialCommandGroup{
 
     public AimAndShoot(Swerve swerve, Vision vision, Shoot shoot, Intake intake) {
         addCommands(
-            new ParallelRaceGroup(
+            new PulseNote(intake, shoot).withTimeout(0.4),
+            new ParallelCommandGroup(
                  new RotateToTarget(swerve, vision),
                  new AuxShoot(intake, shoot)
             )

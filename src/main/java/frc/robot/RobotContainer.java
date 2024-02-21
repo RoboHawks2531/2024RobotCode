@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -43,6 +44,7 @@ import frc.robot.commands.Shoot.AmpShoot;
 import frc.robot.commands.Shoot.AuxShoot;
 import frc.robot.commands.Shoot.PivotPIDCommandNonDegrees;
 import frc.robot.commands.Shoot.PivotShootVertically;
+import frc.robot.commands.Shoot.PulseNote;
 import frc.robot.commands.Shoot.ResetShooter;
 import frc.robot.commands.Vision.RotateToTarget;
 import frc.robot.subsystems.*;
@@ -150,25 +152,30 @@ public class RobotContainer {
         ));
 
         /* Intake Manual Pivoting */
-        driver.rightTrigger(0.5).whileTrue(new ManualPivotIntake(intake, 0.15)); // Intake Pivot Up
-        driver.leftTrigger(0.5).whileTrue(new ManualPivotIntake(intake, -0.15)); // Intake Pivot Down
+        // driver.rightTrigger(0.5).whileTrue(new ManualPivotIntake(intake, 0.15)); // Intake Pivot Up
+        // driver.leftTrigger(0.5).whileTrue(new ManualPivotIntake(intake, -0.15)); // Intake Pivot Down
         
         /* Intake Power */
         driver.rightBumper().whileTrue(new IntakePowerCommand(intake, 4));
         driver.leftBumper().whileTrue(new IntakePowerCommand(intake, -3));
 
         /* Shooting Pivot Commands */
-        driver.povRight().onTrue(new PivotPIDCommandNonDegrees(shoot, -65)); //one stack of milk please
-        driver.povLeft().onTrue(new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore));
+        // driver.povRight().onTrue(new PivotPIDCommandNonDegrees(shoot, -65)); //one stack of milk please
+        // driver.povLeft().onTrue(new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore));
 
-         /* Shooting Commands */
-        //using velocity vs. voltage helps with shooting at a constant, rather than it deviating when battery is over/under charged
+        /* Shooting Commands */
+        driver.rightTrigger(0.5).whileTrue(new SequentialCommandGroup(
+            new PulseNote(intake, shoot).withTimeout(0.9),
+            new AuxShoot(intake, shoot)
+            ));
+        driver.rightTrigger(0).whileFalse(new ResetShooter(intake, shoot));
+        
 
-        driver.back().whileFalse(new ResetShooter(intake, shoot));
-        driver.back().whileTrue(new AuxShoot(intake, shoot));
+        driver.leftTrigger(0.5).whileTrue(new AmpShoot(shoot, intake));
+        driver.leftTrigger(0).whileFalse(new ResetShooter(intake, shoot));
 
-        driver.povUp().whileTrue(new AmpShoot(shoot, intake));
-        driver.povUp().whileFalse(new ResetShooter(intake, shoot));
+        driver.povLeft().whileTrue(new PulseNote(intake, shoot));
+        driver.povLeft().whileFalse(new ResetShooter(intake, shoot));
 
         driver.povDown().onTrue(
             new ParallelCommandGroup(
