@@ -7,7 +7,10 @@ package frc.robot.commands.Vision;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
 
@@ -38,7 +41,9 @@ public class RotateToTarget extends Command{
         // vision.setCameraLEDS(true); // only here for funsies
         double rotation = rotationPID.calculate(vision.getYaw(), 0.1);
 
-        swerve.drive(new Translation2d(), rotation, false, true);
+        swerve.drive(new Translation2d( //if this doesnt work, revert it back
+            -RobotContainer.driver.getRawAxis(XboxController.Axis.kLeftY.value), -RobotContainer.driver.getRawAxis(XboxController.Axis.kLeftX.value)).times(Constants.Swerve.maxSpeed)
+            , rotation, false, true);
     }   
 
     @Override

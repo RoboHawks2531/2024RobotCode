@@ -13,10 +13,6 @@
 
 package frc.robot;
 
-import java.util.function.Supplier;
-
-import org.photonvision.PhotonCamera;
-
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -85,15 +81,15 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        // s_Swerve.setDefaultCommand(
-        //     new TeleopSwerve(
-        //         s_Swerve, 
-        //         () -> -driver.getRawAxis(translationAxis), 
-        //         () -> -driver.getRawAxis(strafeAxis), 
-        //         () -> -driver.getRawAxis(rotationAxis), 
-        //         () -> driver.start().getAsBoolean()
-        //     )
-        // );
+        s_Swerve.setDefaultCommand(
+            new TeleopSwerve(
+                s_Swerve, 
+                () -> -driver.getRawAxis(translationAxis), 
+                () -> -driver.getRawAxis(strafeAxis), 
+                () -> -driver.getRawAxis(rotationAxis), 
+                () -> driver.start().getAsBoolean()
+            )
+        );
         
         // shoot.setDefaultCommand(
         //     new PivotShootVertically(shoot, vision)
