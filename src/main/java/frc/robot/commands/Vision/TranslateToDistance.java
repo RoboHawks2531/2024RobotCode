@@ -31,6 +31,6 @@ public class TranslateToDistance extends Command {
     public void execute() {
         double speed = translationPID.calculate(vision.getDistanceMethod(), distance);
 
-        swerve.drive(new Translation2d(speed, 0), speed, false, false);
+        swerve.drive(new Translation2d(speed, 0), 0, false, true);
     }
 }

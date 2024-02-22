@@ -21,7 +21,10 @@ public class AimAndShoot extends SequentialCommandGroup{
 
     public AimAndShoot(Swerve swerve, Vision vision, Shoot shoot, Intake intake) {
         addCommands(
-            new PulseNote(intake, shoot).withTimeout(0.4),
+            new ParallelCommandGroup(
+                new PulseNote(intake, shoot).withTimeout(0.9),
+                new TranslateThenShoot(swerve, intake, shoot)
+            ).withTimeout(1),
             new ParallelCommandGroup(
                  new RotateToTarget(swerve, vision),
                  new AuxShoot(intake, shoot)

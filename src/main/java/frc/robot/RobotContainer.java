@@ -14,6 +14,8 @@
 package frc.robot;
 
 
+import java.time.Instant;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -62,10 +64,6 @@ public class RobotContainer {
 
     // private PhotonCamera camera = new PhotonCamera("2531Limelight");
 
-    /* Driver button usage ($ means used)
-     * A$,X$,Y$,B$, Left Bumper$, Right Bumper$, Left Trigger$, Right Trigger$, Menu, Two Squares$
-     */
-
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
@@ -89,7 +87,7 @@ public class RobotContainer {
                 () -> -driver.getRawAxis(translationAxis), 
                 () -> -driver.getRawAxis(strafeAxis), 
                 () -> -driver.getRawAxis(rotationAxis), 
-                () -> driver.start().getAsBoolean()
+                () -> driver.rightStick().getAsBoolean()
             )
         );
         
@@ -117,6 +115,10 @@ public class RobotContainer {
         intake.zeroPivotEncoder();
         elevator.zeroMotorEncoders(); 
         shoot.zeroPivotEncoder();
+
+        SmartDashboard.putData("Zero Intake", new InstantCommand(() -> intake.zeroPivotEncoder()));
+        SmartDashboard.putData("Zero Intake", new InstantCommand(() -> shoot.zeroPivotEncoder()));
+        SmartDashboard.putData("Zero Intake", new InstantCommand(() -> elevator.zeroMotorEncoders()));
         
         // Configure the button bindings
         configureButtonBindings();
@@ -148,7 +150,7 @@ public class RobotContainer {
 
         driver.y().onTrue(new ParallelCommandGroup(
             new IntakeSetpointCommand(intake, Constants.IntakeConstants.ampSetpoint)
-            // new IntakePowerCommand(intake, rotationAxis) //it dont need this tbh
+            // new IntakePowerCommand(intake, -3) //it dont need this tbh
         ));
 
         /* Intake Manual Pivoting */
