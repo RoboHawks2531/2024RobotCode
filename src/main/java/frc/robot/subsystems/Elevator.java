@@ -13,20 +13,22 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Elevator extends SubsystemBase{
 
-    private TalonFX powerMotor1 = new TalonFX(Constants.DeviceConstants.leftElevatorMotor); //adjust to actual ID
-    private TalonFX powerMotor2 = new TalonFX(Constants.DeviceConstants.rightElevatorMotor); //adjust to actual ID
+    private TalonFX leftMotor = new TalonFX(Constants.DeviceConstants.leftElevatorMotor); //adjust to actual ID
+    private TalonFX rightMotor = new TalonFX(Constants.DeviceConstants.rightElevatorMotor); //adjust to actual ID
 
     public Elevator() {
-        powerMotor1.setNeutralMode(NeutralModeValue.Brake);
-        powerMotor2.setNeutralMode(NeutralModeValue.Brake);
+        //according to a ctre worker, ccw is the positive direction for a non-inverted falcon
+        leftMotor.setNeutralMode(NeutralModeValue.Brake);
+        rightMotor.setNeutralMode(NeutralModeValue.Brake);
 
-        powerMotor1.setInverted(false);
-        powerMotor2.setInverted(false);
+        leftMotor.setInverted(false);
+        rightMotor.setInverted(false);
         
         var talonFXConfigs = new TalonFXConfiguration();
 
@@ -46,35 +48,41 @@ public class Elevator extends SubsystemBase{
         motionMagicConfigs.MotionMagicAcceleration = 60; // Target acceleration of 160 rps/s (0.5 seconds)
         motionMagicConfigs.MotionMagicJerk = 1600; // Target jerk of 1600 rps/s/s (0.1 seconds)
 
-        powerMotor1.getConfigurator().apply(talonFXConfigs);
-        powerMotor2.getConfigurator().apply(talonFXConfigs);
+        leftMotor.getConfigurator().apply(talonFXConfigs);
+        rightMotor.getConfigurator().apply(talonFXConfigs);
     }
 
 
     public void moveToSetpoint(double setpoint) {
         final MotionMagicVoltage request = new MotionMagicVoltage(0);
 
-        powerMotor1.setControl(request.withPosition(setpoint));
-        powerMotor2.setControl(request.withPosition(setpoint));
+        leftMotor.setControl(request.withPosition(setpoint));
+        rightMotor.setControl(request.withPosition(setpoint));
     }
 
     public void zeroMotorEncoders() {
-        powerMotor1.setPosition(0);
-        powerMotor2.setPosition(0);
+        leftMotor.setPosition(0);
+        rightMotor.setPosition(0);
     }
 
     //this will be used in case the motion magic doesnt work how I want it to
     public void setMotors(double speed1, double speed2) {
-        powerMotor1.set(speed1);
-        powerMotor2.set(speed2);
+        leftMotor.set(speed1);
+        rightMotor.set(speed2);
     }
 
-    public double getEncoder1() {
-        return powerMotor1.getPosition().getValueAsDouble();
+    public double getEncoderLeft() {
+        return leftMotor.getPosition().getValueAsDouble();
     }
 
-    public double getEncoder2() {
-        return powerMotor2.getPosition().getValueAsDouble();
+    public double getEncoderRight() {
+        return rightMotor.getPosition().getValueAsDouble();
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Left Elevator", getEncoderLeft());
+        SmartDashboard.putNumber("Right Elevator", getEncoderRight());
     }
 
 }

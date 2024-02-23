@@ -88,7 +88,7 @@ public class RobotContainer {
                 () -> -driver.getRawAxis(translationAxis), 
                 () -> -driver.getRawAxis(strafeAxis), 
                 () -> -driver.getRawAxis(rotationAxis), 
-                () -> driver.rightStick().getAsBoolean()
+                () -> driver.leftTrigger(0.5).getAsBoolean()
             )
         );
         
@@ -159,8 +159,8 @@ public class RobotContainer {
         // driver.leftTrigger(0.5).whileTrue(new ManualPivotIntake(intake, -0.15)); // Intake Pivot Down
         
         /* Intake Power */
-        // driver.rightBumper().whileTrue(new IntakePowerCommand(intake, 4));
-        // driver.leftBumper().whileTrue(new IntakePowerCommand(intake, -3));
+        driver.rightBumper().whileTrue(new IntakePowerCommand(intake, 4));
+        driver.leftBumper().whileTrue(new IntakePowerCommand(intake, -3));
 
         /* Shooting Pivot Commands */
         // driver.povRight().onTrue(new PivotPIDCommandNonDegrees(shoot, -65)); //one stack of milk please
@@ -175,8 +175,12 @@ public class RobotContainer {
         driver.rightTrigger(0).whileFalse(new ResetShooter(intake, shoot));
         
         // this can be removed if we do use the two stage amp shooting
-        driver.leftTrigger(0.5).whileTrue(new AmpShoot(shoot, intake));
-        driver.leftTrigger(0).whileFalse(new ResetShooter(intake, shoot));
+        // driver.leftTrigger(0.5).whileTrue(new AmpShoot(shoot, intake));
+        // driver.leftTrigger(0.5).whileTrue(new ParallelCommandGroup(
+        //     new PulseNote(intake, shoot).withTimeout(0.9),
+        //     new AimAndShoot(s_Swerve, vision, shoot, intake)
+        // ));
+        // driver.leftTrigger(0).whileFalse(new ResetShooter(intake, shoot));
 
         driver.povLeft().whileTrue(new PulseNote(intake, shoot));
         driver.povLeft().whileFalse(new ResetShooter(intake, shoot));
@@ -207,12 +211,12 @@ public class RobotContainer {
         // driver.povRight().whileFalse(new ResetShooter(intake, shoot));
 
         /* Elevator Commands */
-        operator.a().onTrue(new ElevatorSetpointCommand(elevator, 0));
-        operator.b().onTrue(new ElevatorSetpointCommand(elevator, 25));
-        operator.y().onTrue(new ElevatorSetpointCommand(elevator, 50));
+        // operator.a().onTrue(new ElevatorSetpointCommand(elevator, 0));
+        // operator.b().onTrue(new ElevatorSetpointCommand(elevator, 25));
+        // operator.y().onTrue(new ElevatorSetpointCommand(elevator, 50));
 
-        operator.back().toggleOnTrue(new ManualElevatorCommand(elevator));
-        operator.start().toggleOnTrue(new ElevatorClimbCommand(elevator));
+        // operator.back().toggleOnTrue(new ManualElevatorCommand(elevator));
+        // operator.start().toggleOnTrue(new ElevatorClimbCommand(elevator));
 
         /* Vision Commands */
         // rotateToTarget.whileTrue(new RotateToTarget(s_Swerve, vision));

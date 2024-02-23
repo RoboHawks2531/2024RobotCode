@@ -24,7 +24,7 @@ public class ManualElevatorCommand extends Command{
     public void execute() {
         double speed = -MathUtil.applyDeadband(RobotContainer.operator.getLeftY() , Constants.stickDeadband);
    
-        elevator.setMotors(speed * Constants.ElevatorConstants.manualSpeed, speed * Constants.ElevatorConstants.manualSpeed);
+        elevator.setMotors(speed * Constants.ElevatorConstants.manualDebugSpeed, speed * Constants.ElevatorConstants.manualDebugSpeed);
     }
 
     @Override

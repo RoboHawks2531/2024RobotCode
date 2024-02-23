@@ -181,7 +181,8 @@ public final class Constants {
     }
 
     public static class ElevatorConstants {
-        public static final double manualSpeed = 0.2;
+        public static final double manualSpeed = 0.3;
+        public static final double manualDebugSpeed = 0.1;
         public static final double highSetpoint = 100; //change to real number
         public static final double midSetpoint = 100; //change to real number
         public static final double lowSetpoint = 100; //change to real number
