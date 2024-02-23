@@ -34,16 +34,17 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.autos.*;
 import frc.robot.commands.Defaults.TeleopSwerve;
-// import frc.robot.commands.Elevator.ElevatorClimbCommand;
+import frc.robot.commands.Elevator.ElevatorClimbCommand;
 import frc.robot.commands.Elevator.ElevatorSetpointCommand;
-// import frc.robot.commands.Elevator.MoveElevator;
-// import frc.robot.commands.Elevator.ManualElevatorCommand;
+import frc.robot.commands.Elevator.MoveElevator;
+import frc.robot.commands.Elevator.ManualElevatorCommand;
 import frc.robot.commands.Intake.IntakePowerCommand;
 import frc.robot.commands.Intake.IntakeSetpointCommand;
 import frc.robot.commands.Intake.ManualPivotIntake;
 import frc.robot.commands.Shoot.AimAndShoot;
 import frc.robot.commands.Shoot.AmpShoot;
 import frc.robot.commands.Shoot.AuxShoot;
+import frc.robot.commands.Shoot.IndexNote;
 import frc.robot.commands.Shoot.PivotPIDCommandNonDegrees;
 import frc.robot.commands.Shoot.PivotShootVertically;
 import frc.robot.commands.Shoot.PulseNote;
@@ -60,7 +61,7 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Controllers */
     public static final CommandXboxController driver = new CommandXboxController(0);
-    // public static final CommandXboxController operator = new CommandXboxController(1);
+    public static final CommandXboxController operator = new CommandXboxController(1);
 
     // private PhotonCamera camera = new PhotonCamera("2531Limelight");
 
@@ -169,15 +170,23 @@ public class RobotContainer {
         driver.rightTrigger(0.5).whileTrue(new SequentialCommandGroup(
             new PulseNote(intake, shoot).withTimeout(0.9),
             new AuxShoot(intake, shoot)
-            ));
+            )
+        );
         driver.rightTrigger(0).whileFalse(new ResetShooter(intake, shoot));
         
-
+        // this can be removed if we do use the two stage amp shooting
         driver.leftTrigger(0.5).whileTrue(new AmpShoot(shoot, intake));
         driver.leftTrigger(0).whileFalse(new ResetShooter(intake, shoot));
 
         driver.povLeft().whileTrue(new PulseNote(intake, shoot));
         driver.povLeft().whileFalse(new ResetShooter(intake, shoot));
+
+        driver.povRight().whileTrue(new SequentialCommandGroup(
+            new IndexNote(intake, shoot).withTimeout(0.3),
+            new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp)
+            )
+        );
+        driver.povRight().whileFalse(new ResetShooter(intake, shoot));
 
         driver.povDown().onTrue(
             new ParallelCommandGroup(
@@ -187,17 +196,23 @@ public class RobotContainer {
             )
         );
 
+        driver.povUp().whileTrue(new ParallelCommandGroup(
+            new InstantCommand(() -> shoot.setIndexMotorVolts(-3)),
+            new InstantCommand(() -> shoot.setMotorVelocity(Constants.ShootingConstants.targetShootingAmpTarget, false))
+        ));
+
+        driver.povUp().whileFalse(new ResetShooter(intake, shoot));
         driver.povDown().onFalse(new ResetShooter(intake, shoot));
             
         // driver.povRight().whileFalse(new ResetShooter(intake, shoot));
 
         /* Elevator Commands */
-        // operator.a().onTrue(new ElevatorSetpointCommand(elevator, 0));
-        // operator.b().onTrue(new ElevatorSetpointCommand(elevator, 25));
-        // operator.y().onTrue(new ElevatorSetpointCommand(elevator, 50));
+        operator.a().onTrue(new ElevatorSetpointCommand(elevator, 0));
+        operator.b().onTrue(new ElevatorSetpointCommand(elevator, 25));
+        operator.y().onTrue(new ElevatorSetpointCommand(elevator, 50));
 
-        // operator.back().toggleOnTrue(new ManualElevatorCommand(elevator));
-        // operator.start().toggleOnTrue(new ElevatorClimbCommand(elevator));
+        operator.back().toggleOnTrue(new ManualElevatorCommand(elevator));
+        operator.start().toggleOnTrue(new ElevatorClimbCommand(elevator));
 
         /* Vision Commands */
         // rotateToTarget.whileTrue(new RotateToTarget(s_Swerve, vision));

@@ -14,7 +14,7 @@ public class TranslateThenShoot extends SequentialCommandGroup{
     public TranslateThenShoot(Swerve swerve, Intake intake, Shoot shoot) {
         addCommands(
             new ParallelCommandGroup(
-                new TranslateDistance(swerve, 1), //pose x value is read in meters
+                new TranslateDistance(swerve, 1).withTimeout(1), //pose x value is read in meters
                 new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore), // re-add this if we start using the pivot again
                 // new IntakeSetpointCommand(intake, -3.6), //pulsing puts the intake here anyways
                 new InstantCommand(() -> intake.setPowerVolts(-1)),
