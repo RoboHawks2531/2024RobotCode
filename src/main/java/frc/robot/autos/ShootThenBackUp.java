@@ -11,6 +11,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -57,6 +58,10 @@ public class ShootThenBackUp extends SequentialCommandGroup{
                 swerve::setModuleStates,
                 swerve);
         addCommands(
+            new ParallelCommandGroup(
+                new InstantCommand(() -> shoot.zeroPivotEncoder()),
+                new InstantCommand(() -> intake.zeroPivotEncoder())
+            ),
             new InstantCommand(() -> swerve.setPose(speakerToTopNotTrajectory.getInitialPose())),
             new AuxShoot(intake, shoot).withTimeout(2),
             swerveControllerCommand1

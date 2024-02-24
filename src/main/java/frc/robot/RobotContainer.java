@@ -14,13 +14,11 @@
 package frc.robot;
 
 
-import java.time.Instant;
+import com.fasterxml.jackson.databind.util.Named;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,29 +26,26 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.autos.*;
+import frc.robot.autos.ShootThenBackUp;
+import frc.robot.autos.TestingTwoNoteAuto;
+import frc.robot.autos.exampleAuto;
 import frc.robot.commands.Defaults.TeleopSwerve;
-// import frc.robot.commands.Elevator.ElevatorClimbCommand;
-import frc.robot.commands.Elevator.ElevatorSetpointCommand;
-import frc.robot.commands.Elevator.MoveElevator;
 // import frc.robot.commands.Elevator.ManualElevatorCommand;
 import frc.robot.commands.Intake.IntakePowerCommand;
 import frc.robot.commands.Intake.IntakeSetpointCommand;
-import frc.robot.commands.Intake.ManualPivotIntake;
 import frc.robot.commands.Shoot.AimAndShoot;
 import frc.robot.commands.Shoot.AmpShoot;
 import frc.robot.commands.Shoot.AuxShoot;
 import frc.robot.commands.Shoot.IndexNote;
 import frc.robot.commands.Shoot.PivotPIDCommandNonDegrees;
-import frc.robot.commands.Shoot.PivotShootVertically;
 import frc.robot.commands.Shoot.PulseNote;
 import frc.robot.commands.Shoot.ResetShooter;
-import frc.robot.commands.Vision.RotateToTarget;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shoot;
+import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Vision;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -78,6 +73,7 @@ public class RobotContainer {
     private final Elevator elevator = new Elevator();
 
     private final SendableChooser<Command> autoChooser = new SendableChooser<>();
+    private SendableChooser<Command> otherChooser = new SendableChooser<>();
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -96,22 +92,49 @@ public class RobotContainer {
         //     new PivotShootVertically(shoot, vision)
         // ); //I do not trust this
 
+        NamedCommands.registerCommand("Aux Shoot", new AuxShoot(intake, shoot).withTimeout(3));
+        NamedCommands.registerCommand("Intake Ground", new ParallelCommandGroup(
+            new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint),
+            new IntakePowerCommand(intake, -3)
+        ));
+        NamedCommands.registerCommand("Reset Shooter", new ResetShooter(intake, shoot));
+        NamedCommands.registerCommand("Amp Shoot", new AmpShoot(shoot, intake).withTimeout(3));
+        NamedCommands.registerCommand("Intake Store", new IntakeSetpointCommand(intake, 0));
+        NamedCommands.registerCommand("Zero All", new ParallelCommandGroup(
+            new InstantCommand(() -> s_Swerve.zeroHeading()),
+            new InstantCommand(() -> intake.zeroPivotEncoder()),
+            new InstantCommand(() -> shoot.zeroPivotEncoder())
+        ));
+        NamedCommands.registerCommand("Shooter Pivot Store", new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore).withTimeout(1));
+
+        otherChooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("Auto Chooser", otherChooser);
+
         
         autoChooser.addOption("Example Auto", new exampleAuto(s_Swerve));
 
-        autoChooser.addOption("Sequential Testing Auto", new SequentialTestingAuto(s_Swerve));
+        // autoChooser.addOption("Sequential Testing Auto", new SequentialTestingAuto(s_Swerve));
 
-        autoChooser.addOption("Shoot then Back up Auto", new ShootThenBackUp(s_Swerve, shoot, intake));
+        // autoChooser.addOption("Shoot then Back up Auto", new ShootThenBackUp(s_Swerve, shoot, intake));
 
-        autoChooser.addOption("Two Note Auto", new TestingTwoNoteAuto(s_Swerve, vision, shoot, intake));
+        // autoChooser.addOption("Two Note Auto", new TestingTwoNoteAuto(s_Swerve, vision, shoot, intake));
 
-        autoChooser.addOption("Aim and Shoot", new AimAndShoot(s_Swerve, vision, shoot, intake));
+        // autoChooser.addOption("Aim and Shoot", new AimAndShoot(s_Swerve, vision, shoot, intake));
+
+        // autoChooser.addOption("Just Shoot Auto", new SequentialCommandGroup(
+        //     new ParallelCommandGroup(
+        //         new InstantCommand(() -> shoot.zeroPivotEncoder()),
+        //         new InstantCommand(() -> intake.zeroPivotEncoder())
+        //     ).withTimeout(0.3),
+        //     new AuxShoot(intake, shoot).withTimeout(3),
+        //     new ResetShooter(intake, shoot)
+        // ));
 
         // autoChooser.addOption("Aim And Shoot Auto", new AimAndShoot(s_Swerve, vision, shoot, intake));
 
         // autoChooser.addOption("Red Alliance Auto", new RedAllianceTestAuto(s_Swerve, vision));
 
-        SmartDashboard.putData(autoChooser);
+        // SmartDashboard.putData(autoChooser);
 
         intake.zeroPivotEncoder();
         elevator.zeroMotorEncoders(); 
@@ -159,9 +182,12 @@ public class RobotContainer {
         // driver.leftTrigger(0.5).whileTrue(new ManualPivotIntake(intake, -0.15)); // Intake Pivot Down
         
         /* Intake Power */
+        driver.leftBumper().whileTrue(new ParallelCommandGroup(
+            new InstantCommand(() -> shoot.setIndexMotorVolts(-3)),
+            new IntakePowerCommand(intake, -3)));
         driver.rightBumper().whileTrue(new IntakePowerCommand(intake, 4));
-        driver.leftBumper().whileTrue(new IntakePowerCommand(intake, -3));
 
+        driver.leftBumper().onFalse(new ResetShooter(intake, shoot));
         /* Shooting Pivot Commands */
         // driver.povRight().onTrue(new PivotPIDCommandNonDegrees(shoot, -65)); //one stack of milk please
         // driver.povLeft().onTrue(new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore));
@@ -232,6 +258,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return autoChooser.getSelected();
+        // return autoChooser.getSelected();
+        return otherChooser.getSelected();
     }
 }

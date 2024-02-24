@@ -21,7 +21,11 @@ public class AmpShoot extends SequentialCommandGroup {
           new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp).withTimeout(0.7),
           new ParallelCommandGroup(
             new RevShooter(shoot, Constants.ShootingConstants.targetShootingAmpTarget),
-            new IndexNote(intake, shoot).withTimeout(0.2)
+            new ParallelCommandGroup(
+              new InstantCommand(() -> shoot.setIndexMotorVolts(Constants.ShootingConstants.indexHoldVolts)),
+              new InstantCommand(() -> intake.setPowerVolts(3))
+            )
+            // new IndexNote(intake, shoot).withTimeout(0.2)
           ).withTimeout(1.5)
         );
     }

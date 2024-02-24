@@ -63,7 +63,7 @@ public class Shoot extends SubsystemBase {
     var slot0Configs = talonFXConfigs.Slot0;
       slot0Configs.kS = 0.25; //Adds volts to overcome static friction
       slot0Configs.kV = 0.24; // A velocity target of 1 rps results in 0.12 V output
-      slot0Configs.kA = 0.60; // An acceleration of 1 rps/s requires 0.01 V output
+      slot0Configs.kA = 0.40; // An acceleration of 1 rps/s requires 0.01 V output //origin is .6
       slot0Configs.kP = 0.11; // An error of 1 rps results in 0.11 V output
       slot0Configs.kI = 0.0;  // Integral value
       slot0Configs.kD = 0.0;  // Derivative value

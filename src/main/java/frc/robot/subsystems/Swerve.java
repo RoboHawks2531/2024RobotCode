@@ -10,11 +10,17 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.hal.SimDevice.Direction;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -36,6 +42,26 @@ public class Swerve extends SubsystemBase {
         };
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
+
+
+        AutoBuilder.configureHolonomic(
+            this::getPose,
+             this::zeroPose,
+              this::getChassisSpeeds,
+               this::setChassisSpeeds,
+                new HolonomicPathFollowerConfig(
+                    new PIDConstants(4,0,0), 
+                    new PIDConstants(1,0,0), 4.5, 0.39, new ReplanningConfig() 
+                    ),
+                 () -> {
+                    var alliance = DriverStation.getAlliance();
+                    if (alliance.isPresent()) {
+                        return alliance.get() == DriverStation.Alliance.Red;
+                    }
+                    return false;
+                 },
+                  this
+        );
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -94,6 +120,11 @@ public class Swerve extends SubsystemBase {
         swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), pose);
     }
 
+    public void zeroPose(Pose2d pose) {
+        // swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), new Pose2d());
+        swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), pose);
+    }
+
     public Rotation2d getHeading(){
         return getPose().getRotation();
     }
@@ -123,6 +154,24 @@ public class Swerve extends SubsystemBase {
     public double getGyroDouble() {
         return gyro.getYaw().getValueAsDouble();
     }
+
+    public ChassisSpeeds getChassisSpeeds() {
+        SwerveModuleState[] currentModuleState = new SwerveModuleState[this.mSwerveMods.length];
+        for (int i = 0; i < this.mSwerveMods.length; i++) {
+            currentModuleState[i] = mSwerveMods[i].getState();
+        }
+        return Constants.Swerve.swerveKinematics.toChassisSpeeds(currentModuleState);
+    }
+
+    public void setChassisSpeeds(ChassisSpeeds chassisSpeeds) {
+        setModuleStates(Constants.Swerve.swerveKinematics.toSwerveModuleStates(chassisSpeeds));
+    }
+
+    // public void setModuleStates(SwerveModuleState[] desiredStates) {
+    //     for (int i = 0; i < desiredStates.length; i++) {
+    //         mSwerveMods[i].setDesiredState(desiredStates[i], false);
+    //     }
+    // }
 
     @Override
     public void periodic(){
