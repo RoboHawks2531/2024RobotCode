@@ -33,6 +33,6 @@ public class TranslateDistance extends Command{
 
     @Override
     public void end(boolean interrupted) {
-        
+        swerve.drive(new Translation2d(), 0, false, false);
     }
 }

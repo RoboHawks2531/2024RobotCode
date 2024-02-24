@@ -172,7 +172,7 @@ public final class Constants {
         public static final int targetShootingRPM = 6800; //flipped velocity
         public static final int targetShootingAmpTarget = 1500;
         public static final double indexFeedVolts = 10;
-        public static final double indexHoldVolts = 4;
+        public static final double indexHoldVolts = 3;
         public static final double pivotStore = 0.27;
         public static final double pivotAmp = -64; //OUT IS NEGATIVE DO NOT PUT ANY POSITIVES OR IT BREAKS
         public static final double pivotIntake = -100;
@@ -192,6 +192,7 @@ public final class Constants {
         public static final double sourceSetpoint = -33;
         public static final double groundSetpoint = -122;
         public static final double ampSetpoint = -44;
+        public static final double indexFeedingSetpoint = -3.5;
 
         public static final double intakeSpitVolts = 5;
         public static final double intakeSuckVolts = -4;

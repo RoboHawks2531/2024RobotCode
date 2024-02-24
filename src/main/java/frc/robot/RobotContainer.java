@@ -34,10 +34,10 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.autos.*;
 import frc.robot.commands.Defaults.TeleopSwerve;
-import frc.robot.commands.Elevator.ElevatorClimbCommand;
+// import frc.robot.commands.Elevator.ElevatorClimbCommand;
 import frc.robot.commands.Elevator.ElevatorSetpointCommand;
 import frc.robot.commands.Elevator.MoveElevator;
-import frc.robot.commands.Elevator.ManualElevatorCommand;
+// import frc.robot.commands.Elevator.ManualElevatorCommand;
 import frc.robot.commands.Intake.IntakePowerCommand;
 import frc.robot.commands.Intake.IntakeSetpointCommand;
 import frc.robot.commands.Intake.ManualPivotIntake;
@@ -61,7 +61,7 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Controllers */
     public static final CommandXboxController driver = new CommandXboxController(0);
-    public static final CommandXboxController operator = new CommandXboxController(1);
+    // public static final CommandXboxController operator = new CommandXboxController(1);
 
     // private PhotonCamera camera = new PhotonCamera("2531Limelight");
 
@@ -168,7 +168,7 @@ public class RobotContainer {
 
         /* Shooting Commands */
         driver.rightTrigger(0.5).whileTrue(new SequentialCommandGroup(
-            new PulseNote(intake, shoot).withTimeout(0.9),
+            // new PulseNote(intake, shoot).withTimeout(0.9),
             new AuxShoot(intake, shoot)
             )
         );
@@ -185,12 +185,20 @@ public class RobotContainer {
         driver.povLeft().whileTrue(new PulseNote(intake, shoot));
         driver.povLeft().whileFalse(new ResetShooter(intake, shoot));
 
-        driver.povRight().whileTrue(new SequentialCommandGroup(
-            new IndexNote(intake, shoot).withTimeout(0.3),
+        driver.povRight().onTrue(new SequentialCommandGroup(
+            new IndexNote(intake, shoot).withTimeout(0.4),
+            // new InstantCommand(() -> intake.setPowerVolts(0)),
             new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp)
             )
         );
+
         driver.povRight().whileFalse(new ResetShooter(intake, shoot));
+
+        driver.povUp().whileTrue(new ParallelCommandGroup(
+                new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp),
+                new InstantCommand(() -> shoot.setIndexMotorVolts(8)),
+                new InstantCommand(() -> shoot.setMotorVelocity(Constants.ShootingConstants.targetShootingAmpTarget, false))
+        ));
 
         driver.povDown().onTrue(
             new ParallelCommandGroup(
@@ -200,10 +208,7 @@ public class RobotContainer {
             )
         );
 
-        driver.povUp().whileTrue(new ParallelCommandGroup(
-            new InstantCommand(() -> shoot.setIndexMotorVolts(-3)),
-            new InstantCommand(() -> shoot.setMotorVelocity(Constants.ShootingConstants.targetShootingAmpTarget, false))
-        ));
+        
 
         driver.povUp().whileFalse(new ResetShooter(intake, shoot));
         driver.povDown().onFalse(new ResetShooter(intake, shoot));

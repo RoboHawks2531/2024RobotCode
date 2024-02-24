@@ -36,8 +36,8 @@ public class ElevatorSetpointCommand extends Command{
 
     @Override
     public void execute() {
-        double speed1 = pidController1.calculate(elevator.getEncoder1());
-        double speed2 = pidController2.calculate(elevator.getEncoder2());
+        double speed1 = pidController1.calculate(elevator.getEncoderLeft());
+        double speed2 = pidController2.calculate(elevator.getEncoderRight());
 
         elevator.setMotors(speed1, speed2);
     }
