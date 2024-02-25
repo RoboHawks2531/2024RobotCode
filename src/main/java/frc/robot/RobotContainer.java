@@ -27,7 +27,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.autos.ShootThenBackUp;
 import frc.robot.autos.TestingTwoNoteAuto;
 import frc.robot.autos.exampleAuto;
 import frc.robot.commands.Defaults.TeleopSwerve;
@@ -110,26 +109,9 @@ public class RobotContainer {
         
         autoChooser.addOption("Example Auto", new exampleAuto(s_Swerve));
 
-        // autoChooser.addOption("Sequential Testing Auto", new SequentialTestingAuto(s_Swerve));
-
-        // autoChooser.addOption("Shoot then Back up Auto", new ShootThenBackUp(s_Swerve, shoot, intake));
 
         // autoChooser.addOption("Two Note Auto", new TestingTwoNoteAuto(s_Swerve, vision, shoot, intake));
 
-        // autoChooser.addOption("Aim and Shoot", new AimAndShoot(s_Swerve, vision, shoot, intake));
-
-        // autoChooser.addOption("Just Shoot Auto", new SequentialCommandGroup(
-        //     new ParallelCommandGroup(
-        //         new InstantCommand(() -> shoot.zeroPivotEncoder()),
-        //         new InstantCommand(() -> intake.zeroPivotEncoder())
-        //     ).withTimeout(0.3),
-        //     new AuxShoot(intake, shoot).withTimeout(3),
-        //     new ResetShooter(intake, shoot)
-        // ));
-
-        // autoChooser.addOption("Aim And Shoot Auto", new AimAndShoot(s_Swerve, vision, shoot, intake));
-
-        // autoChooser.addOption("Red Alliance Auto", new RedAllianceTestAuto(s_Swerve, vision));
 
         // SmartDashboard.putData(autoChooser);
 
