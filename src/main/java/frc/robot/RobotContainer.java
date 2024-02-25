@@ -88,9 +88,6 @@ public class RobotContainer {
             )
         );
         
-        // shoot.setDefaultCommand(
-        //     new PivotShootVertically(shoot, vision)
-        // ); //I do not trust this
 
         NamedCommands.registerCommand("Aux Shoot", new AuxShoot(intake, shoot).withTimeout(3));
         NamedCommands.registerCommand("Intake Ground", new ParallelCommandGroup(
