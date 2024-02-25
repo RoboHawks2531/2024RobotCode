@@ -11,8 +11,8 @@ import frc.robot.subsystems.Elevator;
 public class ElevatorSetpointCommand extends Command{
     
     private Elevator elevator;
-    private PIDController pidController1 = new PIDController(0.12, 0.012, 0);
-    private PIDController pidController2 = new PIDController(0.12, 0.012, 0);
+    private PIDController pidController1 = new PIDController(0.005, 0.0, 0);
+    private PIDController pidController2 = new PIDController(0.005, 0.0, 0);
 
     private double setpoint;
 
@@ -21,8 +21,8 @@ public class ElevatorSetpointCommand extends Command{
         this.setpoint = setpoint;
 
         // addRequirements(elevator);
-        pidController1.setIZone(20);
-        pidController2.setIZone(20);
+        pidController1.setIZone(30);
+        pidController2.setIZone(30);
         pidController1.setSetpoint(setpoint);
         pidController2.setSetpoint(setpoint);
     }

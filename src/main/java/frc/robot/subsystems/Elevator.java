@@ -67,12 +67,14 @@ public class Elevator extends SubsystemBase{
 
     //this will be used in case the motion magic doesnt work how I want it to
     public void setMotors(double speed1, double speed2) {
-        leftMotor.set(speed1);
+        leftMotor.set(-speed1);
         rightMotor.set(speed2);
+        // if elevator needs to flip directions, make speed1 positive and make speed2 negative
+        // if need to flip, flip the encoders values to
     }
 
     public double getEncoderLeft() {
-        return leftMotor.getPosition().getValueAsDouble();
+        return -leftMotor.getPosition().getValueAsDouble();
     }
 
     public double getEncoderRight() {

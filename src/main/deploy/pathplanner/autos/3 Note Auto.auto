@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4,
-      "y": 5.54
+      "x": 1.264368346918512,
+      "y": 5.53650223579517
     },
     "rotation": 0
   },
@@ -18,15 +18,28 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Aux Shoot"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Aux Shoot"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Reset Shooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Ground"
           }
         },
         {
@@ -68,6 +81,25 @@
           }
         },
         {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pulse Stage 1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pulse Stage 2"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Aux Shoot"
@@ -77,6 +109,12 @@
           "type": "named",
           "data": {
             "name": "Reset Shooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Ground"
           }
         },
         {

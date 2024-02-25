@@ -30,6 +30,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.autos.TestingTwoNoteAuto;
 import frc.robot.autos.exampleAuto;
 import frc.robot.commands.Defaults.TeleopSwerve;
+import frc.robot.commands.Elevator.ElevatorClimbCommand;
+import frc.robot.commands.Elevator.ElevatorSetpointCommand;
+import frc.robot.commands.Elevator.ManualElevatorCommand;
 // import frc.robot.commands.Elevator.ManualElevatorCommand;
 import frc.robot.commands.Intake.IntakePowerCommand;
 import frc.robot.commands.Intake.IntakeSetpointCommand;
@@ -55,7 +58,7 @@ import frc.robot.subsystems.Vision;
 public class RobotContainer {
     /* Controllers */
     public static final CommandXboxController driver = new CommandXboxController(0);
-    // public static final CommandXboxController operator = new CommandXboxController(1);
+    public static final CommandXboxController operator = new CommandXboxController(1);
 
     // private PhotonCamera camera = new PhotonCamera("2531Limelight");
 
@@ -88,26 +91,37 @@ public class RobotContainer {
         );
         
 
-        NamedCommands.registerCommand("Aux Shoot", new AuxShoot(intake, shoot).withTimeout(3));
+        NamedCommands.registerCommand("Aux Shoot", new AuxShoot(intake, shoot).withTimeout(2));
         NamedCommands.registerCommand("Intake Ground", new ParallelCommandGroup(
+            new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint),
+            new IntakePowerCommand(intake, -3)
+        ).withTimeout(1.5));
+        NamedCommands.registerCommand("Intake Ground Non Timeout", new ParallelCommandGroup(
             new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint),
             new IntakePowerCommand(intake, -3)
         ));
         NamedCommands.registerCommand("Reset Shooter", new ResetShooter(intake, shoot));
         NamedCommands.registerCommand("Amp Shoot", new AmpShoot(shoot, intake).withTimeout(3));
-        NamedCommands.registerCommand("Intake Store", new IntakeSetpointCommand(intake, 0));
+        NamedCommands.registerCommand("Intake Store", new IntakeSetpointCommand(intake, -2.5).withTimeout(1.5));
         NamedCommands.registerCommand("Zero All", new ParallelCommandGroup(
             new InstantCommand(() -> s_Swerve.zeroHeading()),
             new InstantCommand(() -> intake.zeroPivotEncoder()),
             new InstantCommand(() -> shoot.zeroPivotEncoder())
         ));
         NamedCommands.registerCommand("Shooter Pivot Store", new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore).withTimeout(1));
+        NamedCommands.registerCommand("Pulse Stage 2", new ParallelCommandGroup(
+            new InstantCommand(() -> shoot.setIndexMotorVolts(-3)),
+            new IntakePowerCommand(intake, -3)).withTimeout(0.2));
+        NamedCommands.registerCommand("Pulse Stage 1", new ParallelCommandGroup(
+            new IntakeSetpointCommand(intake, -4),
+            new InstantCommand(() -> shoot.setIndexMotorVolts(3)),
+            new IntakePowerCommand(intake, 3)).withTimeout(0.2));
 
         otherChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", otherChooser);
 
         
-        autoChooser.addOption("Example Auto", new exampleAuto(s_Swerve));
+        // autoChooser.addOption("Example Auto", new exampleAuto(s_Swerve));
 
 
         // autoChooser.addOption("Two Note Auto", new TestingTwoNoteAuto(s_Swerve, vision, shoot, intake));
@@ -164,9 +178,13 @@ public class RobotContainer {
         driver.leftBumper().whileTrue(new ParallelCommandGroup(
             new InstantCommand(() -> shoot.setIndexMotorVolts(-3)),
             new IntakePowerCommand(intake, -3)));
-        driver.rightBumper().whileTrue(new IntakePowerCommand(intake, 4));
+        driver.rightBumper().whileTrue(new ParallelCommandGroup(
+            new IntakePowerCommand(intake, 4),
+            new InstantCommand(() -> shoot.setIndexMotorVolts(3))
+        ));
 
         driver.leftBumper().onFalse(new ResetShooter(intake, shoot));
+        driver.rightBumper().onFalse(new ResetShooter(intake, shoot));
         /* Shooting Pivot Commands */
         // driver.povRight().onTrue(new PivotPIDCommandNonDegrees(shoot, -65)); //one stack of milk please
         // driver.povLeft().onTrue(new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore));
@@ -221,12 +239,13 @@ public class RobotContainer {
         // driver.povRight().whileFalse(new ResetShooter(intake, shoot));
 
         /* Elevator Commands */
-        // operator.a().onTrue(new ElevatorSetpointCommand(elevator, 0));
+        // operator.a().onTrue(new ElevatorSetpointCommand(elevator, 7));
         // operator.b().onTrue(new ElevatorSetpointCommand(elevator, 25));
         // operator.y().onTrue(new ElevatorSetpointCommand(elevator, 50));
 
-        // operator.back().toggleOnTrue(new ManualElevatorCommand(elevator));
-        // operator.start().toggleOnTrue(new ElevatorClimbCommand(elevator));
+        operator.back().toggleOnTrue(new ManualElevatorCommand(elevator));
+        operator.a().onTrue(new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint));
+        operator.start().toggleOnTrue(new ElevatorClimbCommand(elevator));
 
         /* Vision Commands */
         // rotateToTarget.whileTrue(new RotateToTarget(s_Swerve, vision));

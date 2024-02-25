@@ -19,7 +19,7 @@ public class AuxShoot extends SequentialCommandGroup{
                 new InstantCommand(() -> intake.setPowerVolts(-1)),
                 new InstantCommand(() -> shoot.setIndexMotorVolts(Constants.ShootingConstants.indexFeedVolts)), //sped up because david said so
                 new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM)
-            ).withTimeout(1.5),
+            ).withTimeout(1),
             new ParallelCommandGroup(
                 new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM),
                 new IndexNote(intake, shoot)

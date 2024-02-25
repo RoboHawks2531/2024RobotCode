@@ -160,8 +160,8 @@ public final class Constants {
     public static class DeviceConstants {
         public static final int leftShooterMotor = 34;
         public static final int rightShooterMotor = 33;
-        public static final int leftElevatorMotor = 0;
-        public static final int rightElevatorMotor = 0;
+        public static final int leftElevatorMotor = 28; //flip this, default is clockwise
+        public static final int rightElevatorMotor = 13; //spinning counter clockwise
         public static final int intakePivotMotor = 31;
         public static final int intakePowerMotor = 21;
         public static final int indexMotorID = 22;
@@ -182,18 +182,19 @@ public final class Constants {
     }
 
     public static class ElevatorConstants {
-        public static final double manualSpeed = 0.3;
+        public static final double manualSpeed = 0.70;
         public static final double manualDebugSpeed = 0.1;
-        public static final double highSetpoint = 100; //change to real number
-        public static final double midSetpoint = 100; //change to real number
-        public static final double lowSetpoint = 100; //change to real number
+        public static final double highSetpoint = 145; //change to real number
+        public static final double midSetpoint = 25; //change to real number
+        public static final double lowSetpoint = 2; //change to real number
     }
 
     public static class IntakeConstants {
         public static final double sourceSetpoint = -33;
         public static final double groundSetpoint = -122;
         public static final double ampSetpoint = -44;
-        public static final double indexFeedingSetpoint = -3.5;
+        // public static final double indexFeedingSetpoint = -3.5;
+        public static final double indexFeedingSetpoint = -3;
 
         public static final double intakeSpitVolts = 5;
         public static final double intakeSuckVolts = -4;
