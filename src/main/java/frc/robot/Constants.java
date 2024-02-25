@@ -170,7 +170,7 @@ public final class Constants {
 
     public static class ShootingConstants {
         // public static final int targetShootingRPM = -6800;
-        public static final int targetShootingRPM = 6800; //flipped velocity
+        public static final int targetShootingRPM = 6800; //when testing, try lowering this so that we can test more torque
         public static final int targetShootingAmpTarget = 1500;
         public static final double indexFeedVolts = 12;
         public static final double indexHoldVolts = 6;
