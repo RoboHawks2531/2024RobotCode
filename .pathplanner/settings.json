@@ -2,8 +2,12 @@
   "robotWidth": 0.71,
   "robotLength": 0.71,
   "holonomicMode": true,
-  "pathFolders": [],
-  "autoFolders": [],
+  "pathFolders": [
+    "Kadens-Paths"
+  ],
+  "autoFolders": [
+    "Kadens-Auto"
+  ],
   "defaultMaxVel": 5.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,

@@ -39,7 +39,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake Ground"
+            "name": "Intake Ground Quick Timeout"
           }
         },
         {
@@ -114,7 +114,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake Ground"
+            "name": "Intake Ground Quick Timeout"
           }
         },
         {
@@ -170,6 +170,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Kadens-Auto",
   "choreoAuto": false
 }

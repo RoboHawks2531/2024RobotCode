@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.43,
-      "y": 7.31
+      "x": 1.26,
+      "y": 5.54
     },
-    "rotation": 0.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -18,38 +18,39 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Top To Amp"
+            "name": "Aux Shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Speaker To Top Note"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Ground"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Amp Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shooter Pivot Store"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Reset Shooter"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Amp to Mid"
+            "name": null
           }
         }
       ]
     }
   },
-  "folder": "Kadens-Auto",
+  "folder": null,
   "choreoAuto": false
 }

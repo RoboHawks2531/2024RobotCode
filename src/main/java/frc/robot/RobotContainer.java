@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -43,6 +44,8 @@ import frc.robot.commands.Shoot.IndexNote;
 import frc.robot.commands.Shoot.PivotPIDCommandNonDegrees;
 import frc.robot.commands.Shoot.PulseNote;
 import frc.robot.commands.Shoot.ResetShooter;
+import frc.robot.commands.Vision.RotateToHeading;
+import frc.robot.commands.Vision.RotateToTarget;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shoot;
@@ -99,7 +102,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Intake Ground Quick Timeout", new ParallelCommandGroup(
             new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint),
             new IntakePowerCommand(intake, -3)
-        ));
+        ).withTimeout(0.5));
         NamedCommands.registerCommand("Reset Shooter", new ResetShooter(intake, shoot));
         NamedCommands.registerCommand("Amp Shoot", new AmpShoot(shoot, intake).withTimeout(3));
         NamedCommands.registerCommand("Intake Store", new IntakeSetpointCommand(intake, -2.5).withTimeout(1.5));
@@ -116,7 +119,8 @@ public class RobotContainer {
             new IntakeSetpointCommand(intake, -4),
             new InstantCommand(() -> shoot.setIndexMotorVolts(3)),
             new IntakePowerCommand(intake, 3)).withTimeout(0.2));
-
+        //NamedCommands.registerCommand("Aim And Shoot", new AimAndShoot(s_Swerve, vision, shoot, intake));
+        //NamedCommands.registerCommand("Turn To Zero", new InstantCommand(() -> Swerve.setHeading(Rotation2d(0))));
         otherChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", otherChooser);
 
