@@ -96,7 +96,7 @@ public class RobotContainer {
             new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint),
             new IntakePowerCommand(intake, -3)
         ).withTimeout(1.5));
-        NamedCommands.registerCommand("Intake Ground Non Timeout", new ParallelCommandGroup(
+        NamedCommands.registerCommand("Intake Ground Quick Timeout", new ParallelCommandGroup(
             new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint),
             new IntakePowerCommand(intake, -3)
         ));

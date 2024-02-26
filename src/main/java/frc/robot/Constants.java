@@ -170,7 +170,7 @@ public final class Constants {
 
     public static class ShootingConstants {
         // public static final int targetShootingRPM = -6800;
-        public static final int targetShootingRPM = 6800; //when testing, try lowering this so that we can test more torque
+        public static final int targetShootingRPM = 6800; 
         public static final int targetShootingAmpTarget = 1500;
         public static final double indexFeedVolts = 12;
         public static final double indexHoldVolts = 6;
@@ -184,9 +184,9 @@ public final class Constants {
     public static class ElevatorConstants {
         public static final double manualSpeed = 0.70;
         public static final double manualDebugSpeed = 0.1;
-        public static final double highSetpoint = 145; //change to real number
-        public static final double midSetpoint = 25; //change to real number
-        public static final double lowSetpoint = 2; //change to real number
+        public static final double highSetpoint = 145; 
+        public static final double midSetpoint = 25; 
+        public static final double lowSetpoint = 2; 
     }
 
     public static class IntakeConstants {
