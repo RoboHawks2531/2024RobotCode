@@ -1,0 +1,200 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.264368346918512,
+      "y": 5.53650223579517
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Zero All"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Aux Shoot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Reset Shooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Ground Quick Timeout"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Ground"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Speaker to Middle Note"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Store"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Middle Note to Speaker"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pulse Stage 1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pulse Stage 2"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Aux Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Reset Shooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Ground Quick Timeout"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Ground"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Speaker To Top Note"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Store"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Top Note to Speaker"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Aux Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Reset Shooter"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Speaker to Mid Top"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Ground"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Store"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Kadens-Auto",
+  "choreoAuto": false
+}

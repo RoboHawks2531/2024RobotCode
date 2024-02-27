@@ -21,6 +21,7 @@ public class AuxShoot extends SequentialCommandGroup{
                 new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM)
             ).withTimeout(1),
             new ParallelCommandGroup(
+                new IntakeSetpointCommand(intake, Constants.IntakeConstants.indexFeedingSetpoint),
                 new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM),
                 new IndexNote(intake, shoot)
             )

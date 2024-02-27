@@ -1,0 +1,99 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.255039600988293,
+      "y": 6.408848454060545
+    },
+    "rotation": 0.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Zero All"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Start To Top Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Aux Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Reset Shooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Ground Quick Timeout"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Speaker Top to Top Note"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Ground"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Store"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Top Note to Amp"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Amp Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Reset Shooter"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Kadens-Auto",
+  "choreoAuto": false
+}

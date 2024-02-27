@@ -89,7 +89,8 @@ public class RobotContainer {
                 () -> -driver.getRawAxis(translationAxis), 
                 () -> -driver.getRawAxis(strafeAxis), 
                 () -> -driver.getRawAxis(rotationAxis), 
-                () -> driver.leftTrigger(0.5).getAsBoolean()
+                // () -> driver.leftTrigger(0.5).getAsBoolean()
+                () -> driver.leftStick().getAsBoolean()
             )
         );
         
@@ -153,7 +154,8 @@ public class RobotContainer {
 
         /* Intake Commands */
         driver.x().onTrue(new ParallelCommandGroup(
-            new IntakeSetpointCommand(intake, 0),
+            // new IntakeSetpointCommand(intake, 0),
+            new IntakeSetpointCommand(intake, Constants.IntakeConstants.indexFeedingSetpoint),
             new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore)
             // new IntakePowerCommand(intake, 2)
         ));
@@ -199,6 +201,13 @@ public class RobotContainer {
             )
         );
         driver.rightTrigger(0).whileFalse(new ResetShooter(intake, shoot));
+
+        driver.leftTrigger(0.5).whileTrue(new SequentialCommandGroup(
+            new IndexNote(intake, shoot).withTimeout(0.4),
+            // new InstantCommand(() -> intake.setPowerVolts(0)),
+            new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp)
+            ));
+        driver.leftTrigger(0).whileFalse(new ResetShooter(intake, shoot));
         
         // this can be removed if we do use the two stage amp shooting
         // driver.leftTrigger(0.5).whileTrue(new AmpShoot(shoot, intake));
@@ -211,12 +220,12 @@ public class RobotContainer {
         driver.povLeft().whileTrue(new PulseNote(intake, shoot));
         driver.povLeft().whileFalse(new ResetShooter(intake, shoot));
 
-        driver.povRight().onTrue(new SequentialCommandGroup(
-            new IndexNote(intake, shoot).withTimeout(0.4),
-            // new InstantCommand(() -> intake.setPowerVolts(0)),
-            new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp)
-            )
-        );
+        // driver.povRight().onTrue(new SequentialCommandGroup(
+        //     new IndexNote(intake, shoot).withTimeout(0.4),
+        //     // new InstantCommand(() -> intake.setPowerVolts(0)),
+        //     new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp)
+        //     )
+        // );
 
         driver.povRight().whileFalse(new ResetShooter(intake, shoot));
 
