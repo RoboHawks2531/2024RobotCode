@@ -50,17 +50,20 @@ public class Swerve extends SubsystemBase {
               this::getChassisSpeeds,
                this::setChassisSpeeds,
                 new HolonomicPathFollowerConfig(
-                    new PIDConstants(4,0,0), 
-                    new PIDConstants(1,0,0), 4.5, 0.39, new ReplanningConfig() 
+                    new PIDConstants(4,0,0),  //good numbers
+                    new PIDConstants(1,0,0), //good numbers
+                     4.5, //this is fine
+                      0.39, //may need reconfig
+                       new ReplanningConfig() 
                     ),
                  () -> {
                     var alliance = DriverStation.getAlliance();
                     if (alliance.isPresent()) {
                         return alliance.get() == DriverStation.Alliance.Red;
                     }
-                    return false;
+                    return false; 
                  },
-                  this
+                  this 
         );
     }
 

@@ -1,0 +1,93 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.255039600988293,
+      "y": 4.664372965109567
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Zero All"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Bottom Shoot Starting"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Aux Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Ground Quick Timeout"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Ground"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Bottom To Bottom Note"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Store"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Bottom Note to Speaker"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Aux Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Speaker to Bottom Leavin"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Kadens-Auto",
+  "choreoAuto": false
+}

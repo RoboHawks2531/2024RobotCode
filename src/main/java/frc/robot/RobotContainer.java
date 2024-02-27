@@ -119,8 +119,7 @@ public class RobotContainer {
             new IntakeSetpointCommand(intake, -4),
             new InstantCommand(() -> shoot.setIndexMotorVolts(3)),
             new IntakePowerCommand(intake, 3)).withTimeout(0.2));
-        //NamedCommands.registerCommand("Aim And Shoot", new AimAndShoot(s_Swerve, vision, shoot, intake));
-        //NamedCommands.registerCommand("Turn To Zero", new InstantCommand(() -> Swerve.setHeading(Rotation2d(0))));
+        NamedCommands.registerCommand("Aim And Shoot", new AimAndShoot(s_Swerve, vision, shoot, intake));
         otherChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", otherChooser);
 
