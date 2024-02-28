@@ -69,7 +69,7 @@ public final class Constants {
 
         /* These values are used by the drive falcon to ramp in open loop and closed loop driving.
          * We found a small open loop ramp (0.25) helps with tread wear, tipping, etc */
-        public static final double openLoopRamp = 0.25;
+        public static final double openLoopRamp = 0.15;
         public static final double closedLoopRamp = 0.05;
 
         /* Angle Motor PID Values */
@@ -191,10 +191,10 @@ public final class Constants {
 
     public static class IntakeConstants {
         public static final double sourceSetpoint = -33;
-        public static final double groundSetpoint = -122;
+        public static final double groundSetpoint = -122.5;
         public static final double ampSetpoint = -44;
         // public static final double indexFeedingSetpoint = -3.5;
-        public static final double indexFeedingSetpoint = -3;
+        public static final double indexFeedingSetpoint = -5;
 
         public static final double intakeSpitVolts = 5;
         public static final double intakeSuckVolts = -4;

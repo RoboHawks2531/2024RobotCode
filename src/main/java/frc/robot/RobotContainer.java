@@ -170,10 +170,10 @@ public class RobotContainer {
             new IntakePowerCommand(intake, -3)
         ));
 
-        driver.y().onTrue(new ParallelCommandGroup(
-            new IntakeSetpointCommand(intake, Constants.IntakeConstants.ampSetpoint)
-            // new IntakePowerCommand(intake, -3) //it dont need this tbh
-        ));
+        // driver.y().onTrue(new ParallelCommandGroup(
+        //     new IntakeSetpointCommand(intake, Constants.IntakeConstants.ampSetpoint)
+        //     // new IntakePowerCommand(intake, -3) //it dont need this tbh
+        // ));
 
         /* Intake Manual Pivoting */
         // driver.rightTrigger(0.5).whileTrue(new ManualPivotIntake(intake, 0.15)); // Intake Pivot Up
@@ -190,6 +190,7 @@ public class RobotContainer {
 
         driver.leftBumper().onFalse(new ResetShooter(intake, shoot));
         driver.rightBumper().onFalse(new ResetShooter(intake, shoot));
+
         /* Shooting Pivot Commands */
         // driver.povRight().onTrue(new PivotPIDCommandNonDegrees(shoot, -65)); //one stack of milk please
         // driver.povLeft().onTrue(new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore));
@@ -208,6 +209,14 @@ public class RobotContainer {
             new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp)
             ));
         driver.leftTrigger(0).whileFalse(new ResetShooter(intake, shoot));
+
+        driver.y().whileTrue(new ParallelCommandGroup(
+                new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp),
+                new InstantCommand(() -> shoot.setIndexMotorVolts(8)),
+                new InstantCommand(() -> shoot.setMotorVelocity(Constants.ShootingConstants.targetShootingAmpTarget, false))
+        ));
+
+        driver.y().whileFalse(new ResetShooter(intake, shoot));
         
         // this can be removed if we do use the two stage amp shooting
         // driver.leftTrigger(0.5).whileTrue(new AmpShoot(shoot, intake));
@@ -229,11 +238,11 @@ public class RobotContainer {
 
         driver.povRight().whileFalse(new ResetShooter(intake, shoot));
 
-        driver.povUp().whileTrue(new ParallelCommandGroup(
-                new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp),
-                new InstantCommand(() -> shoot.setIndexMotorVolts(8)),
-                new InstantCommand(() -> shoot.setMotorVelocity(Constants.ShootingConstants.targetShootingAmpTarget, false))
-        ));
+        // driver.povUp().whileTrue(new ParallelCommandGroup(
+        //         new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp),
+        //         new InstantCommand(() -> shoot.setIndexMotorVolts(8)),
+        //         new InstantCommand(() -> shoot.setMotorVelocity(Constants.ShootingConstants.targetShootingAmpTarget, false))
+        // ));
 
         driver.povDown().onTrue(
             new ParallelCommandGroup(
