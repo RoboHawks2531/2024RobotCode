@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.autos.TestingTwoNoteAuto;
 import frc.robot.autos.exampleAuto;
@@ -77,8 +78,8 @@ public class RobotContainer {
     private final Intake intake = new Intake();
     private final Elevator elevator = new Elevator();
 
-    private final SendableChooser<Command> autoChooser = new SendableChooser<>();
-    private SendableChooser<Command> otherChooser = new SendableChooser<>();
+    // private final SendableChooser<Command> autoChooser = new SendableChooser<>();
+    private SendableChooser<Command> autoChooser = new SendableChooser<>();
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -95,7 +96,7 @@ public class RobotContainer {
         );
         
 
-        NamedCommands.registerCommand("Aux Shoot", new AuxShoot(intake, shoot).withTimeout(2));
+        NamedCommands.registerCommand("Aux Shoot", new AuxShoot(intake, shoot).withTimeout(1.5));
         NamedCommands.registerCommand("Intake Ground", new ParallelCommandGroup(
             new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint),
             new IntakePowerCommand(intake, -3)
@@ -107,11 +108,14 @@ public class RobotContainer {
         NamedCommands.registerCommand("Reset Shooter", new ResetShooter(intake, shoot));
         NamedCommands.registerCommand("Amp Shoot", new AmpShoot(shoot, intake).withTimeout(3));
         NamedCommands.registerCommand("Intake Store", new IntakeSetpointCommand(intake, -2.5).withTimeout(1.5));
+        NamedCommands.registerCommand("Zero Swerve", new InstantCommand(() -> s_Swerve.zeroHeading()));
         NamedCommands.registerCommand("Zero All", new ParallelCommandGroup(
             new InstantCommand(() -> s_Swerve.zeroHeading()),
             new InstantCommand(() -> intake.zeroPivotEncoder()),
             new InstantCommand(() -> shoot.zeroPivotEncoder())
         ));
+        NamedCommands.registerCommand("Zero Intake", new InstantCommand(() -> shoot.zeroPivotEncoder()).withTimeout(0.1));
+        NamedCommands.registerCommand("Zero Pivot", new InstantCommand(() -> intake.zeroPivotEncoder()).withTimeout(0.1));
         NamedCommands.registerCommand("Shooter Pivot Store", new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore).withTimeout(1));
         NamedCommands.registerCommand("Pulse Stage 2", new ParallelCommandGroup(
             new InstantCommand(() -> shoot.setIndexMotorVolts(-3)),
@@ -121,8 +125,11 @@ public class RobotContainer {
             new InstantCommand(() -> shoot.setIndexMotorVolts(3)),
             new IntakePowerCommand(intake, 3)).withTimeout(0.2));
         NamedCommands.registerCommand("Aim And Shoot", new AimAndShoot(s_Swerve, vision, shoot, intake));
-        otherChooser = AutoBuilder.buildAutoChooser();
-        SmartDashboard.putData("Auto Chooser", otherChooser);
+        NamedCommands.registerCommand("Wait Command", new WaitCommand(7));
+        NamedCommands.registerCommand("Wait Command 1", new WaitCommand(1));
+
+        autoChooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("Auto Chooser", autoChooser);
 
         
         // autoChooser.addOption("Example Auto", new exampleAuto(s_Swerve));
@@ -147,10 +154,12 @@ public class RobotContainer {
 
 
     private void configureButtonBindings() {
+        /* Any command that uses the shooter or intake must be fitted with a while false statement to bring it to a stop */
+
         /* Driver Buttons */
         driver.start().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
-        driver.start().onTrue(new InstantCommand(() -> intake.zeroPivotEncoder()));
-        driver.start().onTrue(new InstantCommand(() -> shoot.zeroPivotEncoder()));
+        // driver.start().onTrue(new InstantCommand(() -> intake.zeroPivotEncoder()));
+        // driver.start().onTrue(new InstantCommand(() -> shoot.zeroPivotEncoder()));
 
         /* Intake Commands */
         driver.x().onTrue(new ParallelCommandGroup(
@@ -203,12 +212,19 @@ public class RobotContainer {
         );
         driver.rightTrigger(0).whileFalse(new ResetShooter(intake, shoot));
 
+        //this is the first stage of the amp shoot
         driver.leftTrigger(0.5).whileTrue(new SequentialCommandGroup(
-            new IndexNote(intake, shoot).withTimeout(0.4),
+            // new IndexNote(intake, shoot).withTimeout(0.4),
+            new ParallelCommandGroup(
+            new InstantCommand(() -> intake.setPowerVolts(4)),
+            // new InstantCommand(() -> intake.setPowerVelocity(Constants.IntakeConstants.intakeSpitVelocity, false)),
+            new InstantCommand(() -> shoot.setIndexMotorVolts(8)).withTimeout(1.2)),
+            new InstantCommand(() -> shoot.brakeMotors()),
             // new InstantCommand(() -> intake.setPowerVolts(0)),
             new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp)
             ));
         driver.leftTrigger(0).whileFalse(new ResetShooter(intake, shoot));
+        driver.leftTrigger(0).whileFalse(new InstantCommand(() -> shoot.coastMotors()));
 
         driver.y().whileTrue(new ParallelCommandGroup(
                 new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp),
@@ -220,10 +236,6 @@ public class RobotContainer {
         
         // this can be removed if we do use the two stage amp shooting
         // driver.leftTrigger(0.5).whileTrue(new AmpShoot(shoot, intake));
-        // driver.leftTrigger(0.5).whileTrue(new ParallelCommandGroup(
-        //     new PulseNote(intake, shoot).withTimeout(0.9),
-        //     new AimAndShoot(s_Swerve, vision, shoot, intake)
-        // ));
         // driver.leftTrigger(0).whileFalse(new ResetShooter(intake, shoot));
 
         driver.povLeft().whileTrue(new PulseNote(intake, shoot));
@@ -276,8 +288,8 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        // An ExampleCommand will run in autonomous
         // return autoChooser.getSelected();
-        return otherChooser.getSelected();
+        // This will run whatever is selected in the dropdown box on shuffleboard
+        return autoChooser.getSelected();
     }
 }

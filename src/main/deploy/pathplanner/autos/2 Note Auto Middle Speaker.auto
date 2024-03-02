@@ -30,6 +30,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Intake Ground Quick Timeout"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [

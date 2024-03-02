@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3763132980811417,
-      "y": 5.550603828480384
+      "x": 1.264368346918512,
+      "y": 5.513288844759509
     },
     "rotation": 0
   },
@@ -18,9 +18,21 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Speaker to Middle Note"
+            "name": "Wait Command 1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Aux Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Reset Shooter"
           }
         }
       ]

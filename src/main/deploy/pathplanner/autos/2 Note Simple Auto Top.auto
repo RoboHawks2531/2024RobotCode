@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.65,
-      "y": 4.46
+      "x": 0.7,
+      "y": 6.595423372664927
     },
-    "rotation": -60.15247242977933
+    "rotation": 59.03624346792659
   },
   "command": {
     "type": "sequential",
@@ -54,7 +54,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Bottom To Bottom Note"
+                  "pathName": "Angled to Note"
                 }
               }
             ]
@@ -65,30 +65,18 @@
           "data": {
             "commands": [
               {
+                "type": "path",
+                "data": {
+                  "pathName": "Note to Top Angled"
+                }
+              },
+              {
                 "type": "named",
                 "data": {
                   "name": "Intake Store"
                 }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Bottom Note to Speaker"
-                }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Pulse Stage 1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Pulse Stage 2"
           }
         },
         {
@@ -106,7 +94,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Speaker to Bottom Leavin"
+            "pathName": "Angled to Zero Space"
           }
         },
         {

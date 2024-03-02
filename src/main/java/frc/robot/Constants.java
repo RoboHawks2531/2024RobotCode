@@ -184,14 +184,14 @@ public final class Constants {
     public static class ElevatorConstants {
         public static final double manualSpeed = 0.70;
         public static final double manualDebugSpeed = 0.1;
-        public static final double highSetpoint = 145; 
+        public static final double highSetpoint = 160; 
         public static final double midSetpoint = 25; 
         public static final double lowSetpoint = 2; 
     }
 
     public static class IntakeConstants {
         public static final double sourceSetpoint = -33;
-        public static final double groundSetpoint = -122.5;
+        public static final double groundSetpoint = -123;
         public static final double ampSetpoint = -44;
         // public static final double indexFeedingSetpoint = -3.5;
         public static final double indexFeedingSetpoint = -5;

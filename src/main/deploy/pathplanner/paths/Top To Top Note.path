@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.79,
-        "y": 6.7
+        "x": 0.68,
+        "y": 6.63
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9267093079640705,
-        "y": 6.9872307017341315
+        "x": 1.6748331678481538,
+        "y": 6.837970766850624
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.8072597963377744,
-        "y": 6.7
+        "x": 2.4211328422656844,
+        "y": 6.99655944766435
       },
       "prevControl": {
-        "x": 1.6561756759877155,
-        "y": 7.024545685455007
+        "x": 1.3011328422656843,
+        "y": 6.99655944766435
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,25 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.85,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake Ground"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 5.0,
     "maxAcceleration": 3.0,
@@ -39,13 +57,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 60.71277615531488,
+    "rotation": 0.5405101871306546,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 67.14987566510312,
+    "rotation": 60.61538866037479,
     "velocity": 0
   },
   "useDefaultConstraints": true

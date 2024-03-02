@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.26,
-      "y": 5.54
+      "x": 0.71,
+      "y": 6.59
     },
-    "rotation": 0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -24,33 +24,26 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Speaker To Top Note"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Ground"
-                }
-              }
-            ]
+            "name": "Reset Shooter"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "Wait Command"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top to Zero Position"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Kadens-Auto",
   "choreoAuto": false
 }
