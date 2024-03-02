@@ -2,10 +2,16 @@
 # Meet Awesom-O 4000! </br>
 
 <br> This years robot consists of four main subsystems
-    * Swerve Drivebase
-    * Over the Bumper Intake
-    * Pivoting Shooter and Index
-    * 2 Stage Climb Elevator
+<br>    * -Swerve Drivebase
+<br>    * -Over the Bumper Intake
+<br>    * -Pivoting Shooter and Index
+<br>    * -2 Stage Climb Elevator
+<br>
+> [!IMPORTANT]
+> This code is dependen on the following vender libraries:
+> PathPlanner Lib
+> Phoenix6
+> PhotonLib
     
 <br> Awesom-O 4000 consists of 16 Falcon 500 Motors powered by TalonFX, using Phoenix v6!
 
