@@ -1,12 +1,14 @@
 # 2024 Cresendo 2531 Robohawks code </br>
 # Meet Awesom-O 4000! </br>
 
-<br> This years robot consists of four main subsystems
-<br>    * -Swerve Drivebase
-<br>    * -Over the Bumper Intake
-<br>    * -Pivoting Shooter and Index
-<br>    * -2 Stage Climb Elevator
+<br> ###This years robot consists of four main subsystems
+<br>    -Swerve Drivebase
+<br>    -Over the Bumper Intake
+<br>    -Pivoting Shooter and Index
+<br>    -2 Stage Climb Elevator
 <br>
+
+
 > [!IMPORTANT]
 > This code is dependen on the following vender libraries:
 > PathPlanner Lib
