@@ -1,7 +1,7 @@
 # 2024 Cresendo 2531 Robohawks code </br>
 # Meet Awesom-O 4000! </br>
 
- ###This years robot consists of four main subsystems
+This years robot consists of four main subsystems
 <br>    -Swerve Drivebase
 <br>    -Over the Bumper Intake
 <br>    -Pivoting Shooter and Index
