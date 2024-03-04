@@ -3,32 +3,38 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7,
-        "y": 6.6
+        "x": 0.78,
+        "y": 6.6047521185951465
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.348327060290484,
-        "y": 6.856628258711063
+        "x": 1.428327060290484,
+        "y": 6.86138037730621
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.5,
-        "y": 6.99
+        "x": 2.55,
+        "y": 7.0
       },
       "prevControl": {
-        "x": 1.5,
-        "y": 6.99
+        "x": 0.7886023044773361,
+        "y": 7.052531923245665
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -45,7 +51,7 @@
   "reversed": false,
   "folder": "Kadens-Paths",
   "previewStartingState": {
-    "rotation": 59.25841315050951,
+    "rotation": 58.56009625234688,
     "velocity": 0
   },
   "useDefaultConstraints": true

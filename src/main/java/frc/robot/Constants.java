@@ -191,10 +191,10 @@ public final class Constants {
 
     public static class IntakeConstants {
         public static final double sourceSetpoint = -33;
-        public static final double groundSetpoint = -123;
+        public static final double groundSetpoint = -125;
         public static final double ampSetpoint = -44;
         // public static final double indexFeedingSetpoint = -3.5;
-        public static final double indexFeedingSetpoint = -5;
+        public static final double indexFeedingSetpoint = -8;
 
         public static final double intakeSpitVolts = 5;
         public static final double intakeSuckVolts = -4;

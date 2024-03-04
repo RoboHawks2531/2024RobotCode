@@ -96,37 +96,41 @@ public class RobotContainer {
         );
         
 
-        NamedCommands.registerCommand("Aux Shoot", new AuxShoot(intake, shoot).withTimeout(1.5));
-        NamedCommands.registerCommand("Intake Ground", new ParallelCommandGroup(
+        NamedCommands.registerCommand("Aux Shoot", new AuxShoot(intake, shoot).withTimeout(1.5)); //full shooting command for auto
+        NamedCommands.registerCommand("Intake Ground", new ParallelCommandGroup( //this makes sure the intake is down and ends when it needs to, if stopping early, switch to the deadline group version
             new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint),
             new IntakePowerCommand(intake, -3)
         ).withTimeout(1.5));
-        NamedCommands.registerCommand("Intake Ground Quick Timeout", new ParallelCommandGroup(
+        NamedCommands.registerCommand("Intake Ground No Timeout", new ParallelCommandGroup(  //put this in a deadline group with the path as the deadline to ensure that the intake picks up the note
+            new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint),
+            new IntakePowerCommand(intake, -3)
+        ));
+        NamedCommands.registerCommand("Intake Ground Quick Timeout", new ParallelCommandGroup( //this is used to ensure that the intake is at the ground for intaking
             new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint),
             new IntakePowerCommand(intake, -3)
         ).withTimeout(0.5));
-        NamedCommands.registerCommand("Reset Shooter", new ResetShooter(intake, shoot));
-        NamedCommands.registerCommand("Amp Shoot", new AmpShoot(shoot, intake).withTimeout(3));
-        NamedCommands.registerCommand("Intake Store", new IntakeSetpointCommand(intake, -2.5).withTimeout(1.5));
-        NamedCommands.registerCommand("Zero Swerve", new InstantCommand(() -> s_Swerve.zeroHeading()));
-        NamedCommands.registerCommand("Zero All", new ParallelCommandGroup(
+        NamedCommands.registerCommand("Reset Shooter", new ResetShooter(intake, shoot)); //stops the shooter and index
+        NamedCommands.registerCommand("Amp Shoot", new AmpShoot(shoot, intake).withTimeout(3)); //runs the amp shooting command; this involves the pivot which needs to be returned to store at the end
+        NamedCommands.registerCommand("Intake Store", new IntakeSetpointCommand(intake, -2.5).withTimeout(1.5)); //bring the intake to the store position
+        NamedCommands.registerCommand("Zero Swerve", new InstantCommand(() -> s_Swerve.zeroHeading())); // use this at the end of the routine so that we are zeroed for teleop
+        NamedCommands.registerCommand("Zero All", new ParallelCommandGroup( //use only when we start facing the center of the field
             new InstantCommand(() -> s_Swerve.zeroHeading()),
             new InstantCommand(() -> intake.zeroPivotEncoder()),
             new InstantCommand(() -> shoot.zeroPivotEncoder())
         ));
-        NamedCommands.registerCommand("Zero Intake", new InstantCommand(() -> shoot.zeroPivotEncoder()).withTimeout(0.1));
-        NamedCommands.registerCommand("Zero Pivot", new InstantCommand(() -> intake.zeroPivotEncoder()).withTimeout(0.1));
-        NamedCommands.registerCommand("Shooter Pivot Store", new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore).withTimeout(1));
-        NamedCommands.registerCommand("Pulse Stage 2", new ParallelCommandGroup(
+        NamedCommands.registerCommand("Zero Intake", new InstantCommand(() -> shoot.zeroPivotEncoder()).withTimeout(0.1)); //use both at the beginning of each auto sequence
+        NamedCommands.registerCommand("Zero Pivot", new InstantCommand(() -> intake.zeroPivotEncoder()).withTimeout(0.1)); //use both at the beginning of each auto sequence
+        NamedCommands.registerCommand("Shooter Pivot Store", new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore).withTimeout(1)); //use with amp auto to zero
+        NamedCommands.registerCommand("Pulse Stage 2", new ParallelCommandGroup( //brings the note from the index to the intake
             new InstantCommand(() -> shoot.setIndexMotorVolts(-3)),
             new IntakePowerCommand(intake, -3)).withTimeout(0.2));
-        NamedCommands.registerCommand("Pulse Stage 1", new ParallelCommandGroup(
+        NamedCommands.registerCommand("Pulse Stage 1", new ParallelCommandGroup( //brings the note into the index from the intake
             new IntakeSetpointCommand(intake, -4),
             new InstantCommand(() -> shoot.setIndexMotorVolts(3)),
             new IntakePowerCommand(intake, 3)).withTimeout(0.2));
-        NamedCommands.registerCommand("Aim And Shoot", new AimAndShoot(s_Swerve, vision, shoot, intake));
-        NamedCommands.registerCommand("Wait Command", new WaitCommand(7));
-        NamedCommands.registerCommand("Wait Command 1", new WaitCommand(1));
+        NamedCommands.registerCommand("Aim And Shoot", new AimAndShoot(s_Swerve, vision, shoot, intake)); //aiming shooting command
+        NamedCommands.registerCommand("Wait Command", new WaitCommand(7)); //waiting command for delaying auto a lot
+        NamedCommands.registerCommand("Wait Command 1", new WaitCommand(1)); //using this to delay shooting to not hit any notes while shooting
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -140,13 +144,13 @@ public class RobotContainer {
 
         // SmartDashboard.putData(autoChooser);
 
-        intake.zeroPivotEncoder();
-        elevator.zeroMotorEncoders(); 
-        shoot.zeroPivotEncoder();
+        intake.zeroPivotEncoder(); //zeros intake on startup ONLY
+        elevator.zeroMotorEncoders(); //zeros elevator on startup ONLY
+        shoot.zeroPivotEncoder(); //zeros shooter pivot on startup ONLY
 
-        SmartDashboard.putData("Zero Intake", new InstantCommand(() -> intake.zeroPivotEncoder()));
-        SmartDashboard.putData("Zero Intake", new InstantCommand(() -> shoot.zeroPivotEncoder()));
-        SmartDashboard.putData("Zero Intake", new InstantCommand(() -> elevator.zeroMotorEncoders()));
+        SmartDashboard.putData("Zero Intake", new InstantCommand(() -> intake.zeroPivotEncoder())); //creates a dashboard button to zero intake
+        SmartDashboard.putData("Zero Pivot", new InstantCommand(() -> shoot.zeroPivotEncoder())); //creates a dashboard button to zero shooter pivot
+        SmartDashboard.putData("Zero Elevator", new InstantCommand(() -> elevator.zeroMotorEncoders())); //creates a dashboard button to zero elevator
         
         // Configure the button bindings
         configureButtonBindings();
@@ -277,14 +281,11 @@ public class RobotContainer {
         // operator.y().onTrue(new ElevatorSetpointCommand(elevator, 50));
 
         operator.back().toggleOnTrue(new ManualElevatorCommand(elevator));
-        operator.a().onTrue(new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint));
+        // operator.a().onTrue(new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint));
         operator.start().toggleOnTrue(new ElevatorClimbCommand(elevator));
 
         /* Vision Commands */
-        // rotateToTarget.whileTrue(new RotateToTarget(s_Swerve, vision));
-        // driver.povUp().whileTrue(new MoveElevator(elevator, 0.2));
-        // driver.povDown().whileTrue(new MoveElevator(elevator, -0.2));
-        
+        // rotateToTarget.whileTrue(new RotateToTarget(s_Swerve, vision));        
     }
 
     public Command getAutonomousCommand() {

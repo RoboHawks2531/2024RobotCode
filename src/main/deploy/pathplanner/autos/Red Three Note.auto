@@ -110,7 +110,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Red Speaker to Top Note"
+                  "pathName": "Red Speaker to Podium Path"
                 }
               }
             ]
@@ -123,7 +123,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Red Note to Speaker"
+                  "pathName": "Podium to Shoot"
                 }
               },
               {

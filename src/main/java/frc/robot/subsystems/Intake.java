@@ -102,7 +102,7 @@ public class Intake extends SubsystemBase{
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("Intake Limit Switch", getLimitSwitch());
+        // SmartDashboard.putBoolean("Intake Limit Switch", getLimitSwitch());
         SmartDashboard.putNumber("Intake Pivot Encoder", getPivotEncoder());
         SmartDashboard.putNumber("Power Motor Velocity", getPowerVelocity());
     }

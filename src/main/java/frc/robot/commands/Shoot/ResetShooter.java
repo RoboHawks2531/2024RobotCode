@@ -20,7 +20,7 @@ public class ResetShooter extends Command{
     @Override
     public void execute() {
         // intake.setIntakeAndSetpoint(0, 0);
-        intake.setPivotSpeed(0);
+        intake.setPivotSpeed(0); //readd this if something goes wrong
         intake.setPowerVolts(0);
         shoot.setIndexMotorVolts(0);
         shoot.setPivotMotorSpeed(0);

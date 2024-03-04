@@ -14,7 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Zero All"
+            "name": "Zero Intake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Zero Pivot"
           }
         },
         {
@@ -39,6 +45,12 @@
           "type": "path",
           "data": {
             "pathName": "Top to Zero Position"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Zero Swerve"
           }
         }
       ]

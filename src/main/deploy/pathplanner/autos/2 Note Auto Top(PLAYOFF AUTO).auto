@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7,
-      "y": 6.595423372664927
+      "x": 0.78,
+      "y": 6.6047521185951465
     },
-    "rotation": 59.03624346792659
+    "rotation": 58.3936567566718
   },
   "command": {
     "type": "sequential",
@@ -21,6 +21,12 @@
           "type": "named",
           "data": {
             "name": "Zero Pivot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wait Command 1"
           }
         },
         {
@@ -77,6 +83,18 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pulse Stage 1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pulse Stage 2"
           }
         },
         {

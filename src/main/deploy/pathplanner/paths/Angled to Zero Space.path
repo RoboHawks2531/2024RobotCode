@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7,
-        "y": 6.6047521185951465
+        "x": 0.78,
+        "y": 6.6
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.684161913778373,
-        "y": 7.071189415106104
+        "x": 1.764161913778374,
+        "y": 7.066437296510957
       },
       "isLocked": false,
       "linkedName": null
@@ -51,7 +51,7 @@
   "reversed": false,
   "folder": "Kadens-Paths",
   "previewStartingState": {
-    "rotation": 58.915247955231244,
+    "rotation": 55.49147701233157,
     "velocity": 0
   },
   "useDefaultConstraints": true
