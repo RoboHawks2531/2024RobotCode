@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.commands.Intake.IntakeSetpointCommand;
 import frc.robot.commands.Vision.RotateToTarget;
+import frc.robot.commands.Vision.VisionTranslate;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shoot;
 import frc.robot.subsystems.Swerve;
@@ -22,8 +23,9 @@ public class AimAndShoot extends SequentialCommandGroup{
     public AimAndShoot(Swerve swerve, Vision vision, Shoot shoot, Intake intake) {
         addCommands(
             new ParallelCommandGroup(
-                new PulseNote(intake, shoot).withTimeout(0.9),
-                new TranslateThenShoot(swerve, intake, shoot)
+                // new PulseNote(intake, shoot).withTimeout(0.9),
+                // new TranslateThenShoot(swerve, intake, shoot)
+                new VisionTranslate(swerve, vision, 0.2, 0)
             ).withTimeout(1),
             new ParallelCommandGroup(
                  new RotateToTarget(swerve, vision),
