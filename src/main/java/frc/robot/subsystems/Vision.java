@@ -47,7 +47,7 @@ public class Vision extends SubsystemBase{
 
     private AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
 
-    private PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, arduCam, robotToCam);
+    // private PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, arduCam, robotToCam); //this is not being used
 
     public Vision() {
 
@@ -80,18 +80,18 @@ public class Vision extends SubsystemBase{
     public Pose2d getPose2d() {
         var result = arduCam.getLatestResult();
 
-        if (result.hasTargets()) {
-            return PhotonUtils.estimateFieldToRobot(
-                cameraHeight,
-                targetHeight, 
-                cameraPitchRadians, 
-                getPitch(), 
-                Rotation2d.fromDegrees(-getYaw()), 
-                swerve.getHeading(), 
-                new Pose2d(1,1, new Rotation2d(0,0)), 
-                robotToCam
-            );
-        }
+        // if (result.hasTargets()) {
+        //     return PhotonUtils.estimateFieldToRobot(
+        //         cameraHeight,
+        //         targetHeight, 
+        //         cameraPitchRadians, 
+        //         getPitch(), 
+        //         Rotation2d.fromDegrees(-getYaw()), 
+        //         swerve.getHeading(), 
+        //         new Pose2d(1,1, new Rotation2d(0,0)), 
+        //         robotToCam
+        //     );
+        // }
         return new Pose2d();
     }
 
