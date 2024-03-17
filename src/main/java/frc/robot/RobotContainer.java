@@ -135,7 +135,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("Aim And Shoot", new AimAndShoot(s_Swerve, vision, shoot, intake)); //aiming shooting command
         NamedCommands.registerCommand("Wait Command", new WaitCommand(7)); //waiting command for delaying auto a lot
         NamedCommands.registerCommand("Wait Command 1", new WaitCommand(1)); //using this to delay shooting to not hit any notes while shooting
-        NamedCommands.registerCommand("Vision Trajectory to Speaker", new TagToPoseTrajectoryGenerator(s_Swerve, vision, 7, 36));
+        // NamedCommands.registerCommand("Vision Trajectory to Speaker", new TagToPoseTrajectoryGenerator(s_Swerve, vision, 7, 36));
+        NamedCommands.registerCommand("Vision Translate", new VisionTranslate(s_Swerve, vision, 1.32, 0));
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -182,13 +183,13 @@ public class RobotContainer {
         ));
 
         driver.a().onTrue(new ParallelCommandGroup(
-            new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint)
-            // new IntakePowerCommand(intake, -3)
+            new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint),
+            new IntakePowerCommand(intake, -3)
         ));
 
         driver.b().onTrue(new ParallelCommandGroup(
-            new IntakeSetpointCommand(intake, Constants.IntakeConstants.sourceSetpoint)
-            // new IntakePowerCommand(intake, -3)
+            new IntakeSetpointCommand(intake, Constants.IntakeConstants.sourceSetpoint),
+            new IntakePowerCommand(intake, -3)
         ));
 
         // driver.y().onTrue(new ParallelCommandGroup(
