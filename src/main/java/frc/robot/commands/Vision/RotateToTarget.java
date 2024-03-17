@@ -20,7 +20,7 @@ public class RotateToTarget extends Command{
     private Swerve swerve;
     private Vision vision;
 
-    private PIDController rotationPID = new PIDController(0.1, 0, 0);
+    private PIDController rotationPID = new PIDController(0.1, 0, 0.0);
 
     public RotateToTarget(Swerve swerve, Vision vision) {
         this.swerve = swerve;
@@ -39,10 +39,10 @@ public class RotateToTarget extends Command{
     @Override
     public void execute() {
         // vision.setCameraLEDS(true); // only here for funsies
-        double rotation = rotationPID.calculate(vision.getYaw(), 0.1);
+        double rotation = rotationPID.calculate(vision.getYaw(), -2);
 
         swerve.drive(new Translation2d( //if this doesnt work, revert it back
-            -RobotContainer.driver.getRawAxis(XboxController.Axis.kLeftY.value), -RobotContainer.driver.getRawAxis(XboxController.Axis.kLeftX.value)).times(Constants.Swerve.maxSpeed)
+            -MathUtil.applyDeadband(RobotContainer.driver.getRawAxis(XboxController.Axis.kLeftY.value), Constants.stickDeadband), -MathUtil.applyDeadband(RobotContainer.driver.getRawAxis(XboxController.Axis.kLeftX.value), Constants.stickDeadband)).times(1)
             , rotation, false, true);
     }   
 

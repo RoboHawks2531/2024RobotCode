@@ -12,7 +12,16 @@ import frc.robot.subsystems.Intake;
 public class IntakeSetpointCommand extends Command{
     private Intake intake;
     private double setpoint;
-    // private PIDController pidController = new PIDController(0.40, 0.015, 0);
+
+    /*
+     * From what I could gather running simulations of PIDs on the WPILIB docs, The Integral Values can remain at 0,
+     * while adjusting the P values to allow the system to reach the setpoint without oscillation, then adjusting the D value CAREFULLY 
+     * to allow the system to reach the setpoint as quickly as possible without overshooting.
+     * 
+     * Basically alot more tuning is needed for a faster and more percise intake.
+     * so... TODO: Tune intake PID to be constistantly fast and percise going to all setpoint values
+     * Also, this should be done with the intake detached as this prevents it from getting damaged.
+     */
     private PIDController pidController = new PIDController(0.42, 0.015, 0);
 
     public IntakeSetpointCommand(Intake intake, double setpoint) {

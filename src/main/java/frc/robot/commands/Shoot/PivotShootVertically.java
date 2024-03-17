@@ -20,15 +20,15 @@ public class PivotShootVertically extends Command{
         addRequirements(shoot);
     }
 
+    //this will most likely never be used, but it is here just in case
     @Override
     public void execute() {
         // double verticalOffset = 10;
-        double targetHeight = Units.feetToMeters(6);
+        double targetHeight = Units.feetToMeters(6.65);
 
         if (vision.hasTarget()) {
         //   new PivotPIDCommand(shoot, Math.tan(targetHeight / vision.getDistanceMethod()));  
-          new PivotPIDCommandNonDegrees(shoot, -Conversions.degreesToFalcon(Math.atan(targetHeight / vision.getDistanceMethod()), .008)); //this needs to be adjusted to the actual gear ratio of the pivot
-        //   new PivotPIDCommandNonDegrees(shoot, -Math.atan(targetHeight / vision.getDistanceMethod())); //this needs to be adjusted to the actual gear ratio of the pivot
+          new PivotPIDCommandNonDegrees(shoot, MathUtil.clamp(-vision.getDistanceMethod() * 4.7, -15, -0.5));
         } else {
             new PivotPIDCommand(shoot, Constants.ShootingConstants.pivotStore); //brings the pivot to a default position if no target is found
         }

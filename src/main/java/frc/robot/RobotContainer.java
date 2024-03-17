@@ -14,7 +14,6 @@
 package frc.robot;
 
 
-import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -41,12 +40,15 @@ import frc.robot.commands.Intake.IntakeSetpointCommand;
 import frc.robot.commands.Shoot.AimAndShoot;
 import frc.robot.commands.Shoot.AmpShoot;
 import frc.robot.commands.Shoot.AuxShoot;
+import frc.robot.commands.Shoot.DistanceShoot;
 import frc.robot.commands.Shoot.IndexNote;
 import frc.robot.commands.Shoot.PivotPIDCommandNonDegrees;
 import frc.robot.commands.Shoot.PulseNote;
 import frc.robot.commands.Shoot.ResetShooter;
 import frc.robot.commands.Vision.RotateToHeading;
 import frc.robot.commands.Vision.RotateToTarget;
+import frc.robot.commands.Vision.TagToPoseTrajectoryGenerator;
+import frc.robot.commands.Vision.VisionTranslate;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shoot;
@@ -131,6 +133,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Aim And Shoot", new AimAndShoot(s_Swerve, vision, shoot, intake)); //aiming shooting command
         NamedCommands.registerCommand("Wait Command", new WaitCommand(7)); //waiting command for delaying auto a lot
         NamedCommands.registerCommand("Wait Command 1", new WaitCommand(1)); //using this to delay shooting to not hit any notes while shooting
+        NamedCommands.registerCommand("Vision Trajectory to Speaker", new TagToPoseTrajectoryGenerator(s_Swerve, vision, 7, 36));
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -162,6 +165,8 @@ public class RobotContainer {
 
         /* Driver Buttons */
         driver.start().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+
+        driver.button(7).whileTrue(new TagToPoseTrajectoryGenerator(s_Swerve, vision, 4, 66));
         // driver.start().onTrue(new InstantCommand(() -> intake.zeroPivotEncoder()));
         // driver.start().onTrue(new InstantCommand(() -> shoot.zeroPivotEncoder()));
 
@@ -252,7 +257,12 @@ public class RobotContainer {
         //     )
         // );
 
-        driver.povRight().whileFalse(new ResetShooter(intake, shoot));
+        // driver.povRight().whileFalse(new ResetShooter(intake, shoot));
+        driver.povRight().whileTrue(new RotateToTarget(s_Swerve, vision));
+        // driver.povRight().whileTrue(new VisionTranslate(s_Swerve, vision, 2, 0));
+
+        driver.povDown().whileTrue(new DistanceShoot(intake, shoot));
+        driver.povDown().whileFalse(new ResetShooter(intake, shoot));
 
         // driver.povUp().whileTrue(new ParallelCommandGroup(
         //         new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp),
@@ -260,13 +270,13 @@ public class RobotContainer {
         //         new InstantCommand(() -> shoot.setMotorVelocity(Constants.ShootingConstants.targetShootingAmpTarget, false))
         // ));
 
-        driver.povDown().onTrue(
-            new ParallelCommandGroup(
-            new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotIntake),
-            // new InstantCommand(() -> shoot.setMotorVelocity(-500, false))
-            new InstantCommand(() -> shoot.setIndexMotorVolts(2))
-            )
-        );
+        // driver.povDown().onTrue(
+        //     new ParallelCommandGroup(
+        //     new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotIntake),
+        //     // new InstantCommand(() -> shoot.setMotorVelocity(-500, false))
+        //     new InstantCommand(() -> shoot.setIndexMotorVolts(2))
+        //     )
+        // );
 
         
 
@@ -283,6 +293,8 @@ public class RobotContainer {
         operator.back().toggleOnTrue(new ManualElevatorCommand(elevator));
         // operator.a().onTrue(new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint));
         operator.start().toggleOnTrue(new ElevatorClimbCommand(elevator));
+
+        operator.a().whileTrue(new TagToPoseTrajectoryGenerator(s_Swerve, vision, vision.getBestTargetID(), 24));
 
         /* Vision Commands */
         // rotateToTarget.whileTrue(new RotateToTarget(s_Swerve, vision));        

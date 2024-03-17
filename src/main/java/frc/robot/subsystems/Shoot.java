@@ -61,16 +61,16 @@ public class Shoot extends SubsystemBase {
     //the v and a values were taken from revCalc(reca.le) for a flywheel operating at 3000 rpm
     // this should theoretically take 0.72s to rev to 3k rpm
     var slot0Configs = talonFXConfigs.Slot0;
-      slot0Configs.kS = 0.25; //Adds volts to overcome static friction
-      slot0Configs.kV = 0.24; // A velocity target of 1 rps results in 0.12 V output
-      slot0Configs.kA = 0.40; // An acceleration of 1 rps/s requires 0.01 V output //origin is .6
-      slot0Configs.kP = 0.11; // An error of 1 rps results in 0.11 V output
+      slot0Configs.kS = 0.6; //Adds volts to overcome static friction
+      slot0Configs.kV = 2; // A velocity target of 1 rps results in 0.12 V output
+      slot0Configs.kA = 1; // An acceleration of 1 rps/s requires 0.01 V output //origin is .6
+      slot0Configs.kP = 0.2; // An error of 1 rps results in 0.11 V output
       slot0Configs.kI = 0.0;  // Integral value
       slot0Configs.kD = 0.0;  // Derivative value
 
       var motionMagicConfigs = talonFXConfigs.MotionMagic;
 
-      motionMagicConfigs.MotionMagicAcceleration = 200; // Target acceleration of 200 rps/s (0.5 seconds to full speed)
+      motionMagicConfigs.MotionMagicAcceleration = 400; // Target acceleration of 200 rps/s (0.5 seconds to full speed)
       motionMagicConfigs.MotionMagicJerk = 4000; // Target jerk of 4000 rps/s/s (0.1 seconds)
 
       motor1.getConfigurator().apply(talonFXConfigs);

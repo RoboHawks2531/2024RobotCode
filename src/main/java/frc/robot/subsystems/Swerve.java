@@ -170,6 +170,12 @@ public class Swerve extends SubsystemBase {
         setModuleStates(Constants.Swerve.swerveKinematics.toSwerveModuleStates(chassisSpeeds));
     }
 
+    public void stopModules() {
+        for(SwerveModule mod : mSwerveMods){
+            mod.stop();
+        }
+    }
+
     // public void setModuleStates(SwerveModuleState[] desiredStates) {
     //     for (int i = 0; i < desiredStates.length; i++) {
     //         mSwerveMods[i].setDesiredState(desiredStates[i], false);

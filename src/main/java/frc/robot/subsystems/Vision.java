@@ -10,6 +10,7 @@ import static edu.wpi.first.math.util.Units.rotationsToDegrees;
 
 import java.util.List;
 
+import org.opencv.photo.Photo;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
@@ -19,6 +20,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -35,22 +37,26 @@ public class Vision extends SubsystemBase{
 
     private Swerve swerve;
 
-    private PhotonCamera limelight = new PhotonCamera("2531Limelight");
-    private PhotonCamera arduCam = new PhotonCamera("ArduinoCam");
+    // private PhotonCamera limelight = new PhotonCamera("2531Limelight");
+    private PhotonCamera arduCam = new PhotonCamera("Arducam");
 
-    double cameraHeight = Units.inchesToMeters(4); //how hight is camera off the ground?
+    double cameraHeight = Units.inchesToMeters(18.75); //how hight is camera off the ground?
     double targetHeight = Units.inchesToMeters(53.88); //how high is the target off the ground(all april tags are the same)
-    double cameraPitchRadians = Units.degreesToRadians(0); //what is the cameras angle from level?
+    double cameraPitchRadians = Units.degreesToRadians(21.1); //what is the cameras angle from level?
     double goalRangeMeters = Units.feetToMeters(3); //target goal distance for getting in range of a target
 
-    private Transform3d robotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.2), new Rotation3d(0,0,0)); //Cam mounted facing forward, half a meter forward of center, half a meter up from center.
+    private Transform2d robotToCam = new Transform2d(new Translation2d(0.5, 0.0), new Rotation2d(0)); //Cam mounted facing forward, half a meter forward of center, half a meter up from center.
 
     private AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
 
-    // private PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, arduCam, robotToCam); //this is not being used
+    // private PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, arduCam, robotToCam);
 
     public Vision() {
 
+    }
+
+    public PhotonCamera getCamera() {
+        return arduCam;
     }
 
     public double getDistanceMethod() {
@@ -58,41 +64,29 @@ public class Vision extends SubsystemBase{
         var result = arduCam.getLatestResult();
 
         if (result.hasTargets()) {
-            return PhotonUtils.calculateDistanceToTargetMeters(
+            return PhotonUtils.calculateDistanceToTargetMeters( //Return in meters
                 cameraHeight, targetHeight, cameraPitchRadians, Units.degreesToRadians(result.getBestTarget().getPitch()));
         }
         return 0;
     }
 
-    // public Pose3d getPose3d() {
-    //     // var result = limelight.getLatestResult();
-    //     var result = arduCam.getLatestResult();
-
-    //     if (result.hasTargets()) {
-    //         return PhotonUtils.estimateFieldToRobotAprilTag(
-    //             result.getBestTarget().getBestCameraToTarget(),
-    //             aprilTagFieldLayout.getTagPose(result.getBestTarget().getFiducialId()),
-    //             robotToCam);
-    //     }
-    //     return new Pose3d();
-    // }
-
     public Pose2d getPose2d() {
         var result = arduCam.getLatestResult();
 
-        // if (result.hasTargets()) {
-        //     return PhotonUtils.estimateFieldToRobot(
-        //         cameraHeight,
-        //         targetHeight, 
-        //         cameraPitchRadians, 
-        //         getPitch(), 
-        //         Rotation2d.fromDegrees(-getYaw()), 
-        //         swerve.getHeading(), 
-        //         new Pose2d(1,1, new Rotation2d(0,0)), 
-        //         robotToCam
-        //     );
-        // }
+        if (result.hasTargets()) {
+            return PhotonUtils.estimateFieldToRobot(
+                cameraHeight,
+                targetHeight, 
+                cameraPitchRadians, 
+                getPitch(), 
+                Rotation2d.fromDegrees(-getYaw()), 
+                swerve.getHeading(), 
+                new Pose2d(), 
+                robotToCam
+            );
+        }
         return new Pose2d();
+
     }
 
     public Translation2d distanceToTranslate(double translation) {
@@ -114,9 +108,7 @@ public class Vision extends SubsystemBase{
         
         if (result.hasTargets()) {
             // targets.add(result.getBestTarget());
-            // return targets.get(0).getYaw(); //this will hopefully filter the multitargets and pick one to aim at
             return target.getYaw(); //This should be the one to take the better target and go to that
-
             // return result.getBestTarget().getYaw();
         }
         return 0;
@@ -128,16 +120,16 @@ public class Vision extends SubsystemBase{
         PhotonTrackedTarget target = result.getBestTarget();
         
         if (result.hasTargets()) {
-            limelight.takeOutputSnapshot();
+            // limelight.takeOutputSnapshot();
         }
     }
 
     @Deprecated //this does nothing
     public void setCameraLEDS(boolean on) {
         if (on) {
-            limelight.setLED(VisionLEDMode.kOn);
+            // limelight.setLED(VisionLEDMode.kOn);
         } else if (!on) {
-            limelight.setLED(VisionLEDMode.kDefault);
+            // limelight.setLED(VisionLEDMode.kDefault);
         } 
     }
 
@@ -178,10 +170,26 @@ public class Vision extends SubsystemBase{
         arduCam.setDriverMode(on);
     }
 
+    public int getBestTargetID() {
+        var result = arduCam.getLatestResult();
+        if (!result.hasTargets()) {
+            return 0;
+        } else {
+            return result.getBestTarget().getFiducialId();
+        }
+    }
+
     @Override
     public void periodic() {
         SmartDashboard.putNumber("camera yaw", getYaw());
         SmartDashboard.putNumber("camera pitch", getPitch());
-        SmartDashboard.putNumber("camera skew", getSkew());
+        SmartDashboard.putNumber("camera distance", getDistanceMethod());
+        SmartDashboard.putNumber("camera best target id", getBestTargetID());
+        SmartDashboard.putBoolean("camera has target", hasTarget());
+        // add a smart dashboard for the pose of the robot
+        SmartDashboard.putNumber("robot pose x", getPose2d().getX());
+        SmartDashboard.putNumber("robot pose y", getPose2d().getY());
+        SmartDashboard.putNumber("robot pose rotation", getPose2d().getRotation().getRotations());
     }
 }
+>>>>>>> b2f11c44f36e5299158fd0e5c098f388538e0c05

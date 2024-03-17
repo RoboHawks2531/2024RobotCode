@@ -16,13 +16,13 @@ public class PulseNote extends SequentialCommandGroup{
             new ParallelCommandGroup(
                 new InstantCommand(() -> shoot.setIndexMotorVolts(3)),
                 new InstantCommand(() -> intake.setPowerVolts(2)) 
-            ),
+            ).withTimeout(1),
             new ParallelCommandGroup(
-                // new InstantCommand(() -> shoot.setIndexMotorVolts(-3)),
-                // new InstantCommand(() -> intake.setPowerVolts(-4)) //normal values
-                new InstantCommand(() -> shoot.setIndexMotorVolts(3)),
-                new InstantCommand(() -> intake.setPowerVolts(4)) 
-            ).withTimeout(0.4)
+                new InstantCommand(() -> shoot.setIndexMotorVolts(-3)),
+                new InstantCommand(() -> intake.setPowerVolts(-4)) //normal values
+                // new InstantCommand(() -> shoot.setIndexMotorVolts(3)),
+                // new InstantCommand(() -> intake.setPowerVolts(4)) 
+            ).withTimeout(1)
         );
     }
 }

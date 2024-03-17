@@ -169,14 +169,15 @@ public final class Constants {
     }
 
     public static class ShootingConstants {
-        // public static final int targetShootingRPM = -6800;
-        public static final int targetShootingRPM = 6800; 
+        public static final int targetShootingRPM = 6800;
+        // public static final int targetShootingRPM = 10000; 
         public static final int targetShootingAmpTarget = 1500;
         public static final double indexFeedVolts = 12;
         public static final double indexHoldVolts = 6;
         public static final double pivotStore = 0.27;
         public static final double pivotAmp = -64; //OUT IS NEGATIVE DO NOT PUT ANY POSITIVES OR IT BREAKS
         public static final double pivotIntake = -100;
+        public static final double pivotDistanceShooting = -9;
 
         /* When Adjusting the pivot setpoints, only use negative numbers */
     }
@@ -190,9 +191,13 @@ public final class Constants {
     }
 
     public static class IntakeConstants {
+        // public static final double sourceSetpoint = -33;
+        // public static final double groundSetpoint = -125;
+        // public static final double ampSetpoint = -44;
         public static final double sourceSetpoint = -33;
-        public static final double groundSetpoint = -125;
-        public static final double ampSetpoint = -44;
+        public static final double groundSetpoint = -50;
+        public static final double ampSetpoint = -20;
+
         // public static final double indexFeedingSetpoint = -3.5;
         public static final double indexFeedingSetpoint = -8;
 
@@ -203,12 +208,12 @@ public final class Constants {
 
     public static class VisionConstants {
 
-    public static final String LimelightName = "2531limelight";
+    // public static final String LimelightName = "2531limelight";
     
     /** Physical location of the camera on the robot, relative to the center of the robot. */
-    public static final Transform3d LimelightToRobot = new Transform3d(
-        new Translation3d(-0.11, -0.015, -0.895),
-        new Rotation3d(degreesToRadians(-90.0), degreesToRadians(34.6), 0.0));
+    public static final Transform3d robotToCam = new Transform3d(
+        new Translation3d(Units.inchesToMeters(6), 0, Units.inchesToMeters(18.75)), //TODO: This needs to be tuned to where the camera will be mounted 
+        new Rotation3d(degreesToRadians(0), degreesToRadians(21.1), 0.0));
     
     public static final double FieldLengthMeters= 16.54175;
     public static final double FieldWidthMeters = 8.0137;
