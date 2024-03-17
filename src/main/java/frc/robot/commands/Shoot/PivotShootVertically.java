@@ -24,14 +24,12 @@ public class PivotShootVertically extends Command{
     @Override
     public void execute() {
         // double verticalOffset = 10;
-        double targetHeight = Units.feetToMeters(6.65);
-
-        if (vision.hasTarget()) {
+        // double targetHeight = Units.feetToMeters(6.65);
         //   new PivotPIDCommand(shoot, Math.tan(targetHeight / vision.getDistanceMethod()));  
+        if (vision.hasTarget()) {
           new PivotPIDCommandNonDegrees(shoot, MathUtil.clamp(-vision.getDistanceMethod() * 4.7, -15, -0.5));
         } else {
-            new PivotPIDCommand(shoot, Constants.ShootingConstants.pivotStore); //brings the pivot to a default position if no target is found
+            new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore);
         }
-        
     }
 }

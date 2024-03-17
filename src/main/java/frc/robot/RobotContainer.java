@@ -184,7 +184,7 @@ public class RobotContainer {
 
         driver.a().onTrue(new ParallelCommandGroup(
             new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint),
-            new IntakePowerCommand(intake, -3)
+            new IntakePowerCommand(intake, -3.5)
         ));
 
         driver.b().onTrue(new ParallelCommandGroup(
@@ -265,8 +265,8 @@ public class RobotContainer {
         driver.povRight().whileTrue(new RotateToTarget(s_Swerve, vision));
         // driver.povRight().whileTrue(new VisionTranslate(s_Swerve, vision, 2, 0));
 
-        driver.povDown().whileTrue(new DistanceShoot(intake, shoot));
-        // driver.povDown().whileTrue(new PivotShootVertically(shoot, vision));
+        // driver.povDown().whileTrue(new DistanceShoot(intake, shoot));
+        driver.povDown().whileTrue(new PivotShootVertically(shoot, vision));
         driver.povDown().whileFalse(new ResetShooter(intake, shoot));
 
         // driver.povUp().whileTrue(new ParallelCommandGroup(
