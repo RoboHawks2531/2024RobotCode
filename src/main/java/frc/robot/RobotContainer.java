@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.autos.TestingTwoNoteAuto;
+import frc.robot.autos.TranslateDistance;
 import frc.robot.autos.exampleAuto;
 import frc.robot.commands.Defaults.TeleopSwerve;
 import frc.robot.commands.Elevator.ElevatorClimbCommand;
@@ -43,6 +44,7 @@ import frc.robot.commands.Shoot.AuxShoot;
 import frc.robot.commands.Shoot.DistanceShoot;
 import frc.robot.commands.Shoot.IndexNote;
 import frc.robot.commands.Shoot.PivotPIDCommandNonDegrees;
+import frc.robot.commands.Shoot.PivotShootVertically;
 import frc.robot.commands.Shoot.PulseNote;
 import frc.robot.commands.Shoot.ResetShooter;
 import frc.robot.commands.Vision.RotateToHeading;
@@ -166,7 +168,8 @@ public class RobotContainer {
         /* Driver Buttons */
         driver.start().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
-        driver.button(7).whileTrue(new TagToPoseTrajectoryGenerator(s_Swerve, vision, 4, 66));
+        // driver.button(7).whileTrue(new TagToPoseTrajectoryGenerator(s_Swerve, vision, 3, 15));
+        driver.button(7).whileTrue(new VisionTranslate(s_Swerve, vision, 1.32, 0));
         // driver.start().onTrue(new InstantCommand(() -> intake.zeroPivotEncoder()));
         // driver.start().onTrue(new InstantCommand(() -> shoot.zeroPivotEncoder()));
 
@@ -179,13 +182,13 @@ public class RobotContainer {
         ));
 
         driver.a().onTrue(new ParallelCommandGroup(
-            new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint),
-            new IntakePowerCommand(intake, -3)
+            new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint)
+            // new IntakePowerCommand(intake, -3)
         ));
 
         driver.b().onTrue(new ParallelCommandGroup(
-            new IntakeSetpointCommand(intake, Constants.IntakeConstants.sourceSetpoint),
-            new IntakePowerCommand(intake, -3)
+            new IntakeSetpointCommand(intake, Constants.IntakeConstants.sourceSetpoint)
+            // new IntakePowerCommand(intake, -3)
         ));
 
         // driver.y().onTrue(new ParallelCommandGroup(
@@ -262,6 +265,7 @@ public class RobotContainer {
         // driver.povRight().whileTrue(new VisionTranslate(s_Swerve, vision, 2, 0));
 
         driver.povDown().whileTrue(new DistanceShoot(intake, shoot));
+        // driver.povDown().whileTrue(new PivotShootVertically(shoot, vision));
         driver.povDown().whileFalse(new ResetShooter(intake, shoot));
 
         // driver.povUp().whileTrue(new ParallelCommandGroup(
@@ -278,10 +282,7 @@ public class RobotContainer {
         //     )
         // );
 
-        
-
         driver.povUp().whileFalse(new ResetShooter(intake, shoot));
-        driver.povDown().onFalse(new ResetShooter(intake, shoot));
             
         // driver.povRight().whileFalse(new ResetShooter(intake, shoot));
 

@@ -4,6 +4,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.lib.math.Conversions;
@@ -20,9 +21,13 @@ public class IntakeSetpointCommand extends Command{
      * 
      * Basically alot more tuning is needed for a faster and more percise intake.
      * so... TODO: Tune intake PID to be constistantly fast and percise going to all setpoint values
-     * Also, this should be done with the intake detached as this prevents it from getting damaged.
      */
-    private PIDController pidController = new PIDController(0.42, 0.015, 0);
+    //Old PID Values
+    // private PIDController pidController = new PIDController(0.42, 0.015, 0);
+
+    //New PID Values
+    // private PIDController pidController = new PIDController(0.75, 0.0, 0.0);
+    private PIDController pidController = new PIDController(0.95, 0.0, 0.0001);
 
     public IntakeSetpointCommand(Intake intake, double setpoint) {
         this.intake = intake;
@@ -30,7 +35,7 @@ public class IntakeSetpointCommand extends Command{
 
         // pidController.setSetpoint(setpoint);
         pidController.setTolerance(0);
-        pidController.setIZone(20);
+        // pidController.setIZone(20);
         addRequirements(intake);
     }
 
@@ -44,6 +49,8 @@ public class IntakeSetpointCommand extends Command{
         double speed = pidController.calculate(intake.getPivotEncoder(), setpoint);
 
         intake.setPivotVolts(speed);
+
+        SmartDashboard.putNumber("Intake PID Error", pidController.getPositionError());
     }
 
     @Override

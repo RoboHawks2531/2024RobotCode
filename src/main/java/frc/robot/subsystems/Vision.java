@@ -70,24 +70,24 @@ public class Vision extends SubsystemBase{
         return 0;
     }
 
-    public Pose2d getPose2d() {
-        var result = arduCam.getLatestResult();
+    // public Pose2d getPose2d() {
+    //     // var result = arduCam.getLatestResult();
 
-        if (result.hasTargets()) {
-            return PhotonUtils.estimateFieldToRobot(
-                cameraHeight,
-                targetHeight, 
-                cameraPitchRadians, 
-                getPitch(), 
-                Rotation2d.fromDegrees(-getYaw()), 
-                swerve.getHeading(), 
-                new Pose2d(), 
-                robotToCam
-            );
-        }
-        return new Pose2d();
+    //     // if (result.hasTargets()) {
+    //     //     return PhotonUtils.estimateFieldToRobot(
+    //     //         cameraHeight,
+    //     //         targetHeight, 
+    //     //         cameraPitchRadians, 
+    //     //         getPitch(), 
+    //     //         Rotation2d.fromDegrees(-getYaw()), 
+    //     //         swerve.getHeading(), 
+    //     //         new Pose2d(), 
+    //     //         robotToCam
+    //     //     );
+    //     // }
+    //     // return new Pose2d();
 
-    }
+    // }
 
     public Translation2d distanceToTranslate(double translation) {
         var result = arduCam.getLatestResult();
@@ -187,9 +187,8 @@ public class Vision extends SubsystemBase{
         SmartDashboard.putNumber("camera best target id", getBestTargetID());
         SmartDashboard.putBoolean("camera has target", hasTarget());
         // add a smart dashboard for the pose of the robot
-        SmartDashboard.putNumber("robot pose x", getPose2d().getX());
-        SmartDashboard.putNumber("robot pose y", getPose2d().getY());
-        SmartDashboard.putNumber("robot pose rotation", getPose2d().getRotation().getRotations());
+        // SmartDashboard.putNumber("robot pose x", getPose2d().getX());
+        // SmartDashboard.putNumber("robot pose y", getPose2d().getY());
+        // SmartDashboard.putNumber("robot pose rotation", getPose2d().getRotation().getRotations());
     }
 }
->>>>>>> b2f11c44f36e5299158fd0e5c098f388538e0c05

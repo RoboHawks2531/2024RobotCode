@@ -11,7 +11,8 @@ public class VisionTranslate extends Command {
     private Swerve swerve;
     private Vision vision;
 
-    private PIDController translationPID = new PIDController(0.1, 0, 0);
+    private PIDController translationPID = new PIDController(2.2, 0, 0.004);
+    private PIDController rotationPID = new PIDController(0.1, 0, 0);
     private double xDistance;
     private double yDistance;
 
@@ -35,9 +36,10 @@ public class VisionTranslate extends Command {
     @Override
     public void execute() {
         double speedX = translationPID.calculate(vision.getDistanceMethod(), xDistance);
-        double speedY = translationPID.calculate(vision.getYaw(), yDistance);
+        // double speedY = translationPID.calculate(vision.getYaw(), yDistance);
+        double speedY = rotationPID.calculate(vision.getYaw(), yDistance);
 
-        swerve.drive(new Translation2d(speedX, speedY), 0, true, true);
+        swerve.drive(new Translation2d(speedX, 0), speedY, false, true);
 
         // swerve.setChassisSpeeds(swerve.getChassisSpeeds());
     }

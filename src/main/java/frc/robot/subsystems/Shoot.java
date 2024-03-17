@@ -146,11 +146,11 @@ public class Shoot extends SubsystemBase {
   }
 
   public double getRPMfromVelocity1() {
-    return (motor1.getVelocity().getValueAsDouble() * 600) / 2048;
+    return motor1.getVelocity().getValueAsDouble();
   }
 
   public double getRPMfromVelocity2() {
-    return (motor2.getVelocity().getValueAsDouble()  * 600) / 2048;
+    return motor2.getVelocity().getValueAsDouble();
   }
 
   public static double InchesToRPM(double inches) {
