@@ -195,12 +195,13 @@ public final class Constants {
         // public static final double groundSetpoint = -125;
         // public static final double ampSetpoint = -44;
         public static final double sourceSetpoint = -33;
-        public static final double groundSetpoint = -121.6; //real number is around -120
+        public static final double groundSetpoint = -122.2; //real number is around -120
         public static final double ampSetpoint = -20;
 
         // public static final double indexFeedingSetpoint = -3.5;
         // public static final double indexFeedingSetpoint = -2.95;
-        public static final double indexFeedingSetpoint = -1.95;
+        // public static final double indexFeedingSetpoint = -1.2;
+        public static final double indexFeedingSetpoint = -0.1;
 
         public static final double intakeSpitVolts = 5;
         public static final double intakeSuckVolts = -4;

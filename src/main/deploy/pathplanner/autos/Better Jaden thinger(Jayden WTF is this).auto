@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7886023044773361,
+      "y": 4.3751818412727745
+    },
+    "rotation": 124.18612248637504
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top To Amp"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Jaydens Autos",
+  "choreoAuto": false
+}

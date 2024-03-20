@@ -18,6 +18,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -100,11 +101,11 @@ public class RobotContainer {
         );
         
 
-        NamedCommands.registerCommand("Aux Shoot", new AuxShoot(intake, shoot).withTimeout(1.5)); //full shooting command for auto
+        NamedCommands.registerCommand("Aux Shoot", new AuxShoot(intake, shoot).withTimeout(2)); //full shooting command for auto
         NamedCommands.registerCommand("Intake Ground", new ParallelCommandGroup( //this makes sure the intake is down and ends when it needs to, if stopping early, switch to the deadline group version
             new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint),
             new IntakePowerCommand(intake, -3)
-        ).withTimeout(1.5));
+        ).withTimeout(1.8));
         NamedCommands.registerCommand("Intake Ground No Timeout", new ParallelCommandGroup(  //put this in a deadline group with the path as the deadline to ensure that the intake picks up the note
             new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint),
             new IntakePowerCommand(intake, -3)
@@ -137,6 +138,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Wait Command 1", new WaitCommand(1)); //using this to delay shooting to not hit any notes while shooting
         // NamedCommands.registerCommand("Vision Trajectory to Speaker", new TagToPoseTrajectoryGenerator(s_Swerve, vision, 7, 36));
         NamedCommands.registerCommand("Vision Translate", new VisionTranslate(s_Swerve, vision, 1.32, 0));
+        NamedCommands.registerCommand("Spin Spin", new RunCommand(() -> s_Swerve.drive(new Translation2d(), 0.3, false, false)));
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -144,9 +146,7 @@ public class RobotContainer {
         
         // autoChooser.addOption("Example Auto", new exampleAuto(s_Swerve));
 
-
         // autoChooser.addOption("Two Note Auto", new TestingTwoNoteAuto(s_Swerve, vision, shoot, intake));
-
 
         // SmartDashboard.putData(autoChooser);
 
@@ -265,8 +265,8 @@ public class RobotContainer {
         driver.povRight().whileTrue(new RotateToTarget(s_Swerve, vision));
         // driver.povRight().whileTrue(new VisionTranslate(s_Swerve, vision, 2, 0));
 
-        // driver.povDown().whileTrue(new DistanceShoot(intake, shoot));
-        driver.povDown().whileTrue(new PivotShootVertically(shoot, vision));
+        driver.povDown().whileTrue(new DistanceShoot(intake, shoot));
+        // driver.povDown().whileTrue(new PivotShootVertically(shoot, vision));
         driver.povDown().whileFalse(new ResetShooter(intake, shoot));
 
         // driver.povUp().whileTrue(new ParallelCommandGroup(

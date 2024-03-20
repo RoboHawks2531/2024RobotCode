@@ -41,7 +41,7 @@ public class IntakeSetpointCommand extends Command{
 
     @Override
     public void initialize() {
-        pidController.reset();
+        // pidController.reset();
     }
 
     @Override
@@ -60,6 +60,6 @@ public class IntakeSetpointCommand extends Command{
     
     @Override
     public boolean isFinished() {
-        return pidController.atSetpoint();
+        return false;
     }
 }

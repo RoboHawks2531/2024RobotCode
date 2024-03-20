@@ -1,0 +1,68 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.68,
+      "y": 4.47
+    },
+    "rotation": 119.84210624365164
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Zero Pivot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Zero Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Aux Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Reset Shooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Speaker to Bottom Leavin"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Zero Swerve"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Spin Spin"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Jaydens Autos",
+  "choreoAuto": false
+}

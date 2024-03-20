@@ -15,13 +15,15 @@ public class AuxShoot extends SequentialCommandGroup{
         addCommands(
             new ParallelCommandGroup(
                 // new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore), // re-add this if we start using the pivot again
-                new PivotPIDCommandNonDegrees(shoot, -1),
+                new PivotPIDCommandNonDegrees(shoot, -2.5),
                 new IntakeSetpointCommand(intake, Constants.IntakeConstants.indexFeedingSetpoint), //pulsing puts the intake here anyways
-                new InstantCommand(() -> intake.setPowerVolts(-2)),
+                // new InstantCommand(() -> intake.setPowerVolts(-2)),
                 new InstantCommand(() -> shoot.setIndexMotorVolts(Constants.ShootingConstants.indexFeedVolts)), //sped up because david said so
-                new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM)
-            ).withTimeout(1),
+                new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM),
+                new InstantCommand(() -> shoot.brakeMotors())
+            ).withTimeout(1.5),
             new ParallelCommandGroup(
+                new PivotPIDCommandNonDegrees(shoot, -2.5),
                 new IntakeSetpointCommand(intake, Constants.IntakeConstants.indexFeedingSetpoint),
                 new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM),
                 // new InstantCommand(() -> shoot.setIndexMotorVolts(12))

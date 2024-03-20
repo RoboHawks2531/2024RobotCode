@@ -14,10 +14,10 @@ public class DistanceShoot extends SequentialCommandGroup{
     
     public DistanceShoot(Intake intake, Shoot shoot) {
         addCommands(
-            new ParallelCommandGroup(
-                new InstantCommand(() -> shoot.setIndexMotorVolts(4)),
-                new InstantCommand(() -> intake.setPowerVolts(5)) 
-            ).withTimeout(0.5),
+            // new ParallelCommandGroup(
+            //     new InstantCommand(() -> shoot.setIndexMotorVolts(4)),
+            //     new InstantCommand(() -> intake.setPowerVolts(5)) 
+            // ).withTimeout(0.5),
             new ParallelCommandGroup(
                 new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotDistanceShooting), // re-add this if we start using the pivot again
                 new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM)
