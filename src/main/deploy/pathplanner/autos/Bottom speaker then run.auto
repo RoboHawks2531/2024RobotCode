@@ -53,6 +53,12 @@
           "data": {
             "pathName": "Bottom to Run Away"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Zero Swerve"
+          }
         }
       ]
     }

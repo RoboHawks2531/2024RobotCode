@@ -85,7 +85,7 @@ public class Shoot extends SubsystemBase {
   }
 
   public void setMotorVolts(double voltage) {
-    motor1.setVoltage(voltage);
+    motor1.setVoltage(-voltage);
     motor2.setVoltage(voltage);
   }
 

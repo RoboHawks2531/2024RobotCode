@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2736970928487312,
-      "y": 5.531946336619947
+      "x": 0.68,
+      "y": 4.468469300574965
     },
-    "rotation": 0
+    "rotation": -59.036243467926454
   },
   "command": {
     "type": "sequential",
@@ -43,25 +43,32 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Intake Ground Quick Timeout"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "Intake Ground"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Intake Ground"
+                      }
+                    }
+                  ]
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Speaker to Middle Note"
+                  "pathName": "Bottom to midline"
                 }
               }
             ]
@@ -80,7 +87,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Middle Note to Speaker"
+                  "pathName": "Mideline to speaker"
                 }
               }
             ]
@@ -99,59 +106,15 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Intake Ground Quick Timeout"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Blue Speaker Podium"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Ground"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Blue Podium to Speaker"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Store"
-                }
-              }
-            ]
+            "pathName": "Bottom to Run Away"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Aux Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Reset Shooter"
+            "name": "Zero Swerve"
           }
         }
       ]

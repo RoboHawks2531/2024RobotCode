@@ -12,9 +12,22 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Zero All"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Zero Intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Wait Command 1"
+                }
+              }
+            ]
           }
         },
         {
@@ -176,7 +189,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake Ground Quick Timeout"
+            "name": "Reset Shooter"
           }
         }
       ]

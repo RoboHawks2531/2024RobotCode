@@ -101,7 +101,7 @@ public class RobotContainer {
         );
         
 
-        NamedCommands.registerCommand("Aux Shoot", new AuxShoot(intake, shoot).withTimeout(2)); //full shooting command for auto
+        NamedCommands.registerCommand("Aux Shoot", new AuxShoot(intake, shoot).withTimeout(1.7)); //full shooting command for auto
         NamedCommands.registerCommand("Intake Ground", new ParallelCommandGroup( //this makes sure the intake is down and ends when it needs to, if stopping early, switch to the deadline group version
             new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint),
             new IntakePowerCommand(intake, -3)
@@ -232,7 +232,7 @@ public class RobotContainer {
             new InstantCommand(() -> intake.setPowerVolts(4)),
             // new InstantCommand(() -> intake.setPowerVelocity(Constants.IntakeConstants.intakeSpitVelocity, false)),
             new InstantCommand(() -> shoot.setIndexMotorVolts(8)).withTimeout(1.2)),
-            new InstantCommand(() -> shoot.brakeMotors()),
+            new InstantCommand(() -> shoot.setIndexMotorVelocity(-250)),
             // new InstantCommand(() -> intake.setPowerVolts(0)),
             new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp)
             ));

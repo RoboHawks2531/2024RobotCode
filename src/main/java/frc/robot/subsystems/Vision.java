@@ -71,22 +71,25 @@ public class Vision extends SubsystemBase{
     }
 
     // public Pose2d getPose2d() {
-    //     // var result = arduCam.getLatestResult();
+    //         return PhotonUtils.estimateFieldToRobot(
+    //             cameraHeight,
+    //             targetHeight, 
+    //             cameraPitchRadians, 
+    //             getPitch(), 
+    //             Rotation2d.fromDegrees(-getYaw()), 
+    //             swerve.getHeading(), 
+    //             PhotonUtils.estimateFieldToRobotAprilTag(
+    //                 null,
+    //                 null,
+    //                 null
+    //                 ).toPose2d(), 
+    //             robotToCam
+    //         );
+    // }
 
-    //     // if (result.hasTargets()) {
-    //     //     return PhotonUtils.estimateFieldToRobot(
-    //     //         cameraHeight,
-    //     //         targetHeight, 
-    //     //         cameraPitchRadians, 
-    //     //         getPitch(), 
-    //     //         Rotation2d.fromDegrees(-getYaw()), 
-    //     //         swerve.getHeading(), 
-    //     //         new Pose2d(), 
-    //     //         robotToCam
-    //     //     );
-    //     // }
-    //     // return new Pose2d();
-
+    // public Pose3d getPose3d() {
+    //     PhotonTrackedTarget target = arduCam.getLatestResult().getBestTarget();
+    //     return PhotonUtils.estimateFieldToRobotAprilTag(target.getBestCameraToTarget(), aprilTagFieldLayout.getTagPose(target.getFiducialId()), PhotonUtils.);
     // }
 
     public Translation2d distanceToTranslate(double translation) {

@@ -16,11 +16,15 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.hal.SimDevice.Direction;
+import edu.wpi.first.math.estimator.PoseEstimator;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -28,6 +32,9 @@ public class Swerve extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
+
+    // private Vision vision;
+    // private SwerveDrivePoseEstimator swervePoseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions(), getPose());
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
@@ -43,6 +50,7 @@ public class Swerve extends SubsystemBase {
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
 
+        // swervePoseEstimator.addVisionMeasurement(vision.getPose2d(), Timer.getFPGATimestamp());
 
         AutoBuilder.configureHolonomic(
             this::getPose,
@@ -88,7 +96,9 @@ public class Swerve extends SubsystemBase {
         for(SwerveModule mod : mSwerveMods){
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
-    }    
+
+        
+    }   
 
     /* Used by SwerveControllerCommand in Auto */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
@@ -118,6 +128,10 @@ public class Swerve extends SubsystemBase {
     public Pose2d getPose() {
         return swerveOdometry.getPoseMeters();
     }
+
+    // public Pose2d getEstimatedPose() {
+    //     return swervePoseEstimator.getEstimatedPosition();
+    // }
 
     public void setPose(Pose2d pose) {
         swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), pose);
