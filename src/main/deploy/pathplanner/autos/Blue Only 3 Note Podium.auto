@@ -2,32 +2,19 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 15.26681598817743,
-      "y": 5.550603828480384
+      "x": 1.2736970928487312,
+      "y": 5.531946336619947
     },
-    "rotation": 180.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Zero Intake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Zero Pivot"
-                }
-              }
-            ]
+            "name": "Zero All"
           }
         },
         {
@@ -61,7 +48,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Red Speaker to Note"
+                  "pathName": "Speaker to Middle Note"
                 }
               }
             ]
@@ -80,7 +67,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Red Middle Note to Speaker"
+                  "pathName": "Middle Note to Speaker"
                 }
               }
             ]
@@ -99,19 +86,25 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Intake Ground Quick Timeout"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "Intake Ground"
+                  "pathName": "Blue Speaker Podium"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "Red Speaker to Podium Path"
+                  "name": "Intake Ground"
                 }
               }
             ]
@@ -124,32 +117,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Podium to Shoot"
+                  "pathName": "Blue Podium to Speaker"
                 }
               },
               {
                 "type": "named",
                 "data": {
                   "name": "Intake Store"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Pulse Stage 1"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Pulse Stage 2"
                 }
               }
             ]

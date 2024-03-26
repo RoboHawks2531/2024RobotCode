@@ -43,9 +43,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "Wait Command"
+            "waitTime": 5.5
           }
         },
         {
