@@ -32,6 +32,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Vision extends SubsystemBase{
 
@@ -70,22 +71,23 @@ public class Vision extends SubsystemBase{
         return 0;
     }
 
-    // public Pose2d getPose2d() {
-    //         return PhotonUtils.estimateFieldToRobot(
-    //             cameraHeight,
-    //             targetHeight, 
-    //             cameraPitchRadians, 
-    //             getPitch(), 
-    //             Rotation2d.fromDegrees(-getYaw()), 
-    //             swerve.getHeading(), 
-    //             PhotonUtils.estimateFieldToRobotAprilTag(
-    //                 null,
-    //                 null,
-    //                 null
-    //                 ).toPose2d(), 
-    //             robotToCam
-    //         );
-    // }
+    public Pose2d getPose2d() {
+            return PhotonUtils.estimateFieldToRobot(
+                cameraHeight,
+                targetHeight, 
+                cameraPitchRadians, 
+                getPitch(), 
+                Rotation2d.fromDegrees(-getYaw()), 
+                swerve.getHeading(), 
+                PhotonUtils.estimateFieldToRobotAprilTag(
+                    arduCam.getLatestResult().getBestTarget().getBestCameraToTarget(),
+                    // aprilTagFieldLayout.getOrigin(),
+                    aprilTagFieldLayout.getTagPose(getBestTargetID()).get(),
+                    Constants.VisionConstants.robotToCam
+                    ).toPose2d(), 
+                robotToCam
+            );
+    }
 
     // public Pose3d getPose3d() {
     //     PhotonTrackedTarget target = arduCam.getLatestResult().getBestTarget();

@@ -33,8 +33,8 @@ public class Swerve extends SubsystemBase {
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
 
-    // private Vision vision;
-    // private SwerveDrivePoseEstimator swervePoseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions(), getPose());
+    private Vision vision;
+    private SwerveDrivePoseEstimator swervePoseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions(), getPose());
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
@@ -50,10 +50,10 @@ public class Swerve extends SubsystemBase {
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
 
-        // swervePoseEstimator.addVisionMeasurement(vision.getPose2d(), Timer.getFPGATimestamp());
+        swervePoseEstimator.addVisionMeasurement(vision.getPose2d(), Timer.getFPGATimestamp());
 
         AutoBuilder.configureHolonomic(
-            this::getPose,
+            this::getEstimatedPose,
              this::zeroPose,
               this::getChassisSpeeds,
                this::setChassisSpeeds,
@@ -129,9 +129,9 @@ public class Swerve extends SubsystemBase {
         return swerveOdometry.getPoseMeters();
     }
 
-    // public Pose2d getEstimatedPose() {
-    //     return swervePoseEstimator.getEstimatedPosition();
-    // }
+    public Pose2d getEstimatedPose() {
+        return swervePoseEstimator.getEstimatedPosition();
+    }
 
     public void setPose(Pose2d pose) {
         swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), pose);
