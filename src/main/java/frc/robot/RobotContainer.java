@@ -37,12 +37,15 @@ import frc.robot.commands.Intake.IntakeSetpointCommand;
 import frc.robot.commands.Shoot.AimAndShoot;
 import frc.robot.commands.Shoot.AmpShoot;
 import frc.robot.commands.Shoot.AuxShoot;
+import frc.robot.commands.Shoot.IndexNote;
 import frc.robot.commands.Shoot.PivotPIDCommandNonDegrees;
 import frc.robot.commands.Shoot.PulseNote;
 import frc.robot.commands.Shoot.ResetShooter;
 import frc.robot.commands.Shoot.RevShooter;
+import frc.robot.commands.Vision.RotateToTarget;
 import frc.robot.commands.Vision.TagToPoseTrajectoryGenerator;
 import frc.robot.commands.Vision.VisionTranslate;
+import frc.robot.subsystems.Candle;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shoot;
@@ -73,6 +76,7 @@ public class RobotContainer {
     private final Shoot shoot = new Shoot();
     private final Intake intake = new Intake();
     private final Elevator elevator = new Elevator();
+    private final Candle candle = new Candle();
 
     // private final SendableChooser<Command> autoChooser = new SendableChooser<>();
     private SendableChooser<Command> autoChooser = new SendableChooser<>();
@@ -124,7 +128,7 @@ public class RobotContainer {
             new IntakeSetpointCommand(intake, -4),
             new InstantCommand(() -> shoot.setIndexMotorVolts(3)),
             new IntakePowerCommand(intake, 3)).withTimeout(0.2));
-        NamedCommands.registerCommand("Aim And Shoot", new AimAndShoot(s_Swerve, vision, shoot, intake)); //aiming shooting command
+        NamedCommands.registerCommand("Aim And Shoot", new AimAndShoot(s_Swerve, vision, shoot, intake, candle)); //aiming shooting command
         NamedCommands.registerCommand("Wait Command", new WaitCommand(7)); //waiting command for delaying auto a lot
         NamedCommands.registerCommand("Wait Command 1", new WaitCommand(1)); //using this to delay shooting to not hit any notes while shooting
         // NamedCommands.registerCommand("Vision Trajectory to Speaker", new TagToPoseTrajectoryGenerator(s_Swerve, vision, 7, 36));
@@ -169,13 +173,16 @@ public class RobotContainer {
         driver.x().onTrue(new ParallelCommandGroup(
             // new IntakeSetpointCommand(intake, 0),
             new IntakeSetpointCommand(intake, Constants.IntakeConstants.indexFeedingSetpoint),
-            new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore)
+            new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore),
+            new RunCommand(() -> Candle.LEDSegment.MainStrip.setStrobeAnimation(candle.green, 0.5)).withTimeout(2)
             // new IntakePowerCommand(intake, 2)
         ));
 
         driver.a().onTrue(new ParallelCommandGroup(
             new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint),
-            new IntakePowerCommand(intake, -3.5)
+            new IntakePowerCommand(intake, -3.5),
+            new RunCommand(() -> Candle.LEDSegment.MainStrip.setBandAnimation(candle.yellow, 0.5))
+            // new InstantCommand(() -> candle.setLEDStrobe(0, 255, 0))
         ));
 
         driver.b().onTrue(new ParallelCommandGroup(
@@ -187,10 +194,6 @@ public class RobotContainer {
         //     new IntakeSetpointCommand(intake, Constants.IntakeConstants.ampSetpoint)
         //     // new IntakePowerCommand(intake, -3) //it dont need this tbh
         // ));
-
-        /* Intake Manual Pivoting */
-        // driver.rightTrigger(0.5).whileTrue(new ManualPivotIntake(intake, 0.15)); // Intake Pivot Up
-        // driver.leftTrigger(0.5).whileTrue(new ManualPivotIntake(intake, -0.15)); // Intake Pivot Down
         
         /* Intake Power */
         driver.leftBumper().whileTrue(new ParallelCommandGroup(
@@ -203,10 +206,6 @@ public class RobotContainer {
 
         driver.leftBumper().onFalse(new ResetShooter(intake, shoot));
         driver.rightBumper().onFalse(new ResetShooter(intake, shoot));
-
-        /* Shooting Pivot Commands */
-        // driver.povRight().onTrue(new PivotPIDCommandNonDegrees(shoot, -65)); //one stack of milk please
-        // driver.povLeft().onTrue(new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore));
 
         /* Shooting Commands */
         driver.rightTrigger(0.5).whileTrue(new SequentialCommandGroup(
@@ -225,35 +224,29 @@ public class RobotContainer {
             new InstantCommand(() -> shoot.setIndexMotorVolts(8)).withTimeout(1.2)),
             new InstantCommand(() -> shoot.setMotorVelocity(-1, false)), // TODO: remove this if it shreds a note
             // new InstantCommand(() -> intake.setPowerVolts(0)),
-            new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp)
+            new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp),
+            new RunCommand(() -> Candle.LEDSegment.MainStrip.setBandAnimation(candle.yellow, 0.5))
             ));
         driver.leftTrigger(0).whileFalse(new ResetShooter(intake, shoot));
-        driver.leftTrigger(0).whileFalse(new InstantCommand(() -> shoot.coastMotors()));
+        // driver.leftTrigger(0).whileFalse(new InstantCommand(() -> shoot.coastMotors()));
 
         driver.y().whileTrue(new ParallelCommandGroup(
                 new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp),
                 new InstantCommand(() -> shoot.setIndexMotorVolts(8)),
-                new InstantCommand(() -> shoot.setMotorVelocity(Constants.ShootingConstants.targetShootingAmpTarget, false))
+                new InstantCommand(() -> shoot.setMotorVelocity(Constants.ShootingConstants.targetShootingAmpTarget, false)),
+                // new RunCommand(() -> Candle.LEDSegment.MainStrip.setStrobeAnimation(candle.blue, 0.5))
+                new RunCommand(() -> Candle.LEDSegment.MainStrip.setRainbowAnimation(0.5))
         ));
 
         driver.y().whileFalse(new ResetShooter(intake, shoot));
-        
-        // this can be removed if we do use the two stage amp shooting
-        // driver.leftTrigger(0.5).whileTrue(new AmpShoot(shoot, intake));
-        // driver.leftTrigger(0).whileFalse(new ResetShooter(intake, shoot));
 
         driver.povLeft().whileTrue(new PulseNote(intake, shoot));
         driver.povLeft().whileFalse(new ResetShooter(intake, shoot));
 
-        // driver.povRight().onTrue(new SequentialCommandGroup(
-        //     new IndexNote(intake, shoot).withTimeout(0.4),
-        //     // new InstantCommand(() -> intake.setPowerVolts(0)),
-        //     new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp)
-        //     )
-        // );
-
         driver.povRight().whileTrue(new SequentialCommandGroup(
                 new ParallelCommandGroup(
+                new IndexNote(intake, shoot).withTimeout(0.2),
+                new RotateToTarget(s_Swerve, vision, candle),
                 new PivotPIDCommandNonDegrees(shoot, -15), // re-add this if we start using the pivot again
                 new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM)
             ).withTimeout(1),
@@ -261,7 +254,8 @@ public class RobotContainer {
                 // new IntakeSetpointCommand(intake, Constants.IntakeConstants.indexFeedingSetpoint),
                 new PivotPIDCommandNonDegrees(shoot, -15), // re-add this if we start using the pivot again
                 new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM),
-                new InstantCommand(() -> shoot.setIndexMotorVolts(12))
+                new InstantCommand(() -> shoot.setIndexMotorVolts(12)),
+                new RunCommand(() -> Candle.LEDSegment.MainStrip.setStrobeAnimation(candle.purple, 0.5))
                 // new IndexNote(intake, shoot)
             )
             )

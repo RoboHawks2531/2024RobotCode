@@ -34,19 +34,19 @@ public class TwoRingAutoCauseWeReallyThinkWeCanDoThisByWeekOne extends Sequentia
 
 
         addCommands(
-            new AimAndShoot(swerve, vision, shoot, intake),
-            new AutoIntakeLift(intake, Constants.IntakeConstants.groundSetpoint),
-            new RunCommand(() -> swerve.zeroHeading()).withTimeout(0.1),
-            new ParallelRaceGroup(
-                new InstantCommand(() -> swerve.drive(new Translation2d(0.15/ 20 , 0), 0, false, true), swerve),
-                new InstantCommand(() -> swerve.drive(new Translation2d(0.15/ 20,0), 0, false, true), swerve).withTimeout(3)
+            // new AimAndShoot(swerve, vision, shoot, intake),
+            // new AutoIntakeLift(intake, Constants.IntakeConstants.groundSetpoint),
+            // new RunCommand(() -> swerve.zeroHeading()).withTimeout(0.1),
+            // new ParallelRaceGroup(
+            //     new InstantCommand(() -> swerve.drive(new Translation2d(0.15/ 20 , 0), 0, false, true), swerve),
+            //     new InstantCommand(() -> swerve.drive(new Translation2d(0.15/ 20,0), 0, false, true), swerve).withTimeout(3)
                 
                 
-                //limit swicth end on both true
-            ), 
-            new RunCommand(() -> swerve.zeroHeading()),
-            //flip up intake and move ring
-            new AimAndShoot(swerve, vision, shoot, intake)
+            //     //limit swicth end on both true
+            // ), 
+            // new RunCommand(() -> swerve.zeroHeading()),
+            // //flip up intake and move ring
+            // new AimAndShoot(swerve, vision, shoot, intake)
         );
     }
 }

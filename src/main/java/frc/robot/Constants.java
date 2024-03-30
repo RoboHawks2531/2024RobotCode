@@ -208,9 +208,7 @@ public final class Constants {
         public static final double intakeSuckVolts = -4;
     }
 
-
     public static class VisionConstants {
-
     // public static final String LimelightName = "2531limelight";
     
     /** Physical location of the camera on the robot, relative to the center of the robot. */
@@ -229,4 +227,8 @@ public final class Constants {
     /** Minimum target ambiguity. Targets with higher ambiguity will be discarded */
     public static final double ApriltagAmbiguityThreshold = 0.2;
   }
+
+    public static class MiscConstants {
+        public static final int CANdleID = 0;
+    }
 }
