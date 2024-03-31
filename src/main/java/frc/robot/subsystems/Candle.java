@@ -34,6 +34,8 @@ public class Candle extends SubsystemBase{
     public static final Color green = new Color(56, 209, 0);
     public static final Color blue = new Color(8, 32, 255);
     public static final Color red = new Color(255, 0, 0);
+    public static final Color orange = new Color(227, 110, 7);
+    
 
     public Candle() {
         CANdleConfiguration config = new CANdleConfiguration();
@@ -42,13 +44,13 @@ public class Candle extends SubsystemBase{
         config.brightnessScalar = 1;
         candle.configAllSettings(config, 100);
 
-        // configLEDType(LEDStripType.RGBW);
         setDefaultCommand(defaultCommand());
     }
 
     public Command defaultCommand() {
         return runOnce(() -> {
             LEDSegment.MainStrip.setColor(purple);
+            LEDSegment.MainStrip.setFireAnimation(0.5, 0.25, 0.25);
         });
     }
 
@@ -109,6 +111,11 @@ public class Candle extends SubsystemBase{
         public void setRainbowAnimation(double speed) {
             setAnimation(new RainbowAnimation(1, speed, segmentSize, false, startIndex));
         }
+
+        public void setFireAnimation(double speed, double cooling, double sparking) {
+            setAnimation(new FireAnimation(1, speed, segmentSize, cooling, sparking));
+
+        }
     }
 
     public static class Color {
@@ -135,8 +142,8 @@ public class Candle extends SubsystemBase{
 
 
 
-
-/* 
+// @Deprecated
+/* voided bins 
  * public void configLEDType(LEDStripType ledType) {
         candle.configLEDType(ledType);
     }
