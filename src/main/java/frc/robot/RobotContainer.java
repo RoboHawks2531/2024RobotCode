@@ -287,14 +287,14 @@ public class RobotContainer {
             
         // driver.povRight().whileFalse(new ResetShooter(intake, shoot));
 
-        driver.a().onTrue(new InstantCommand(() -> Candle.LEDSegment.InternalLEDs.setColor(candle.green)));
-        driver.a().onTrue(new InstantCommand(() -> Candle.LEDSegment.MainStrip.setColor(candle.green)));
+        driver.a().onTrue(new RunCommand(() -> Candle.LEDSegment.InternalLEDs.setColor(candle.green), candle));
+        driver.a().onTrue(new RunCommand(() -> Candle.LEDSegment.MainStrip.setColor(candle.green), candle));
 
-        driver.b().onTrue(new InstantCommand(() -> Candle.LEDSegment.InternalLEDs.setColor(candle.red)));
-        driver.b().onTrue(new InstantCommand(() -> Candle.LEDSegment.MainStrip.setColor(candle.red)));
+        driver.b().onTrue(new RunCommand(() -> Candle.LEDSegment.InternalLEDs.setColor(candle.red), candle));
+        driver.b().onTrue(new RunCommand(() -> Candle.LEDSegment.MainStrip.setColor(candle.red), candle));
 
-        driver.x().onTrue(new InstantCommand(() -> Candle.LEDSegment.InternalLEDs.setStrobeAnimation(candle.yellow, 0.4)));
-        driver.x().onTrue(new InstantCommand(() -> Candle.LEDSegment.MainStrip.setStrobeAnimation(candle.yellow, 0.4)));
+        driver.x().onTrue(new RunCommand(() -> Candle.LEDSegment.InternalLEDs.setStrobeAnimation(candle.yellow, 0.4), candle));
+        driver.x().onTrue(new RunCommand(() -> Candle.LEDSegment.MainStrip.setStrobeAnimation(candle.yellow, 0.4), candle));
 
         /* Elevator Commands */
         // operator.a().onTrue(new ElevatorSetpointCommand(elevator, 7));
