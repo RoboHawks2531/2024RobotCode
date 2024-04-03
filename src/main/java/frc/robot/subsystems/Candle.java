@@ -40,22 +40,33 @@ public class Candle extends SubsystemBase{
     public Candle() {
         CANdleConfiguration config = new CANdleConfiguration();
         config.statusLedOffWhenActive = true;
-        config.stripType = LEDStripType.RGB;
+        config.stripType = LEDStripType.GRB;
+        config.v5Enabled = true;
+        config.vBatOutputMode = CANdle.VBatOutputMode.Modulated;
         config.brightnessScalar = 1;
         candle.configAllSettings(config, 100);
+        candle.configLEDType(LEDStripType.GRB); //just added this after cd post
 
         setDefaultCommand(defaultCommand());
+
+        System.out.println("Candle Initialized");
     }
 
     public Command defaultCommand() {
         return runOnce(() -> {
+            LEDSegment.MainStrip.fullClear();
+            LEDSegment.InternalLEDs.fullClear();
+
             LEDSegment.MainStrip.setColor(purple);
-            LEDSegment.MainStrip.setFireAnimation(0.5, 0.25, 0.25);
+            LEDSegment.InternalLEDs.setColor(purple);
+            // LEDSegment.MainStrip.setFireAnimation(0.5, 0.25, 0.25);
         });
     }
 
     public static enum LEDSegment {
-        MainStrip(8, 300, 2);
+        InternalLEDs(0, 8, 0),
+        MainStrip(8, 60, 1);
+        //start index is what LED to start on, 0-7 are the candles onboard LEDS, beyond is the strip
 
         public final int startIndex;
         public final int segmentSize;
@@ -115,6 +126,9 @@ public class Candle extends SubsystemBase{
         public void setFireAnimation(double speed, double cooling, double sparking) {
             setAnimation(new FireAnimation(1, speed, segmentSize, cooling, sparking));
 
+        }
+
+        public void setDefaultLEDColors() {
         }
     }
 

@@ -287,6 +287,15 @@ public class RobotContainer {
             
         // driver.povRight().whileFalse(new ResetShooter(intake, shoot));
 
+        driver.a().onTrue(new InstantCommand(() -> Candle.LEDSegment.InternalLEDs.setColor(candle.green)));
+        driver.a().onTrue(new InstantCommand(() -> Candle.LEDSegment.MainStrip.setColor(candle.green)));
+
+        driver.b().onTrue(new InstantCommand(() -> Candle.LEDSegment.InternalLEDs.setColor(candle.red)));
+        driver.b().onTrue(new InstantCommand(() -> Candle.LEDSegment.MainStrip.setColor(candle.red)));
+
+        driver.x().onTrue(new InstantCommand(() -> Candle.LEDSegment.InternalLEDs.setStrobeAnimation(candle.yellow, 0.4)));
+        driver.x().onTrue(new InstantCommand(() -> Candle.LEDSegment.MainStrip.setStrobeAnimation(candle.yellow, 0.4)));
+
         /* Elevator Commands */
         // operator.a().onTrue(new ElevatorSetpointCommand(elevator, 7));
         // operator.b().onTrue(new ElevatorSetpointCommand(elevator, 25));
