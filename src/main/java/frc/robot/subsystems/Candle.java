@@ -39,13 +39,13 @@ public class Candle extends SubsystemBase{
 
     public Candle() {
         CANdleConfiguration config = new CANdleConfiguration();
-        config.statusLedOffWhenActive = true;
+        config.statusLedOffWhenActive = false;
         config.stripType = LEDStripType.GRB;
         config.v5Enabled = true;
         config.vBatOutputMode = CANdle.VBatOutputMode.Modulated;
-        config.brightnessScalar = 1;
+        config.brightnessScalar = 0.5;
         candle.configAllSettings(config, 100);
-        candle.configLEDType(LEDStripType.GRB); //just added this after cd post
+        // candle.configLEDType(LEDStripType.GRB); //just added this after cd post
 
         setDefaultCommand(defaultCommand());
 
@@ -65,7 +65,7 @@ public class Candle extends SubsystemBase{
 
     public static enum LEDSegment {
         InternalLEDs(0, 8, 0),
-        MainStrip(8, 60, 1);
+        MainStrip(8, 68, 1);
         //start index is what LED to start on, 0-7 are the candles onboard LEDS, beyond is the strip
 
         public final int startIndex;
@@ -81,6 +81,7 @@ public class Candle extends SubsystemBase{
         public void setColor(Color color) {
             clearAnimation();
             candle.setLEDs(color.red, color.green, color.blue, 0, startIndex, segmentSize);
+            System.out.println("setting color to" + color.red + color.blue + color.green);
         }
 
         private void setAnimation(Animation animation) {
@@ -103,11 +104,13 @@ public class Candle extends SubsystemBase{
         public void setFlowAnimation(Color color, double speed) {
             setAnimation(new ColorFlowAnimation(
                     color.red, color.green, color.blue, 0, speed, segmentSize, Direction.Forward, startIndex));
+            System.out.println("Flow animation set");
         }
 
         public void setFadeAnimation(Color color, double speed) {
             setAnimation(
                     new SingleFadeAnimation(color.red, color.green, color.blue, 0, speed, segmentSize, startIndex));
+            System.out.println("fade animation set");
         }
 
         public void setBandAnimation(Color color, double speed) {

@@ -173,15 +173,15 @@ public class RobotContainer {
         driver.x().onTrue(new ParallelCommandGroup(
             // new IntakeSetpointCommand(intake, 0),
             new IntakeSetpointCommand(intake, Constants.IntakeConstants.indexFeedingSetpoint),
-            new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore),
-            new RunCommand(() -> Candle.LEDSegment.MainStrip.setStrobeAnimation(candle.green, 0.5)).withTimeout(2)
+            new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore)
+            // new RunCommand(() -> Candle.LEDSegment.MainStrip.setStrobeAnimation(candle.green, 0.5)).withTimeout(2)
             // new IntakePowerCommand(intake, 2)
         ));
 
         driver.a().onTrue(new ParallelCommandGroup(
             new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint),
-            new IntakePowerCommand(intake, -3.5),
-            new RunCommand(() -> Candle.LEDSegment.MainStrip.setBandAnimation(candle.yellow, 0.5))
+            new IntakePowerCommand(intake, -3.5)
+            // new RunCommand(() -> Candle.LEDSegment.MainStrip.setBandAnimation(candle.yellow, 0.5))
             // new InstantCommand(() -> candle.setLEDStrobe(0, 255, 0))
         ));
 
@@ -233,9 +233,9 @@ public class RobotContainer {
         driver.y().whileTrue(new ParallelCommandGroup(
                 new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp),
                 new InstantCommand(() -> shoot.setIndexMotorVolts(8)),
-                new InstantCommand(() -> shoot.setMotorVelocity(Constants.ShootingConstants.targetShootingAmpTarget, false)),
+                new InstantCommand(() -> shoot.setMotorVelocity(Constants.ShootingConstants.targetShootingAmpTarget, false))
                 // new RunCommand(() -> Candle.LEDSegment.MainStrip.setStrobeAnimation(candle.blue, 0.5))
-                new RunCommand(() -> Candle.LEDSegment.MainStrip.setRainbowAnimation(0.5))
+                // new RunCommand(() -> Candle.LEDSegment.MainStrip.setRainbowAnimation(0.5))
         ));
 
         driver.y().whileFalse(new ResetShooter(intake, shoot));
@@ -283,18 +283,30 @@ public class RobotContainer {
             )
         );
 
+        //TODO: Add distance shooting, under the stage pivot, and whatever else
+
         driver.povUp().whileFalse(new ResetShooter(intake, shoot));
             
         // driver.povRight().whileFalse(new ResetShooter(intake, shoot));
 
-        driver.a().onTrue(new RunCommand(() -> Candle.LEDSegment.InternalLEDs.setColor(candle.green), candle));
-        driver.a().onTrue(new RunCommand(() -> Candle.LEDSegment.MainStrip.setColor(candle.green), candle));
+        //THIS IS FOR THE CANDLE WHICH IS BROKEN
+        // driver.a().whileTrue(new RunCommand(() -> Candle.LEDSegment.InternalLEDs.setColor(candle.green), candle));
+        // driver.a().whileTrue(new RunCommand(() -> Candle.LEDSegment.MainStrip.setColor(candle.green), candle));
 
-        driver.b().onTrue(new RunCommand(() -> Candle.LEDSegment.InternalLEDs.setColor(candle.red), candle));
-        driver.b().onTrue(new RunCommand(() -> Candle.LEDSegment.MainStrip.setColor(candle.red), candle));
+        // driver.a().whileFalse(new RunCommand(() -> Candle.LEDSegment.MainStrip.disableLEDs()));
+        // driver.a().whileFalse(new RunCommand(() -> Candle.LEDSegment.InternalLEDs.disableLEDs()));
 
-        driver.x().onTrue(new RunCommand(() -> Candle.LEDSegment.InternalLEDs.setStrobeAnimation(candle.yellow, 0.4), candle));
-        driver.x().onTrue(new RunCommand(() -> Candle.LEDSegment.MainStrip.setStrobeAnimation(candle.yellow, 0.4), candle));
+        // driver.b().whileTrue(new RunCommand(() -> Candle.LEDSegment.InternalLEDs.setColor(candle.red), candle));
+        // driver.b().whileTrue(new RunCommand(() -> Candle.LEDSegment.MainStrip.setColor(candle.red), candle));
+
+        // driver.b().whileFalse(new RunCommand(() -> Candle.LEDSegment.MainStrip.disableLEDs()));
+        // driver.b().whileFalse(new RunCommand(() -> Candle.LEDSegment.InternalLEDs.disableLEDs()));
+
+        // driver.x().whileTrue(new RunCommand(() -> Candle.LEDSegment.InternalLEDs.setStrobeAnimation(candle.yellow, 0.4), candle));
+        // driver.x().whileTrue(new RunCommand(() -> Candle.LEDSegment.MainStrip.setStrobeAnimation(candle.yellow, 0.4), candle));
+
+        // driver.x().whileFalse(new RunCommand(() -> Candle.LEDSegment.MainStrip.disableLEDs()));
+        // driver.x().whileFalse(new RunCommand(() -> Candle.LEDSegment.InternalLEDs.disableLEDs()));
 
         /* Elevator Commands */
         // operator.a().onTrue(new ElevatorSetpointCommand(elevator, 7));
