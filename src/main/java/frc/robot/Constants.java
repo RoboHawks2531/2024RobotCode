@@ -226,6 +226,9 @@ public final class Constants {
 
     /** Minimum target ambiguity. Targets with higher ambiguity will be discarded */
     public static final double ApriltagAmbiguityThreshold = 0.2;
+
+    public static final int ApriltagPiplineIndex = 0;
+    public static final int IntakePiplineIndex = 1;
   }
 
     public static class MiscConstants {

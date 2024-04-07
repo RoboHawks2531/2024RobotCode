@@ -28,7 +28,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Swerve extends SubsystemBase {
-    // public SwerveDriveOdometry swerveOdometry;
+    // public SwerveDriveOdometry swerveOdometry; 
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
 
@@ -47,7 +47,7 @@ public class Swerve extends SubsystemBase {
             new SwerveModule(3, Constants.Swerve.Mod3.constants)
         };
 
-        // swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
+        // swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions()); //use if estimator doesnt work
         swervePoseEstimator =  new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions(), new Pose2d());
         swervePoseEstimator.addVisionMeasurement(vision.getPose2d(), Timer.getFPGATimestamp());
 
@@ -201,7 +201,7 @@ public class Swerve extends SubsystemBase {
 
     @Override
     public void periodic(){
-        // swerveOdometry.update(getGyroYaw(), getModulePositions());
+        // swerveOdometry.update(getGyroYaw(), getModulePositions()); //this is used if estimator doesnt work
         swervePoseEstimator.update(getGyroYaw(), getModulePositions());
 
         for(SwerveModule mod : mSwerveMods){
