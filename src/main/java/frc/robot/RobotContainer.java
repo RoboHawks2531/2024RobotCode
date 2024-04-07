@@ -149,6 +149,9 @@ public class RobotContainer {
         elevator.zeroMotorEncoders(); //zeros elevator on startup ONLY
         shoot.zeroPivotEncoder(); //zeros shooter pivot on startup ONLY
 
+        vision.getCamera().setPipelineIndex(0); //change to index of april tag detection
+        vision.getIntakeCamera().setPipelineIndex(1); //change to the index of the note detection
+
         SmartDashboard.putData("Zero Intake", new InstantCommand(() -> intake.zeroPivotEncoder())); //creates a dashboard button to zero intake
         SmartDashboard.putData("Zero Pivot", new InstantCommand(() -> shoot.zeroPivotEncoder())); //creates a dashboard button to zero shooter pivot
         SmartDashboard.putData("Zero Elevator", new InstantCommand(() -> elevator.zeroMotorEncoders())); //creates a dashboard button to zero elevator

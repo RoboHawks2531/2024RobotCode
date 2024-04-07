@@ -9,17 +9,18 @@ import frc.robot.commands.Intake.IntakeSetpointCommand;
 import frc.robot.commands.Vision.RotateToTarget;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shoot;
+import frc.robot.subsystems.Vision;
 
 public class DistanceShoot extends SequentialCommandGroup{
     
-    public DistanceShoot(Intake intake, Shoot shoot) {
+    public DistanceShoot(Intake intake, Shoot shoot, Vision vision) {
         addCommands(
-            // new ParallelCommandGroup(
-            //     new InstantCommand(() -> shoot.setIndexMotorVolts(4)),
-            //     new InstantCommand(() -> intake.setPowerVolts(5)) 
-            // ).withTimeout(0.5),
+            new ParallelCommandGroup(
+                new IndexHold(intake, shoot)
+            ).withTimeout(0.5),
             new ParallelCommandGroup(
                 new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotDistanceShooting), // re-add this if we start using the pivot again
+                new PivotShootVertically(shoot, vision),
                 new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM)
             ).withTimeout(1.5),
             new ParallelCommandGroup(

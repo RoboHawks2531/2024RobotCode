@@ -40,11 +40,15 @@ public class Vision extends SubsystemBase{
 
     // private PhotonCamera limelight = new PhotonCamera("2531Limelight");
     private PhotonCamera arduCam = new PhotonCamera("Arducam");
+    private PhotonCamera intakeCam = new PhotonCamera("IntakeCam");
 
     double cameraHeight = Units.inchesToMeters(18.75); //how hight is camera off the ground?
     double targetHeight = Units.inchesToMeters(53.88); //how high is the target off the ground(all april tags are the same)
     double cameraPitchRadians = Units.degreesToRadians(21.1); //what is the cameras angle from level?
     double goalRangeMeters = Units.feetToMeters(3); //target goal distance for getting in range of a target
+
+    double intakeHeight = Units.inchesToMeters(6); //how hight is camera off the ground?
+    double intakePitchRadians = Units.degreesToRadians(-15); //what is the cameras angle from level?
 
     private Transform2d robotToCam = new Transform2d(new Translation2d(0.5, 0.0), new Rotation2d(0)); //Cam mounted facing forward, half a meter forward of center, half a meter up from center.
 
@@ -60,6 +64,10 @@ public class Vision extends SubsystemBase{
         return arduCam;
     }
 
+    public PhotonCamera getIntakeCamera() {
+        return intakeCam;
+    }
+
     public double getDistanceMethod() {
         // var result = limelight.getLatestResult();
         var result = arduCam.getLatestResult();
@@ -72,13 +80,14 @@ public class Vision extends SubsystemBase{
     }
 
     public Pose2d getPose2d() {
+        if (hasTarget()) {
             return PhotonUtils.estimateFieldToRobot(
                 cameraHeight,
                 targetHeight, 
                 cameraPitchRadians, 
                 getPitch(), 
                 Rotation2d.fromDegrees(-getYaw()), 
-                swerve.getHeading(), 
+                swerve.getGyroYaw(), 
                 PhotonUtils.estimateFieldToRobotAprilTag(
                     arduCam.getLatestResult().getBestTarget().getBestCameraToTarget(),
                     // aprilTagFieldLayout.getOrigin(),
@@ -87,6 +96,8 @@ public class Vision extends SubsystemBase{
                     ).toPose2d(), 
                 robotToCam
             );
+        }
+        return new Pose2d();
     }
 
     // public Pose3d getPose3d() {
@@ -184,6 +195,36 @@ public class Vision extends SubsystemBase{
         }
     }
 
+    public boolean hasNoteTarget() {
+        var result = intakeCam.getLatestResult();
+        return result.hasTargets();
+    }
+
+    public double getNoteYaw() {
+        var result = intakeCam.getLatestResult();
+        if (result.hasTargets()) {
+            return result.getBestTarget().getYaw();
+        }
+        return 0;
+    }
+
+    public double getNotePitch() {
+        var result = intakeCam.getLatestResult();
+        if (result.hasTargets()) {
+            return result.getBestTarget().getPitch();
+        }
+        return 0;
+    }
+
+    public double getNoteDistance() {
+        var result = intakeCam.getLatestResult();
+        if (result.hasTargets()) {
+            return PhotonUtils.calculateDistanceToTargetMeters( //Return in meters
+                intakeHeight, targetHeight, intakePitchRadians, Units.degreesToRadians(result.getBestTarget().getPitch()));
+        }
+        return 0;
+    }
+
     @Override
     public void periodic() {
         SmartDashboard.putNumber("camera yaw", getYaw());
@@ -191,6 +232,7 @@ public class Vision extends SubsystemBase{
         SmartDashboard.putNumber("camera distance", getDistanceMethod());
         SmartDashboard.putNumber("camera best target id", getBestTargetID());
         SmartDashboard.putBoolean("camera has target", hasTarget());
+        
         // add a smart dashboard for the pose of the robot
         // SmartDashboard.putNumber("robot pose x", getPose2d().getX());
         // SmartDashboard.putNumber("robot pose y", getPose2d().getY());

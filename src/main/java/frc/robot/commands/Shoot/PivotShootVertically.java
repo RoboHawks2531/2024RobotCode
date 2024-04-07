@@ -17,7 +17,7 @@ public class PivotShootVertically extends Command{
         this.shoot = shoot;
         this.vision = vision;
 
-        addRequirements(shoot);
+        addRequirements(shoot, vision);
     }
 
     //this will most likely never be used, but it is here just in case
