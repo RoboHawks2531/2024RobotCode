@@ -34,7 +34,7 @@ public class Shoot extends SubsystemBase {
     motor1.setInverted(false);
     motor2.setInverted(false);
     indexMotor.setInverted(false);
-    pivotMotor.setInverted(true);
+    pivotMotor.setInverted(true); //TEST THIS BEFORE RUNNING BECAUSE IT COULD GO THE WRONG WAY
 
     motor1.setNeutralMode(NeutralModeValue.Brake);
     motor2.setNeutralMode(NeutralModeValue.Brake);

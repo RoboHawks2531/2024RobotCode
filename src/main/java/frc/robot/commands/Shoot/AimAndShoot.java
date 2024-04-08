@@ -13,7 +13,7 @@ import frc.robot.Constants;
 import frc.robot.commands.Intake.IntakeSetpointCommand;
 import frc.robot.commands.Vision.RotateToTarget;
 import frc.robot.commands.Vision.VisionTranslate;
-import frc.robot.subsystems.Candle;
+// import frc.robot.subsystems.Candle;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shoot;
 import frc.robot.subsystems.Swerve;
@@ -21,7 +21,7 @@ import frc.robot.subsystems.Vision;
 
 public class AimAndShoot extends SequentialCommandGroup{
 
-    public AimAndShoot(Swerve swerve, Vision vision, Shoot shoot, Intake intake, Candle candle) {
+    public AimAndShoot(Swerve swerve, Vision vision, Shoot shoot, Intake intake) {
         addCommands(
             new ParallelCommandGroup(
                 // new PulseNote(intake, shoot).withTimeout(0.9),
@@ -29,7 +29,7 @@ public class AimAndShoot extends SequentialCommandGroup{
                 new VisionTranslate(swerve, vision, 0.2, 0)
             ).withTimeout(1),
             new ParallelCommandGroup(
-                 new RotateToTarget(swerve, vision, candle),
+                 new RotateToTarget(swerve, vision),
                  new AuxShoot(intake, shoot)
             )
         );

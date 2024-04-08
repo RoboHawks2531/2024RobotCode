@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Candle;
+// import frc.robot.subsystems.Candle;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
 
@@ -22,14 +22,14 @@ public class RotateToTarget extends Command{
     
     private Swerve swerve;
     private Vision vision;
-    private Candle candle;
+    // private Candle candle;
 
     private PIDController rotationPID = new PIDController(0.1, 0, 0.0);
 
-    public RotateToTarget(Swerve swerve, Vision vision, Candle candle) {
+    public RotateToTarget(Swerve swerve, Vision vision) {
         this.swerve = swerve;
         this.vision = vision;
-        this.candle = candle;
+        // this.candle = candle;
         // addRequirements(swerve);
 
         // rotationPID.setSetpoint(0);
@@ -50,7 +50,7 @@ public class RotateToTarget extends Command{
             -MathUtil.applyDeadband(RobotContainer.driver.getRawAxis(XboxController.Axis.kLeftY.value), Constants.stickDeadband), -MathUtil.applyDeadband(RobotContainer.driver.getRawAxis(XboxController.Axis.kLeftX.value), Constants.stickDeadband)).times(1)
             , rotation, false, true);
         if (vision.hasTarget()) {
-            Candle.LEDSegment.MainStrip.setStrobeAnimation(candle.green, 0.3);
+            // Candle.LEDSegment.MainStrip.setStrobeAnimation(candle.green, 0.3);
         }
     }   
 

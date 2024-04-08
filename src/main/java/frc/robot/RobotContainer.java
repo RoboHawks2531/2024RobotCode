@@ -37,15 +37,18 @@ import frc.robot.commands.Intake.IntakeSetpointCommand;
 import frc.robot.commands.Shoot.AimAndShoot;
 import frc.robot.commands.Shoot.AmpShoot;
 import frc.robot.commands.Shoot.AuxShoot;
+import frc.robot.commands.Shoot.DistanceShoot;
+import frc.robot.commands.Shoot.FeedingShoot;
 import frc.robot.commands.Shoot.IndexNote;
 import frc.robot.commands.Shoot.PivotPIDCommandNonDegrees;
+import frc.robot.commands.Shoot.PivotShootVertically;
 import frc.robot.commands.Shoot.PulseNote;
 import frc.robot.commands.Shoot.ResetShooter;
 import frc.robot.commands.Shoot.RevShooter;
 import frc.robot.commands.Vision.RotateToTarget;
 import frc.robot.commands.Vision.TagToPoseTrajectoryGenerator;
 import frc.robot.commands.Vision.VisionTranslate;
-import frc.robot.subsystems.Candle;
+// import frc.robot.subsystems.Candle;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shoot;
@@ -76,7 +79,7 @@ public class RobotContainer {
     private final Shoot shoot = new Shoot();
     private final Intake intake = new Intake();
     private final Elevator elevator = new Elevator();
-    private final Candle candle = new Candle();
+    // private final Candle candle = new Candle();
 
     // private final SendableChooser<Command> autoChooser = new SendableChooser<>();
     private SendableChooser<Command> autoChooser = new SendableChooser<>();
@@ -128,7 +131,7 @@ public class RobotContainer {
             new IntakeSetpointCommand(intake, -4),
             new InstantCommand(() -> shoot.setIndexMotorVolts(3)),
             new IntakePowerCommand(intake, 3)).withTimeout(0.2));
-        NamedCommands.registerCommand("Aim And Shoot", new AimAndShoot(s_Swerve, vision, shoot, intake, candle)); //aiming shooting command
+        NamedCommands.registerCommand("Aim And Shoot", new AimAndShoot(s_Swerve, vision, shoot, intake)); //aiming shooting command
         NamedCommands.registerCommand("Wait Command", new WaitCommand(7)); //waiting command for delaying auto a lot
         NamedCommands.registerCommand("Wait Command 1", new WaitCommand(1)); //using this to delay shooting to not hit any notes while shooting
         // NamedCommands.registerCommand("Vision Trajectory to Speaker", new TagToPoseTrajectoryGenerator(s_Swerve, vision, 7, 36));
@@ -227,8 +230,7 @@ public class RobotContainer {
             new InstantCommand(() -> shoot.setIndexMotorVolts(8)).withTimeout(1.2)),
             new InstantCommand(() -> shoot.setMotorVelocity(-1, false)), // TODO: remove this if it shreds a note
             // new InstantCommand(() -> intake.setPowerVolts(0)),
-            new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp),
-            new RunCommand(() -> Candle.LEDSegment.MainStrip.setBandAnimation(candle.yellow, 0.5))
+            new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp)
             ));
         driver.leftTrigger(0).whileFalse(new ResetShooter(intake, shoot));
         // driver.leftTrigger(0).whileFalse(new InstantCommand(() -> shoot.coastMotors()));
@@ -246,23 +248,7 @@ public class RobotContainer {
         driver.povLeft().whileTrue(new PulseNote(intake, shoot));
         driver.povLeft().whileFalse(new ResetShooter(intake, shoot));
 
-        driver.povRight().whileTrue(new SequentialCommandGroup(
-                new ParallelCommandGroup(
-                new IndexNote(intake, shoot).withTimeout(0.2),
-                new RotateToTarget(s_Swerve, vision, candle),
-                new PivotPIDCommandNonDegrees(shoot, -15), // re-add this if we start using the pivot again
-                new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM)
-            ).withTimeout(1),
-            new ParallelCommandGroup(
-                // new IntakeSetpointCommand(intake, Constants.IntakeConstants.indexFeedingSetpoint),
-                new PivotPIDCommandNonDegrees(shoot, -15), // re-add this if we start using the pivot again
-                new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM),
-                new InstantCommand(() -> shoot.setIndexMotorVolts(12)),
-                new RunCommand(() -> Candle.LEDSegment.MainStrip.setStrobeAnimation(candle.purple, 0.5))
-                // new IndexNote(intake, shoot)
-            )
-            )
-        );
+        driver.povRight().whileTrue(new DistanceShoot(intake, shoot, vision));
 
         driver.povRight().whileFalse(new ResetShooter(intake, shoot));
         // driver.povRight().whileTrue(new RotateToTarget(s_Swerve, vision));
@@ -272,12 +258,6 @@ public class RobotContainer {
         // driver.povDown().whileTrue(new PivotShootVertically(shoot, vision));
         driver.povDown().whileFalse(new ResetShooter(intake, shoot));
 
-        // driver.povUp().whileTrue(new ParallelCommandGroup(
-        //         new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp),
-        //         new InstantCommand(() -> shoot.setIndexMotorVolts(8)),
-        //         new InstantCommand(() -> shoot.setMotorVelocity(Constants.ShootingConstants.targetShootingAmpTarget, false))
-        // ));
-
         driver.povDown().onTrue(
             new ParallelCommandGroup(
             new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotIntake),
@@ -286,30 +266,10 @@ public class RobotContainer {
             )
         );
 
-        //TODO: Add distance shooting, under the stage pivot, and whatever else
-
+        driver.povUp().whileTrue(new FeedingShoot(shoot, intake));
         driver.povUp().whileFalse(new ResetShooter(intake, shoot));
             
         // driver.povRight().whileFalse(new ResetShooter(intake, shoot));
-
-        //THIS IS FOR THE CANDLE WHICH IS BROKEN
-        // driver.a().whileTrue(new RunCommand(() -> Candle.LEDSegment.InternalLEDs.setColor(candle.green), candle));
-        // driver.a().whileTrue(new RunCommand(() -> Candle.LEDSegment.MainStrip.setColor(candle.green), candle));
-
-        // driver.a().whileFalse(new RunCommand(() -> Candle.LEDSegment.MainStrip.disableLEDs()));
-        // driver.a().whileFalse(new RunCommand(() -> Candle.LEDSegment.InternalLEDs.disableLEDs()));
-
-        // driver.b().whileTrue(new RunCommand(() -> Candle.LEDSegment.InternalLEDs.setColor(candle.red), candle));
-        // driver.b().whileTrue(new RunCommand(() -> Candle.LEDSegment.MainStrip.setColor(candle.red), candle));
-
-        // driver.b().whileFalse(new RunCommand(() -> Candle.LEDSegment.MainStrip.disableLEDs()));
-        // driver.b().whileFalse(new RunCommand(() -> Candle.LEDSegment.InternalLEDs.disableLEDs()));
-
-        // driver.x().whileTrue(new RunCommand(() -> Candle.LEDSegment.InternalLEDs.setStrobeAnimation(candle.yellow, 0.4), candle));
-        // driver.x().whileTrue(new RunCommand(() -> Candle.LEDSegment.MainStrip.setStrobeAnimation(candle.yellow, 0.4), candle));
-
-        // driver.x().whileFalse(new RunCommand(() -> Candle.LEDSegment.MainStrip.disableLEDs()));
-        // driver.x().whileFalse(new RunCommand(() -> Candle.LEDSegment.InternalLEDs.disableLEDs()));
 
         /* Elevator Commands */
         // operator.a().onTrue(new ElevatorSetpointCommand(elevator, 7));
