@@ -11,9 +11,9 @@ This years robot consists of four main subsystems:
 
 > [!IMPORTANT]
 > This code is dependen on the following vender libraries:
-> PathPlanner Lib
-> Phoenix6
-> PhotonLib
+> PathPlanner Lib,
+> Phoenix6,
+> and PhotonLib
 <br>    
 <br> Awesom-O 4000 consists of 16 Falcon 500 Motors powered by TalonFX, using Phoenix v6!
 <br>
