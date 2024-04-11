@@ -57,8 +57,6 @@ public class Vision extends SubsystemBase{
     // private PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, arduCam, robotToCam);
 
     public Vision() {
-        arduCam.setPipelineIndex(Constants.VisionConstants.ApriltagPiplineIndex);
-        intakeCam.setPipelineIndex(Constants.VisionConstants.IntakePiplineIndex);
     }
 
     public PhotonCamera getCamera() {

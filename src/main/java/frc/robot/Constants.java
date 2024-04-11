@@ -103,7 +103,7 @@ public final class Constants {
         public static final class Mod0 { //TODO: This must be tuned to specific robot
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 2;
-            public static final int canCoderID = 3;
+            public static final int canCoderID = 6;
             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(187.2);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
@@ -113,7 +113,7 @@ public final class Constants {
         public static final class Mod1 { //TODO: This must be tuned to specific robot
             public static final int driveMotorID = 4;
             public static final int angleMotorID = 5;
-            public static final int canCoderID = 6;
+            public static final int canCoderID = 3;
             // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(230.93);
             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-127.836);
             public static final SwerveModuleConstants constants = 
@@ -122,9 +122,9 @@ public final class Constants {
         
         /* Back Left Module - Module 2 */
         public static final class Mod2 { //TODO: This must be tuned to specific robot
-            public static final int driveMotorID = 7;
-            public static final int angleMotorID = 8;
-            public static final int canCoderID = 9;
+            public static final int driveMotorID = 8;
+            public static final int angleMotorID = 7;
+            public static final int canCoderID = 12;
             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-0.2);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
@@ -134,7 +134,7 @@ public final class Constants {
         public static final class Mod3 { //TODO: This must be tuned to specific robot
             public static final int driveMotorID = 10;
             public static final int angleMotorID = 11;
-            public static final int canCoderID = 12;
+            public static final int canCoderID = 9;
             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(60.40);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
@@ -158,14 +158,13 @@ public final class Constants {
     }
 
     public static class DeviceConstants {
-        public static final int leftShooterMotor = 34;
-        public static final int rightShooterMotor = 33;
+        public static final int leftShooterMotor = 33; //only one shooter motor
         public static final int leftElevatorMotor = 28; //flip this, default is clockwise
         public static final int rightElevatorMotor = 13; //spinning counter clockwise
         public static final int intakePivotMotor = 31;
         public static final int intakePowerMotor = 21;
-        public static final int indexMotorID = 22;
-        public static final int shootPivotMotor = 30;
+        public static final int indexMotorID = 34;
+        public static final int shootPivotMotor = 22;
     }
 
     public static class ShootingConstants {
@@ -175,9 +174,9 @@ public final class Constants {
         public static final double indexFeedVolts = 12;
         public static final double indexHoldVolts = 6;
         public static final double pivotStore = 0.27;
-        public static final double pivotAmp = -64; //OUT IS NEGATIVE DO NOT PUT ANY POSITIVES OR IT BREAKS
-        public static final double pivotIntake = -100;
-        public static final double pivotDistanceShooting = -9;
+        public static final double pivotAmp = 64; //OUT IS NEGATIVE DO NOT PUT ANY POSITIVES OR IT BREAKS
+        public static final double pivotIntake = 100;
+        public static final double pivotDistanceShooting = 9;
 
         /* When Adjusting the pivot setpoints, only use negative numbers */
     }
@@ -196,7 +195,7 @@ public final class Constants {
         // public static final double ampSetpoint = -44;
         public static final double sourceSetpoint = -33;
         // public static final double groundSetpoint = -122.5;
-        public static final double groundSetpoint = -124.5;
+        public static final double groundSetpoint = -122;
         public static final double ampSetpoint = -20;
 
         // public static final double indexFeedingSetpoint = -3.5;

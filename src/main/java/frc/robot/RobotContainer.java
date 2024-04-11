@@ -177,18 +177,14 @@ public class RobotContainer {
 
         /* Intake Commands */
         driver.x().onTrue(new ParallelCommandGroup(
-            // new IntakeSetpointCommand(intake, 0),
             new IntakeSetpointCommand(intake, Constants.IntakeConstants.indexFeedingSetpoint),
             new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore)
-            // new RunCommand(() -> Candle.LEDSegment.MainStrip.setStrobeAnimation(candle.green, 0.5)).withTimeout(2)
             // new IntakePowerCommand(intake, 2)
         ));
 
         driver.a().onTrue(new ParallelCommandGroup(
             new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint),
             new IntakePowerCommand(intake, -3.5)
-            // new RunCommand(() -> Candle.LEDSegment.MainStrip.setBandAnimation(candle.yellow, 0.5))
-            // new InstantCommand(() -> candle.setLEDStrobe(0, 255, 0))
         ));
 
         driver.b().onTrue(new ParallelCommandGroup(
@@ -259,14 +255,16 @@ public class RobotContainer {
         driver.povDown().whileFalse(new ResetShooter(intake, shoot));
 
         driver.povDown().onTrue(
-            new ParallelCommandGroup(
-            new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotIntake),
-            // new InstantCommand(() -> shoot.setMotorVelocity(-500, false))
-            new InstantCommand(() -> shoot.setIndexMotorVolts(2))
-            )
+            new DistanceShoot(intake, shoot, vision)
+
+            // new ParallelCommandGroup(
+            // new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotIntake),
+            // // new InstantCommand(() -> shoot.setMotorVelocity(-500, false))
+            // new InstantCommand(() -> shoot.setIndexMotorVolts(2))
+            // )
         );
 
-        driver.povUp().whileTrue(new FeedingShoot(shoot, intake));
+        driver.povUp().whileTrue(new FeedingShoot(shoot, intake, vision));
         driver.povUp().whileFalse(new ResetShooter(intake, shoot));
             
         // driver.povRight().whileFalse(new ResetShooter(intake, shoot));
@@ -280,7 +278,10 @@ public class RobotContainer {
         // operator.a().onTrue(new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint));
         operator.start().toggleOnTrue(new ElevatorClimbCommand(elevator));
 
-        operator.a().whileTrue(new TagToPoseTrajectoryGenerator(s_Swerve, vision, vision.getBestTargetID(), 24));
+        operator.a().onTrue(new PivotPIDCommandNonDegrees(shoot, 15));
+        operator.x().onTrue(new PivotPIDCommandNonDegrees(shoot, 30));
+
+        // operator.a().whileTrue(new TagToPoseTrajectoryGenerator(s_Swerve, vision, vision.getBestTargetID(), 24));
 
         /* Vision Commands */
         // rotateToTarget.whileTrue(new RotateToTarget(s_Swerve, vision));        
