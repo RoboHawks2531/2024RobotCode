@@ -1,5 +1,6 @@
 package frc.robot.commands.Shoot;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -15,26 +16,19 @@ public class DistanceShoot extends SequentialCommandGroup{
     
     public DistanceShoot(Intake intake, Shoot shoot, Vision vision) {
         addCommands(
-            // new ParallelCommandGroup(
-            //     new IndexHold(intake, shoot)
-            // ).withTimeout(0.2),
             new ParallelCommandGroup(
-                // new IndexHold(intake, shoot),
-                // new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM),
-                // new InstantCommand(() -> intake.setPowerVolts(10)),
-                new IntakeSetpointCommand(intake, -5),
-            // new InstantCommand(() -> intake.setPowerVelocity(Constants.IntakeConstants.intakeSpitVelocity, false)),
+                new IntakeSetpointCommand(intake, MathUtil.clamp(-vision.getDistanceMethod() * 1.2, -10, 0)),
                 new InstantCommand(() -> shoot.setIndexMotorVolts(Constants.ShootingConstants.indexFeedVolts)),
-                // new PivotPIDCommandNonDegrees(shoot, 10),
-                new PivotShootVertically(shoot, vision),
+                new PivotPIDCommandNonDegrees(shoot, MathUtil.clamp(vision.getDistanceMethod() * 4.1, 0.5, 15)),
                 new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM)
-            ).withTimeout(1.5),
+            ).withTimeout(1.3),
             new ParallelCommandGroup(
-                new PivotShootVertically(shoot, vision),
+                new IntakeSetpointCommand(intake, MathUtil.clamp(-vision.getDistanceMethod() * 1.2, -10, 0)),
+                new PivotPIDCommandNonDegrees(shoot, 8),
                 new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM),
-                new InstantCommand(() -> shoot.setIndexMotorVolts(12)),
-                new InstantCommand(() -> intake.setPowerVolts(10))
-            )
+                new InstantCommand(() -> intake.setPowerVolts(10)),
+                new InstantCommand(() -> shoot.setIndexMotorVolts(14))
+            )    
         );
     }
 }
