@@ -10,7 +10,8 @@ public class PivotPIDCommandNonDegrees extends Command{
     private Shoot shoot;
     private double setpoint;
 
-    private PIDController pidController = new PIDController(0.027, 0, 0);
+    // private PIDController pidController = new PIDController(0.027, 0, 0);
+    private PIDController pidController = new PIDController(0.060, 0, 0);
 
     public PivotPIDCommandNonDegrees(Shoot shoot, double setpoint) {
         this.shoot = shoot;

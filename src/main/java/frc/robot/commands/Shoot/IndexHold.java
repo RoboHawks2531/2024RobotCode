@@ -11,7 +11,7 @@ public class IndexHold extends SequentialCommandGroup{
     public IndexHold(Intake intake, Shoot shoot) {
         addCommands(
             new InstantCommand(() -> intake.setPowerVolts(2)),
-            new InstantCommand(() -> shoot.setIndexMotorVolts(3))
+            new InstantCommand(() -> shoot.setIndexMotorVolts(1.2))
         );
     }
 }

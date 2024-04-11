@@ -22,7 +22,7 @@ import frc.robot.Constants;
 public class Shoot extends SubsystemBase {
   
   private TalonFX motor1 = new TalonFX(Constants.DeviceConstants.leftShooterMotor);
-  private TalonFX motor2 = new TalonFX(Constants.DeviceConstants.rightShooterMotor);
+  // private TalonFX motor2 = new TalonFX(Constants.DeviceConstants.rightShooterMotor);
 
   private TalonFX indexMotor = new TalonFX(Constants.DeviceConstants.indexMotorID);
 
@@ -31,18 +31,18 @@ public class Shoot extends SubsystemBase {
   // private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.02, 0.02, 0.02);
 
   public Shoot() {
-    motor1.setInverted(false);
-    motor2.setInverted(false);
+    motor1.setInverted(false); //one of these will end  }:)
+    // motor2.setInverted(false);
     indexMotor.setInverted(false);
-    pivotMotor.setInverted(true); //TEST THIS BEFORE RUNNING BECAUSE IT COULD GO THE WRONG WAY
+    pivotMotor.setInverted(false); //TEST THIS BEFORE RUNNING BECAUSE IT COULD GO THE WRONG WAY
 
-    motor1.setNeutralMode(NeutralModeValue.Brake);
-    motor2.setNeutralMode(NeutralModeValue.Brake);
+    motor1.setNeutralMode(NeutralModeValue.Coast);
+    // motor2.setNeutralMode(NeutralModeValue.Brake);
     indexMotor.setNeutralMode(NeutralModeValue.Brake);
     pivotMotor.setNeutralMode(NeutralModeValue.Brake);
 
     motor1.getConfigurator().apply(new TalonFXConfiguration());
-    motor2.getConfigurator().apply(new TalonFXConfiguration());
+    // motor2.getConfigurator().apply(new TalonFXConfiguration());
     indexMotor.getConfigurator().apply(new TalonFXConfiguration());
     pivotMotor.getConfigurator().apply(new TalonFXConfiguration());
 
@@ -74,19 +74,19 @@ public class Shoot extends SubsystemBase {
       motionMagicConfigs.MotionMagicJerk = 4000; // Target jerk of 4000 rps/s/s (0.1 seconds)
 
       motor1.getConfigurator().apply(talonFXConfigs);
-      motor2.getConfigurator().apply(talonFXConfigs);
+      // motor2.getConfigurator().apply(talonFXConfigs);
 
       indexMotor.getConfigurator().apply(talonFXConfigs);
   }
 
   public void setSplitMotorVolts(double one, double two) {
     motor1.setVoltage(-one);
-    motor2.setVoltage(two);
+    // motor2.setVoltage(two);
   }
 
   public void setMotorVolts(double voltage) {
     motor1.setVoltage(-voltage);
-    motor2.setVoltage(voltage);
+    // motor2.setVoltage(voltage);
   }
 
   public void setMotorVelocity(double rpm, boolean wantSlow) {
@@ -104,13 +104,13 @@ public class Shoot extends SubsystemBase {
     // motor1.setControl(request.withVelocity(rps));
     // motor2.setControl(request.withVelocity(-rps)); original code
 
-    motor1.setControl(request.withVelocity(-rps));
-    motor2.setControl(request.withVelocity(rps)); //flipped code
+    motor1.setControl(request.withVelocity(rps));
+    // motor2.setControl(request.withVelocity(rps)); //flipped code
 
   }
 
   public void setIndexMotorVolts(double volts) {
-    indexMotor.setVoltage(volts);
+    indexMotor.setVoltage(-volts);
   }
 
   public void setIndexMotorVelocity(double rpm) {
@@ -137,21 +137,21 @@ public class Shoot extends SubsystemBase {
 
   public void brakeMotors() {
     motor1.setNeutralMode(NeutralModeValue.Brake);
-    motor2.setNeutralMode(NeutralModeValue.Brake);
+    // motor2.setNeutralMode(NeutralModeValue.Brake);
   }
 
   public void coastMotors() {
     motor1.setNeutralMode(NeutralModeValue.Coast);
-    motor2.setNeutralMode(NeutralModeValue.Coast);
+    // motor2.setNeutralMode(NeutralModeValue.Coast);
   }
 
   public double getRPMfromVelocity1() {
     return motor1.getVelocity().getValueAsDouble();
   }
 
-  public double getRPMfromVelocity2() {
-    return motor2.getVelocity().getValueAsDouble();
-  }
+  // public double getRPMfromVelocity2() {
+  //   return motor2.getVelocity().getValueAsDouble();
+  // }
 
   public static double InchesToRPM(double inches) {
     return inches * 7.47 + 3800.0;
@@ -161,7 +161,7 @@ public class Shoot extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Motor 1 RPM", getRPMfromVelocity1());
-    SmartDashboard.putNumber("Motor 2 RPM", getRPMfromVelocity2());
+    // SmartDashboard.putNumber("Motor 2 RPM", getRPMfromVelocity2());
     SmartDashboard.putNumber("Shoot Pivot Encoder", getPivotEncoder());
   }
 }

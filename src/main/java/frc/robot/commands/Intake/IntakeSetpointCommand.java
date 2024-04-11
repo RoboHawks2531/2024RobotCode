@@ -26,8 +26,8 @@ public class IntakeSetpointCommand extends Command{
     // private PIDController pidController = new PIDController(0.42, 0.015, 0);
 
     //New PID Values
-    // private PIDController pidController = new PIDController(0.75, 0.0, 0.0);
-    private PIDController pidController = new PIDController(0.95, 0.0, 0.0001);
+    // private PIDController pidController = new PIDController(0.95, 0.0, 0.0001);
+    private PIDController pidController = new PIDController(1.3, 0.0, 0.0001);
 
     public IntakeSetpointCommand(Intake intake, double setpoint) {
         this.intake = intake;
