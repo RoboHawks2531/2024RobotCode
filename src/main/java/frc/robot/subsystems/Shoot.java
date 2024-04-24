@@ -62,13 +62,15 @@ public class Shoot extends SubsystemBase {
     // this should theoretically take 0.72s to rev to 3k rpm
     var slot0Configs = talonFXConfigs.Slot0;
       slot0Configs.kS = 0.6; //Adds volts to overcome static friction
-      slot0Configs.kV = 7; // A velocity target of 1 rps results in 0.12 V output
+      slot0Configs.kV = 1; // A velocity target of 1 rps results in 0.12 V output
       slot0Configs.kA = 1; // An acceleration of 1 rps/s requires 0.01 V output //origin is .6
-      slot0Configs.kP = 0.2; // An error of 1 rps results in 0.11 V output
+      slot0Configs.kP = 1; // An error of 1 rps results in 0.11 V output 0.2
       slot0Configs.kI = 0.0;  // Integral value
       slot0Configs.kD = 0.0;  // Derivative value
 
       var motionMagicConfigs = talonFXConfigs.MotionMagic;
+
+      talonFXConfigs.CurrentLimits.SupplyCurrentLimit = 60;
 
       motionMagicConfigs.MotionMagicAcceleration = 400; // Target acceleration of 200 rps/s (0.5 seconds to full speed)
       motionMagicConfigs.MotionMagicJerk = 4000; // Target jerk of 4000 rps/s/s (0.1 seconds)
@@ -99,7 +101,8 @@ public class Shoot extends SubsystemBase {
     double velocity = wantSlow ? 0.06 : 0;
     request.Velocity = velocity;
 
-    double rps = rpm * 60;
+    // double rps = rpm * 60; //why god
+    double rps = rpm / 60; //why god
 
     // motor1.setControl(request.withVelocity(rps));
     // motor2.setControl(request.withVelocity(-rps)); original code

@@ -57,19 +57,20 @@ public final class Constants {
         public static final SensorDirectionValue cancoderInvert = chosenModule.cancoderInvert;
 
         /* Swerve Current Limiting */
-        public static final int angleCurrentLimit = 25;
+        public static final int angleCurrentLimit = 35;
         public static final int angleCurrentThreshold = 40;
         public static final double angleCurrentThresholdTime = 0.1;
         public static final boolean angleEnableCurrentLimit = true;
 
-        public static final int driveCurrentLimit = 35;
+        public static final int driveCurrentLimit = 40;
         public static final int driveCurrentThreshold = 60;
         public static final double driveCurrentThresholdTime = 0.1;
         public static final boolean driveEnableCurrentLimit = true;
 
         /* These values are used by the drive falcon to ramp in open loop and closed loop driving.
          * We found a small open loop ramp (0.25) helps with tread wear, tipping, etc */
-        public static final double openLoopRamp = 0.15;
+        // public static final double openLoopRamp = 0.175; //turn back to a higher number if we make it to playoffs
+        public static final double openLoopRamp = 0.25; 
         public static final double closedLoopRamp = 0.05;
 
         /* Angle Motor PID Values */
@@ -104,7 +105,7 @@ public final class Constants {
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 2;
             public static final int canCoderID = 6;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(187.2);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-170.1563);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -114,18 +115,19 @@ public final class Constants {
             public static final int driveMotorID = 4;
             public static final int angleMotorID = 5;
             public static final int canCoderID = 3;
-            // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(230.93);
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-127.836);
+            // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-152.4902325);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(27.5097675);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
         
         /* Back Left Module - Module 2 */
         public static final class Mod2 { //TODO: This must be tuned to specific robot
-            public static final int driveMotorID = 8;
-            public static final int angleMotorID = 7;
+            public static final int driveMotorID = 7;
+            public static final int angleMotorID = 8;
             public static final int canCoderID = 12;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-0.2);
+            // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-66.1816475);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(113.8183525);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -135,7 +137,7 @@ public final class Constants {
             public static final int driveMotorID = 10;
             public static final int angleMotorID = 11;
             public static final int canCoderID = 9;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(60.40);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-89.560546875);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -169,16 +171,16 @@ public final class Constants {
 
     public static class ShootingConstants {
         public static final int targetShootingRPM = 6800;
-        // public static final int targetShootingRPM = 10000; 
+        // public static final int targetShootingRPM = 3000;
         public static final int targetShootingAmpTarget = 1500;
         public static final double indexFeedVolts = 12;
         public static final double indexHoldVolts = 6;
-        public static final double pivotStore = 0.27;
+        // public static final double pivotStore = 0.27;
+        public static final double pivotStore = 0;
         public static final double pivotAmp = 64; //OUT IS NEGATIVE DO NOT PUT ANY POSITIVES OR IT BREAKS
         public static final double pivotIntake = 100;
         public static final double pivotDistanceShooting = 9;
 
-        /* When Adjusting the pivot setpoints, only use negative numbers */
     }
 
     public static class ElevatorConstants {

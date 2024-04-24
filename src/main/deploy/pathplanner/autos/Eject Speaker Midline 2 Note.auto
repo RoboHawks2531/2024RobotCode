@@ -31,15 +31,9 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "Angle Shoot"
+            "name": "Eject"
           }
         },
         {
@@ -57,9 +51,22 @@
                 "data": {
                   "commands": [
                     {
+                      "type": "parallel",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Intake Ground Quick Timeout"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.35
+                        "waitTime": 1.4
                       }
                     },
                     {

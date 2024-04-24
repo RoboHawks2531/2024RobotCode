@@ -9,9 +9,9 @@ import frc.robot.commands.Intake.IntakeSetpointCommand;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shoot;
 
-public class AuxShoot extends SequentialCommandGroup{
+public class AngledAuxShoot extends SequentialCommandGroup{
     
-    public AuxShoot(Intake intake, Shoot shoot) {
+    public AngledAuxShoot(Intake intake, Shoot shoot) {
         addCommands(
             new ParallelCommandGroup(
                 new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore), // re-add this if we start using the pivot again
@@ -19,13 +19,13 @@ public class AuxShoot extends SequentialCommandGroup{
                 new IntakeSetpointCommand(intake, Constants.IntakeConstants.indexFeedingSetpoint), //pulsing puts the intake here anyways
                 // new InstantCommand(() -> intake.setPowerVolts(-2)),
                 new InstantCommand(() -> shoot.setIndexMotorVolts(Constants.ShootingConstants.indexFeedVolts)), //sped up because david said so
-                new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM)
+                new RevShooter(shoot, 3500)
             ).withTimeout(.5),
             new ParallelCommandGroup(
                 new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore),
                 // new PivotPIDCommandNonDegrees(shoot, -2.5), //why god
                 new IntakeSetpointCommand(intake, Constants.IntakeConstants.indexFeedingSetpoint),
-                new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM),
+                new RevShooter(shoot, 3500),
                 // new InstantCommand(() -> shoot.setIndexMotorVolts(12))
                 new IndexNote(intake, shoot)
             )

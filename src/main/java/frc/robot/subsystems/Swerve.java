@@ -58,9 +58,9 @@ public class Swerve extends SubsystemBase {
               this::getChassisSpeeds,
                this::setChassisSpeeds,
                 new HolonomicPathFollowerConfig(
-                    new PIDConstants(4,0,0),  //good numbers
-                    new PIDConstants(1,0,0), //good numbers
-                     4.5, //this is fine
+                    new PIDConstants(6,0,0),  //good numbers
+                    new PIDConstants(2,0,0), //good numbers
+                     5, //this is fine 4.5
                       0.39, //this is all fine
                        new ReplanningConfig() 
                     ),

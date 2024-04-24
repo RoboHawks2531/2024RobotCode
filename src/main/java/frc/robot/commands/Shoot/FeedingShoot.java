@@ -17,15 +17,15 @@ public class FeedingShoot extends SequentialCommandGroup{
         addCommands(
             new ParallelCommandGroup(
     
-                new IntakeSetpointCommand(intake, -2),
+                new IntakeSetpointCommand(intake, -7),
                 new InstantCommand(() -> shoot.setIndexMotorVolts(Constants.ShootingConstants.indexFeedVolts)),
                 new PivotPIDCommandNonDegrees(shoot, 8),
-                new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM)
-            ).withTimeout(1.3),
+                new RevShooter(shoot, 2100)
+            ).withTimeout(0.4),
             new ParallelCommandGroup(
-                new IntakeSetpointCommand(intake, -2),
+                new IntakeSetpointCommand(intake, -7),
                 new PivotPIDCommandNonDegrees(shoot, 8),
-                new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM),
+                new RevShooter(shoot, 2100),
                 new InstantCommand(() -> intake.setPowerVolts(10)),
                 new InstantCommand(() -> shoot.setIndexMotorVolts(14))
             )    

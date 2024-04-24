@@ -42,7 +42,19 @@ public class Intake extends SubsystemBase{
         motionMagicConfigs.MotionMagicJerk = 1600; // Target jerk of 1600 rps/s/s (0.1 seconds)
 
         pivotMotor.getConfigurator().apply(talonFXConfigs);
-        powerMotor.getConfigurator().apply(talonFXConfigs);
+        // powerMotor.getConfigurator().apply(talonFXConfigs);
+
+        var talonFXConfiguration1 = new TalonFXConfiguration();
+
+        talonFXConfiguration1.CurrentLimits.StatorCurrentLimit = 80;
+        talonFXConfiguration1.CurrentLimits.StatorCurrentLimitEnable = true;
+
+        talonFXConfiguration1.CurrentLimits.SupplyCurrentLimit = 40;
+        talonFXConfiguration1.CurrentLimits.SupplyCurrentLimitEnable = true;
+        talonFXConfiguration1.CurrentLimits.SupplyCurrentThreshold = 50;
+        talonFXConfiguration1.CurrentLimits.SupplyTimeThreshold = 0.7;
+
+        powerMotor.getConfigurator().apply(talonFXConfiguration1);
     }
 
 

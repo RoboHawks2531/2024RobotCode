@@ -5,11 +5,14 @@
 
 package frc.robot.commands.Shoot;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
+import frc.robot.commands.Intake.IntakePivotAutomatically;
 import frc.robot.commands.Intake.IntakeSetpointCommand;
 import frc.robot.commands.Vision.RotateToTarget;
 import frc.robot.commands.Vision.VisionTranslate;
@@ -24,14 +27,22 @@ public class AimAndShoot extends SequentialCommandGroup{
     public AimAndShoot(Swerve swerve, Vision vision, Shoot shoot, Intake intake) {
         addCommands(
             new ParallelCommandGroup(
-                // new PulseNote(intake, shoot).withTimeout(0.9),
-                // new TranslateThenShoot(swerve, intake, shoot)
-                new VisionTranslate(swerve, vision, 0.2, 0)
-            ).withTimeout(1),
+                // new RotateToTarget(swerve, vision),
+                // new IntakeSetpointCommand(intake, MathUtil.clamp(-vision.getDistanceMethod() * 7, -10, 0)),
+                new IntakeSetpointCommand(intake, MathUtil.clamp(-vision.getDistanceMethod() * 3.7, -10, -10)),
+                // new IntakePivotAutomatically(intake, vision),
+                new PivotShootVertically(shoot, vision),
+                new InstantCommand(() -> shoot.setIndexMotorVolts(Constants.ShootingConstants.indexFeedVolts)),
+                new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM)
+            ).withTimeout(1.3),
             new ParallelCommandGroup(
-                 new RotateToTarget(swerve, vision),
-                 new AuxShoot(intake, shoot)
-            )
+                new IntakeSetpointCommand(intake, MathUtil.clamp(-vision.getDistanceMethod() * 3.7, -10, -10)),
+                // new IntakePivotAutomatically(intake, vision),
+                new PivotShootVertically(shoot, vision),
+                new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM),
+                new InstantCommand(() -> intake.setPowerVolts(10)),
+                new InstantCommand(() -> shoot.setIndexMotorVolts(14))
+            )    
         );
     }
     

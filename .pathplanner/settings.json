@@ -9,9 +9,9 @@
     "Kadens-Auto",
     "Jaydens Autos"
   ],
-  "defaultMaxVel": 5.0,
+  "defaultMaxVel": 7.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
-  "maxModuleSpeed": 4.5
+  "maxModuleSpeed": 5.0
 }

@@ -14,6 +14,7 @@
 package frc.robot;
 
 
+import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -36,8 +37,10 @@ import frc.robot.commands.Intake.IntakePowerCommand;
 import frc.robot.commands.Intake.IntakeSetpointCommand;
 import frc.robot.commands.Shoot.AimAndShoot;
 import frc.robot.commands.Shoot.AmpShoot;
+import frc.robot.commands.Shoot.AngledAuxShoot;
 import frc.robot.commands.Shoot.AuxShoot;
 import frc.robot.commands.Shoot.DistanceShoot;
+import frc.robot.commands.Shoot.Eject;
 import frc.robot.commands.Shoot.FeedingShoot;
 import frc.robot.commands.Shoot.IndexNote;
 import frc.robot.commands.Shoot.PivotPIDCommandNonDegrees;
@@ -46,7 +49,6 @@ import frc.robot.commands.Shoot.PulseNote;
 import frc.robot.commands.Shoot.ResetShooter;
 import frc.robot.commands.Shoot.RevShooter;
 import frc.robot.commands.Vision.RotateToTarget;
-import frc.robot.commands.Vision.TagToPoseTrajectoryGenerator;
 import frc.robot.commands.Vision.VisionTranslate;
 // import frc.robot.subsystems.Candle;
 import frc.robot.subsystems.Elevator;
@@ -98,12 +100,17 @@ public class RobotContainer {
             )
         );
         
-
-        NamedCommands.registerCommand("Aux Shoot", new AuxShoot(intake, shoot).withTimeout(1.7)); //full shooting command for auto
+        NamedCommands.registerCommand("Eject", new Eject(intake, shoot).withTimeout(0.21));
+        NamedCommands.registerCommand("Aux Shoot", new AuxShoot(intake, shoot).withTimeout(.7)); //full shooting command for auto
+        NamedCommands.registerCommand("Aim and Shoot", new AimAndShoot(s_Swerve, vision, shoot, intake));
         NamedCommands.registerCommand("Intake Ground", new ParallelCommandGroup( //this makes sure the intake is down and ends when it needs to, if stopping early, switch to the deadline group version
             new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint),
             new IntakePowerCommand(intake, -3)
         ).withTimeout(1.8));
+        NamedCommands.registerCommand("Intake Ground Longer", new ParallelCommandGroup( //this makes sure the intake is down and ends when it needs to, if stopping early, switch to the deadline group version
+            new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint),
+            new IntakePowerCommand(intake, -3)
+        ).withTimeout(2.2));
         NamedCommands.registerCommand("Intake Ground No Timeout", new ParallelCommandGroup(  //put this in a deadline group with the path as the deadline to ensure that the intake picks up the note
             new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint),
             new IntakePowerCommand(intake, -3)
@@ -112,7 +119,7 @@ public class RobotContainer {
             new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint),
             new IntakePowerCommand(intake, -3)
         ).withTimeout(0.5));
-        NamedCommands.registerCommand("Reset Shooter", new ResetShooter(intake, shoot)); //stops the shooter and index
+        NamedCommands.registerCommand("Reset Shooter", new ResetShooter(intake, shoot).withTimeout(0.2)); //stops the shooter and index
         NamedCommands.registerCommand("Amp Shoot", new AmpShoot(shoot, intake).withTimeout(3)); //runs the amp shooting command; this involves the pivot which needs to be returned to store at the end
         NamedCommands.registerCommand("Intake Store", new IntakeSetpointCommand(intake, -2.5).withTimeout(1.5)); //bring the intake to the store position
         NamedCommands.registerCommand("Zero Swerve", new InstantCommand(() -> s_Swerve.zeroHeading())); // use this at the end of the routine so that we are zeroed for teleop
@@ -137,6 +144,8 @@ public class RobotContainer {
         // NamedCommands.registerCommand("Vision Trajectory to Speaker", new TagToPoseTrajectoryGenerator(s_Swerve, vision, 7, 36));
         NamedCommands.registerCommand("Vision Translate", new VisionTranslate(s_Swerve, vision, 1.32, 0));
         NamedCommands.registerCommand("Spin Spin", new RunCommand(() -> s_Swerve.drive(new Translation2d(), 0.3, false, false)));
+        NamedCommands.registerCommand("Distance Shoot", new DistanceShoot(intake, shoot, vision).withTimeout(2.3));
+        NamedCommands.registerCommand("Angle Shoot", new AngledAuxShoot(intake, shoot).withTimeout(0.7));
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -200,10 +209,13 @@ public class RobotContainer {
         /* Intake Power */
         driver.leftBumper().whileTrue(new ParallelCommandGroup(
             new InstantCommand(() -> shoot.setIndexMotorVolts(-3)),
-            new IntakePowerCommand(intake, -3)));
+            new IntakePowerCommand(intake, -3),
+            new InstantCommand(() -> shoot.setMotorVolts(2))
+        ));
         driver.rightBumper().whileTrue(new ParallelCommandGroup(
             new IntakePowerCommand(intake, 4),
             new InstantCommand(() -> shoot.setIndexMotorVolts(3))
+            // new InstantCommand(() -> shoot.setMotorVolts(-2))
         ));
 
         driver.leftBumper().onFalse(new ResetShooter(intake, shoot));
@@ -241,28 +253,24 @@ public class RobotContainer {
 
         driver.y().whileFalse(new ResetShooter(intake, shoot));
 
-        driver.povLeft().whileTrue(new PulseNote(intake, shoot));
+        // driver.povLeft().whileTrue(new PulseNote(intake, shoot));
+        driver.povLeft().whileTrue(new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotIntake));
         driver.povLeft().whileFalse(new ResetShooter(intake, shoot));
 
-        driver.povRight().whileTrue(new DistanceShoot(intake, shoot, vision));
+        // driver.povRight().whileTrue(new DistanceShoot(intake, shoot, vision));
 
+        driver.povRight().whileTrue(new AimAndShoot(s_Swerve, vision, shoot, intake));
         driver.povRight().whileFalse(new ResetShooter(intake, shoot));
-        // driver.povRight().whileTrue(new RotateToTarget(s_Swerve, vision));
         // driver.povRight().whileTrue(new VisionTranslate(s_Swerve, vision, 2, 0));
 
         // driver.povDown().whileTrue(new DistanceShoot(intake, shoot));
         // driver.povDown().whileTrue(new PivotShootVertically(shoot, vision));
         driver.povDown().whileFalse(new ResetShooter(intake, shoot));
 
-        driver.povDown().onTrue(
+        driver.povDown().onTrue(new ParallelCommandGroup(
+            new RotateToTarget(s_Swerve, vision),
             new DistanceShoot(intake, shoot, vision)
-
-            // new ParallelCommandGroup(
-            // new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotIntake),
-            // // new InstantCommand(() -> shoot.setMotorVelocity(-500, false))
-            // new InstantCommand(() -> shoot.setIndexMotorVolts(2))
-            // )
-        );
+        ));
 
         driver.povUp().whileTrue(new FeedingShoot(shoot, intake, vision));
         driver.povUp().whileFalse(new ResetShooter(intake, shoot));
