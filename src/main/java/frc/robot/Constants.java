@@ -62,15 +62,15 @@ public final class Constants {
         public static final double angleCurrentThresholdTime = 0.1;
         public static final boolean angleEnableCurrentLimit = true;
 
-        public static final int driveCurrentLimit = 40;
-        public static final int driveCurrentThreshold = 60;
+        public static final int driveCurrentLimit = 30;
+        public static final int driveCurrentThreshold = 40;
         public static final double driveCurrentThresholdTime = 0.1;
         public static final boolean driveEnableCurrentLimit = true;
 
         /* These values are used by the drive falcon to ramp in open loop and closed loop driving.
          * We found a small open loop ramp (0.25) helps with tread wear, tipping, etc */
-        // public static final double openLoopRamp = 0.175; //turn back to a higher number if we make it to playoffs
-        public static final double openLoopRamp = 0.25; 
+        // public static final double openLoopRamp = 0.175;
+        public static final double openLoopRamp = 0.15; 
         public static final double closedLoopRamp = 0.05;
 
         /* Angle Motor PID Values */
