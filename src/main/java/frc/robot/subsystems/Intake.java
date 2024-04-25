@@ -46,13 +46,13 @@ public class Intake extends SubsystemBase{
 
         var talonFXConfiguration1 = new TalonFXConfiguration();
 
-        talonFXConfiguration1.CurrentLimits.StatorCurrentLimit = 80;
+        talonFXConfiguration1.CurrentLimits.StatorCurrentLimit = 75;
         talonFXConfiguration1.CurrentLimits.StatorCurrentLimitEnable = true;
 
-        talonFXConfiguration1.CurrentLimits.SupplyCurrentLimit = 40;
+        talonFXConfiguration1.CurrentLimits.SupplyCurrentLimit = 30;
         talonFXConfiguration1.CurrentLimits.SupplyCurrentLimitEnable = true;
-        talonFXConfiguration1.CurrentLimits.SupplyCurrentThreshold = 50;
-        talonFXConfiguration1.CurrentLimits.SupplyTimeThreshold = 0.7;
+        talonFXConfiguration1.CurrentLimits.SupplyCurrentThreshold = 35;
+        talonFXConfiguration1.CurrentLimits.SupplyTimeThreshold = 0.1;
 
         powerMotor.getConfigurator().apply(talonFXConfiguration1);
     }
@@ -68,7 +68,7 @@ public class Intake extends SubsystemBase{
         double velocity = wantSlow ? 0.06 : 0;
         request.Velocity = velocity;
 
-        powerMotor.setControl(request.withVelocity(rpm * 60));
+        powerMotor.setControl(request.withVelocity(rpm / 60));
     }
 
     public void setPowerVolts(double volts) {
