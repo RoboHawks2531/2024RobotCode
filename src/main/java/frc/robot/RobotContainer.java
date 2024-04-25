@@ -220,11 +220,11 @@ public class RobotContainer {
         driver.rightBumper().onFalse(new ResetShooter(intake, shoot));
 
         /* Shooting Commands */
-        // driver.rightTrigger(0.5).whileTrue(new SequentialCommandGroup(
-        //     // new PulseNote(intake, shoot).withTimeout(0.9),
-        //     new AuxShoot(intake, shoot)
-        //     )
-        // );
+        driver.rightTrigger(0.5).whileTrue(new SequentialCommandGroup(
+            // new PulseNote(intake, shoot).withTimeout(0.9),
+            new AuxShoot(intake, shoot)
+            )
+        );
         driver.rightTrigger(0).whileFalse(new ResetShooter(intake, shoot));
 
         //this is the first stage of the amp shoot
@@ -270,8 +270,8 @@ public class RobotContainer {
         //     new DistanceShoot(intake, shoot, vision)
         // ));
 
-        // driver.povUp().whileTrue(new FeedingShoot(shoot, intake, vision));
-        // driver.povUp().whileFalse(new ResetShooter(intake, shoot));
+        driver.povUp().whileTrue(new FeedingShoot(shoot, intake, vision));
+        driver.povUp().whileFalse(new ResetShooter(intake, shoot));
             
         // driver.povRight().whileFalse(new ResetShooter(intake, shoot));
 

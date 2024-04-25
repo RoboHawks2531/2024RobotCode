@@ -49,9 +49,9 @@ public class Intake extends SubsystemBase{
         talonFXConfiguration1.CurrentLimits.StatorCurrentLimit = 60;
         talonFXConfiguration1.CurrentLimits.StatorCurrentLimitEnable = true;
 
-        talonFXConfiguration1.CurrentLimits.SupplyCurrentLimit = 30;
+        talonFXConfiguration1.CurrentLimits.SupplyCurrentLimit = 22;
         talonFXConfiguration1.CurrentLimits.SupplyCurrentLimitEnable = true;
-        talonFXConfiguration1.CurrentLimits.SupplyCurrentThreshold = 35;
+        talonFXConfiguration1.CurrentLimits.SupplyCurrentThreshold = 25;
         talonFXConfiguration1.CurrentLimits.SupplyTimeThreshold = 0.1;
 
         powerMotor.getConfigurator().apply(talonFXConfiguration1);

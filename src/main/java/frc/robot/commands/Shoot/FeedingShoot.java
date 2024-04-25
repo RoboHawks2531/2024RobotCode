@@ -20,11 +20,13 @@ public class FeedingShoot extends SequentialCommandGroup{
                 new IntakeSetpointCommand(intake, -7),
                 new InstantCommand(() -> shoot.setIndexMotorVolts(Constants.ShootingConstants.indexFeedVolts)),
                 new PivotPIDCommandNonDegrees(shoot, 8),
-                new RevShooter(shoot, 2100)
+                // new RevShooter(shoot, 2100)
+                new RevShooter(shoot, 1000)
             ).withTimeout(0.4),
             new ParallelCommandGroup(
                 new IntakeSetpointCommand(intake, -7),
                 new PivotPIDCommandNonDegrees(shoot, 8),
+                // new RevShooter(shoot, 1000),
                 new RevShooter(shoot, 2100),
                 new InstantCommand(() -> intake.setPowerVolts(10)),
                 new InstantCommand(() -> shoot.setIndexMotorVolts(14))
