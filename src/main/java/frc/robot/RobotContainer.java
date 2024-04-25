@@ -39,6 +39,7 @@ import frc.robot.commands.Shoot.AimAndShoot;
 import frc.robot.commands.Shoot.AmpShoot;
 import frc.robot.commands.Shoot.AngledAuxShoot;
 import frc.robot.commands.Shoot.AuxShoot;
+import frc.robot.commands.Shoot.BabyShoot;
 import frc.robot.commands.Shoot.DistanceShoot;
 import frc.robot.commands.Shoot.Eject;
 import frc.robot.commands.Shoot.FeedingShoot;
@@ -180,7 +181,7 @@ public class RobotContainer {
         driver.start().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
         // driver.button(7).whileTrue(new TagToPoseTrajectoryGenerator(s_Swerve, vision, 3, 15));
-        driver.button(7).whileTrue(new VisionTranslate(s_Swerve, vision, 1.32, 0));
+        // driver.button(7).whileTrue(new VisionTranslate(s_Swerve, vision, 1.32, 0));
         // driver.start().onTrue(new InstantCommand(() -> intake.zeroPivotEncoder()));
         // driver.start().onTrue(new InstantCommand(() -> shoot.zeroPivotEncoder()));
 
@@ -201,10 +202,7 @@ public class RobotContainer {
             new IntakePowerCommand(intake, -3)
         ));
 
-        // driver.y().onTrue(new ParallelCommandGroup(
-        //     new IntakeSetpointCommand(intake, Constants.IntakeConstants.ampSetpoint)
-        //     // new IntakePowerCommand(intake, -3) //it dont need this tbh
-        // ));
+        driver.y().onTrue(new BabyShoot(intake, shoot));
         
         /* Intake Power */
         driver.leftBumper().whileTrue(new ParallelCommandGroup(
@@ -222,34 +220,34 @@ public class RobotContainer {
         driver.rightBumper().onFalse(new ResetShooter(intake, shoot));
 
         /* Shooting Commands */
-        driver.rightTrigger(0.5).whileTrue(new SequentialCommandGroup(
-            // new PulseNote(intake, shoot).withTimeout(0.9),
-            new AuxShoot(intake, shoot)
-            )
-        );
+        // driver.rightTrigger(0.5).whileTrue(new SequentialCommandGroup(
+        //     // new PulseNote(intake, shoot).withTimeout(0.9),
+        //     new AuxShoot(intake, shoot)
+        //     )
+        // );
         driver.rightTrigger(0).whileFalse(new ResetShooter(intake, shoot));
 
         //this is the first stage of the amp shoot
-        driver.leftTrigger(0.5).whileTrue(new SequentialCommandGroup(
-            // new IndexNote(intake, shoot).withTimeout(0.4),
-            new ParallelCommandGroup(
-            new InstantCommand(() -> intake.setPowerVolts(4)),
-            // new InstantCommand(() -> intake.setPowerVelocity(Constants.IntakeConstants.intakeSpitVelocity, false)),
-            new InstantCommand(() -> shoot.setIndexMotorVolts(8)).withTimeout(1.2)),
-            new InstantCommand(() -> shoot.setMotorVelocity(-1, false)), // TODO: remove this if it shreds a note
-            // new InstantCommand(() -> intake.setPowerVolts(0)),
-            new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp)
-            ));
-        driver.leftTrigger(0).whileFalse(new ResetShooter(intake, shoot));
+        // driver.leftTrigger(0.5).whileTrue(new SequentialCommandGroup(
+        //     // new IndexNote(intake, shoot).withTimeout(0.4),
+        //     new ParallelCommandGroup(
+        //     new InstantCommand(() -> intake.setPowerVolts(4)),
+        //     // new InstantCommand(() -> intake.setPowerVelocity(Constants.IntakeConstants.intakeSpitVelocity, false)),
+        //     new InstantCommand(() -> shoot.setIndexMotorVolts(8)).withTimeout(1.2)),
+        //     new InstantCommand(() -> shoot.setMotorVelocity(-1, false)), // TODO: remove this if it shreds a note
+        //     // new InstantCommand(() -> intake.setPowerVolts(0)),
+        //     new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp)
+        //     ));
+        // driver.leftTrigger(0).whileFalse(new ResetShooter(intake, shoot));
         // driver.leftTrigger(0).whileFalse(new InstantCommand(() -> shoot.coastMotors()));
 
-        driver.y().whileTrue(new ParallelCommandGroup(
-                new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp),
-                new InstantCommand(() -> shoot.setIndexMotorVolts(8)),
-                new InstantCommand(() -> shoot.setMotorVelocity(Constants.ShootingConstants.targetShootingAmpTarget, false))
-                // new RunCommand(() -> Candle.LEDSegment.MainStrip.setStrobeAnimation(candle.blue, 0.5))
-                // new RunCommand(() -> Candle.LEDSegment.MainStrip.setRainbowAnimation(0.5))
-        ));
+        // driver.y().whileTrue(new ParallelCommandGroup(
+        //         new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp),
+        //         new InstantCommand(() -> shoot.setIndexMotorVolts(8)),
+        //         new InstantCommand(() -> shoot.setMotorVelocity(Constants.ShootingConstants.targetShootingAmpTarget, false))
+        //         // new RunCommand(() -> Candle.LEDSegment.MainStrip.setStrobeAnimation(candle.blue, 0.5))
+        //         // new RunCommand(() -> Candle.LEDSegment.MainStrip.setRainbowAnimation(0.5))
+        // ));
 
         driver.y().whileFalse(new ResetShooter(intake, shoot));
 
@@ -267,13 +265,13 @@ public class RobotContainer {
         // driver.povDown().whileTrue(new PivotShootVertically(shoot, vision));
         driver.povDown().whileFalse(new ResetShooter(intake, shoot));
 
-        driver.povDown().onTrue(new ParallelCommandGroup(
-            new RotateToTarget(s_Swerve, vision),
-            new DistanceShoot(intake, shoot, vision)
-        ));
+        // driver.povDown().onTrue(new ParallelCommandGroup(
+        //     new RotateToTarget(s_Swerve, vision),
+        //     new DistanceShoot(intake, shoot, vision)
+        // ));
 
-        driver.povUp().whileTrue(new FeedingShoot(shoot, intake, vision));
-        driver.povUp().whileFalse(new ResetShooter(intake, shoot));
+        // driver.povUp().whileTrue(new FeedingShoot(shoot, intake, vision));
+        // driver.povUp().whileFalse(new ResetShooter(intake, shoot));
             
         // driver.povRight().whileFalse(new ResetShooter(intake, shoot));
 
