@@ -28,6 +28,8 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Defaults.TeleopSwerve;
 import frc.robot.commands.Elevator.ElevatorClimbCommand;
@@ -68,6 +70,9 @@ public class RobotContainer {
     public static final CommandXboxController driver = new CommandXboxController(0);
     public static final CommandXboxController operator = new CommandXboxController(1);
 
+    public static final CommandGenericHID driverWheel = new CommandGenericHID(2);
+    public static final CommandGenericHID driverPedal = new CommandGenericHID(3);
+
     // private PhotonCamera camera = new PhotonCamera("2531Limelight");
 
     /* Drive Controls */
@@ -92,11 +97,11 @@ public class RobotContainer {
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
-                () -> -driver.getRawAxis(translationAxis), 
-                () -> -driver.getRawAxis(strafeAxis), 
-                () -> -driver.getRawAxis(rotationAxis), 
+                () -> -driverPedal.getRawAxis(0), 
+                () -> -driverWheel.getRawAxis(11), 
+                () -> -driverWheel.getRawAxis(0), 
                 // () -> driver.leftTrigger(0.5).getAsBoolean()
-                () -> driver.leftStick().getAsBoolean()
+                () -> true
             )
         );
         
