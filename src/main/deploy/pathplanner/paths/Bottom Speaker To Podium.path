@@ -3,35 +3,35 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.31,
-        "y": 5.54
+        "x": 0.7658728734312723,
+        "y": 4.464447426217881
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.405625187614012,
-        "y": 5.849123698247397
+        "x": 1.118329249184811,
+        "y": 4.082619685818214
       },
       "isLocked": false,
-      "linkedName": "Speaker Shot"
+      "linkedName": "Bottom Angle Shoot"
     },
     {
       "anchor": {
-        "x": 2.64,
-        "y": 6.77
+        "x": 2.68,
+        "y": 4.2
       },
       "prevControl": {
-        "x": 2.0368491782777145,
-        "y": 6.1020111630755105
+        "x": 1.6800000000000002,
+        "y": 4.2
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Podium Angle"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.4,
-      "rotationDegrees": 68.68292253107445,
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 0,
       "rotateFast": false
     }
   ],
@@ -45,13 +45,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 62.70042778866715,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Kadens-Paths",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -61.189206257026925,
     "velocity": 0
   },
   "useDefaultConstraints": true

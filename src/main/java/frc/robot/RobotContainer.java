@@ -42,6 +42,7 @@ import frc.robot.commands.Shoot.AuxShoot;
 import frc.robot.commands.Shoot.DistanceShoot;
 import frc.robot.commands.Shoot.Eject;
 import frc.robot.commands.Shoot.FeedingShoot;
+import frc.robot.commands.Shoot.FirstStageAmp;
 import frc.robot.commands.Shoot.IndexNote;
 import frc.robot.commands.Shoot.PivotPIDCommandNonDegrees;
 import frc.robot.commands.Shoot.PivotShootVertically;
@@ -96,13 +97,13 @@ public class RobotContainer {
                 () -> -driver.getRawAxis(strafeAxis), 
                 () -> -driver.getRawAxis(rotationAxis), 
                 // () -> driver.leftTrigger(0.5).getAsBoolean()
-                () -> driver.leftStick().getAsBoolean()
+                () -> driver.rightStick().getAsBoolean()
             )
         );
         
         NamedCommands.registerCommand("Eject", new Eject(intake, shoot).withTimeout(0.21));
         NamedCommands.registerCommand("Aux Shoot", new AuxShoot(intake, shoot).withTimeout(.7)); //full shooting command for auto
-        NamedCommands.registerCommand("Aim and Shoot", new AimAndShoot(s_Swerve, vision, shoot, intake));
+        NamedCommands.registerCommand("Aim and Shoot", new AimAndShoot(s_Swerve, vision, shoot, intake).withTimeout(1.7));
         NamedCommands.registerCommand("Intake Ground", new ParallelCommandGroup( //this makes sure the intake is down and ends when it needs to, if stopping early, switch to the deadline group version
             new IntakeSetpointCommand(intake, Constants.IntakeConstants.groundSetpoint),
             new IntakePowerCommand(intake, -3)
@@ -122,7 +123,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Reset Shooter", new ResetShooter(intake, shoot).withTimeout(0.2)); //stops the shooter and index
         NamedCommands.registerCommand("Amp Shoot", new AmpShoot(shoot, intake).withTimeout(3)); //runs the amp shooting command; this involves the pivot which needs to be returned to store at the end
         NamedCommands.registerCommand("Intake Store", new IntakeSetpointCommand(intake, -2.5).withTimeout(1.5)); //bring the intake to the store position
-        NamedCommands.registerCommand("Zero Swerve", new InstantCommand(() -> s_Swerve.zeroHeading())); // use this at the end of the routine so that we are zeroed for teleop
+        NamedCommands.registerCommand("Zero Swerve", new InstantCommand(() -> s_Swerve.zeroHeading()).withTimeout(0.2)); // use this at the end of the routine so that we are zeroed for teleop
         NamedCommands.registerCommand("Zero All", new ParallelCommandGroup( //use only when we start facing the center of the field
             new InstantCommand(() -> s_Swerve.zeroHeading()),
             new InstantCommand(() -> intake.zeroPivotEncoder()),
@@ -145,7 +146,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Vision Translate", new VisionTranslate(s_Swerve, vision, 1.32, 0));
         NamedCommands.registerCommand("Spin Spin", new RunCommand(() -> s_Swerve.drive(new Translation2d(), 0.3, false, false)));
         NamedCommands.registerCommand("Distance Shoot", new DistanceShoot(intake, shoot, vision).withTimeout(2.3));
-        NamedCommands.registerCommand("Angle Shoot", new AngledAuxShoot(intake, shoot).withTimeout(0.7));
+        NamedCommands.registerCommand("Angle Shoot", new AngledAuxShoot(intake, shoot).withTimeout(1));
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -230,16 +231,7 @@ public class RobotContainer {
         driver.rightTrigger(0).whileFalse(new ResetShooter(intake, shoot));
 
         //this is the first stage of the amp shoot
-        driver.leftTrigger(0.5).whileTrue(new SequentialCommandGroup(
-            // new IndexNote(intake, shoot).withTimeout(0.4),
-            new ParallelCommandGroup(
-            new InstantCommand(() -> intake.setPowerVolts(4)),
-            // new InstantCommand(() -> intake.setPowerVelocity(Constants.IntakeConstants.intakeSpitVelocity, false)),
-            new InstantCommand(() -> shoot.setIndexMotorVolts(8)).withTimeout(1.2)),
-            new InstantCommand(() -> shoot.setMotorVelocity(-1, false)), // TODO: remove this if it shreds a note
-            // new InstantCommand(() -> intake.setPowerVolts(0)),
-            new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp)
-            ));
+        driver.leftTrigger(0.5).whileTrue(new FirstStageAmp(shoot, intake));
         driver.leftTrigger(0).whileFalse(new ResetShooter(intake, shoot));
         // driver.leftTrigger(0).whileFalse(new InstantCommand(() -> shoot.coastMotors()));
 

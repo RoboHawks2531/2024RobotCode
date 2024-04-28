@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 1.45,
-        "y": 5.541275082550166
+        "x": 1.31,
+        "y": 5.54
       },
       "prevControl": {
-        "x": 2.2497706738270633,
-        "y": 5.425955586196888
+        "x": 2.1097706738270636,
+        "y": 5.424680503646721
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Speaker Shot"
     }
   ],
   "rotationTargets": [

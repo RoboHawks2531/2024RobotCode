@@ -3,38 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.31,
-        "y": 5.54
+        "x": 0.7658728734312723,
+        "y": 4.464447426217881
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.405625187614012,
-        "y": 5.849123698247397
+        "x": 0.6924444618120014,
+        "y": 4.435076061565361
       },
       "isLocked": false,
-      "linkedName": "Speaker Shot"
+      "linkedName": "Bottom Angle Shoot"
     },
     {
       "anchor": {
-        "x": 2.64,
-        "y": 6.77
+        "x": 1.588271083518912,
+        "y": 4.067934003488759
       },
       "prevControl": {
-        "x": 2.0368491782777145,
-        "y": 6.1020111630755105
+        "x": 0.6190160501966808,
+        "y": 4.009191274196502
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.4,
-      "rotationDegrees": 68.68292253107445,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -45,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 62.70042778866715,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Kadens-Paths",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -62.44718842425356,
     "velocity": 0
   },
   "useDefaultConstraints": true

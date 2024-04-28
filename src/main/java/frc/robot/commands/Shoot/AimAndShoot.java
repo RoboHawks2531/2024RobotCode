@@ -23,20 +23,21 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
 
 public class AimAndShoot extends SequentialCommandGroup{
+    private double intakeMult = -2;
 
     public AimAndShoot(Swerve swerve, Vision vision, Shoot shoot, Intake intake) {
         addCommands(
             new ParallelCommandGroup(
                 // new RotateToTarget(swerve, vision),
                 // new IntakeSetpointCommand(intake, MathUtil.clamp(-vision.getDistanceMethod() * 7, -10, 0)),
-                new IntakeSetpointCommand(intake, MathUtil.clamp(-vision.getDistanceMethod() * 3.7, -10, -10)),
+                new IntakeSetpointCommand(intake, MathUtil.clamp(-vision.getDistanceMethod() + intakeMult, -10, 0)),
                 // new IntakePivotAutomatically(intake, vision),
                 new PivotShootVertically(shoot, vision),
                 new InstantCommand(() -> shoot.setIndexMotorVolts(Constants.ShootingConstants.indexFeedVolts)),
                 new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM)
             ).withTimeout(1.3),
             new ParallelCommandGroup(
-                new IntakeSetpointCommand(intake, MathUtil.clamp(-vision.getDistanceMethod() * 3.7, -10, -10)),
+                new IntakeSetpointCommand(intake, MathUtil.clamp(-vision.getDistanceMethod() + intakeMult, -10, 0)),
                 // new IntakePivotAutomatically(intake, vision),
                 new PivotShootVertically(shoot, vision),
                 new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM),

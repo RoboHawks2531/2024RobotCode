@@ -177,7 +177,8 @@ public final class Constants {
         public static final double indexHoldVolts = 6;
         // public static final double pivotStore = 0.27;
         public static final double pivotStore = 0;
-        public static final double pivotAmp = 64; //OUT IS NEGATIVE DO NOT PUT ANY POSITIVES OR IT BREAKS
+        // public static final double pivotAmp = 64; //OUT IS NEGATIVE DO NOT PUT ANY POSITIVES OR IT BREAKS
+        public static final double pivotAmp = 60; //OUT IS NEGATIVE DO NOT PUT ANY POSITIVES OR IT BREAKS
         public static final double pivotIntake = 100;
         public static final double pivotDistanceShooting = 9;
 
@@ -196,8 +197,9 @@ public final class Constants {
         // public static final double groundSetpoint = -125;
         // public static final double ampSetpoint = -44;
         public static final double sourceSetpoint = -33;
-        // public static final double groundSetpoint = -122.5;
-        public static final double groundSetpoint = -122;
+        public static final double groundSetpoint = -122.5;
+        // public static final double groundSetpoint = -120;
+        // public static final double groundSetpoint = -115;
         public static final double ampSetpoint = -20;
 
         // public static final double indexFeedingSetpoint = -3.5;

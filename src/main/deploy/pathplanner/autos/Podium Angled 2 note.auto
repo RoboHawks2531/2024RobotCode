@@ -1,0 +1,124 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7658728734312723,
+      "y": 4.464447426217881
+    },
+    "rotation": -60.94539590135906
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Zero Intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Zero Pivot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Angle Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Reset Shooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Ground Quick Timeout"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Ground"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Bottom Speaker To Podium"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Store"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Podium to Bottom Angle"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Angle Shoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Reset Shooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Bottom to Zero"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Zero Swerve"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Kadens-Auto",
+  "choreoAuto": false
+}
