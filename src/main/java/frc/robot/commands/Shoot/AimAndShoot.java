@@ -30,14 +30,14 @@ public class AimAndShoot extends SequentialCommandGroup{
             new ParallelCommandGroup(
                 // new RotateToTarget(swerve, vision),
                 // new IntakeSetpointCommand(intake, MathUtil.clamp(-vision.getDistanceMethod() * 7, -10, 0)),
-                new IntakeSetpointCommand(intake, MathUtil.clamp(-vision.getDistanceMethod() + intakeMult, -10, 0)),
+                new IntakeSetpointCommand(intake, -6.5),  //TODO:josiah change this number
                 // new IntakePivotAutomatically(intake, vision),
                 new PivotShootVertically(shoot, vision),
                 new InstantCommand(() -> shoot.setIndexMotorVolts(Constants.ShootingConstants.indexFeedVolts)),
                 new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM)
             ).withTimeout(1.3),
             new ParallelCommandGroup(
-                new IntakeSetpointCommand(intake, MathUtil.clamp(-vision.getDistanceMethod() + intakeMult, -10, 0)),
+                new IntakeSetpointCommand(intake, -6.5), //TODO:josiah change this number
                 // new IntakePivotAutomatically(intake, vision),
                 new PivotShootVertically(shoot, vision),
                 new RevShooter(shoot, Constants.ShootingConstants.targetShootingRPM),

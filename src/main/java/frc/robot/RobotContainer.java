@@ -188,8 +188,8 @@ public class RobotContainer {
         /* Intake Commands */
         driver.x().onTrue(new ParallelCommandGroup(
             new IntakeSetpointCommand(intake, Constants.IntakeConstants.indexFeedingSetpoint),
-            new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore)
-            // new IntakePowerCommand(intake, 2)
+            new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore),
+            new IntakePowerCommand(intake, -1)
         ));
 
         driver.a().onTrue(new ParallelCommandGroup(
@@ -210,7 +210,7 @@ public class RobotContainer {
         /* Intake Power */
         driver.leftBumper().whileTrue(new ParallelCommandGroup(
             new InstantCommand(() -> shoot.setIndexMotorVolts(-3)),
-            new IntakePowerCommand(intake, -3),
+            new IntakePowerCommand(intake, -6),
             new InstantCommand(() -> shoot.setMotorVolts(2))
         ));
         driver.rightBumper().whileTrue(new ParallelCommandGroup(
@@ -246,7 +246,7 @@ public class RobotContainer {
         driver.y().whileFalse(new ResetShooter(intake, shoot));
 
         // driver.povLeft().whileTrue(new PulseNote(intake, shoot));
-        driver.povLeft().whileTrue(new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotIntake));
+        driver.povLeft().whileTrue(new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotAmp));
         driver.povLeft().whileFalse(new ResetShooter(intake, shoot));
 
         // driver.povRight().whileTrue(new DistanceShoot(intake, shoot, vision));

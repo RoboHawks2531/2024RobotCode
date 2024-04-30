@@ -32,7 +32,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Aux Shoot"
+            "name": "Angle Shoot"
           }
         },
         {
@@ -88,19 +88,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Pulse Stage 1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Pulse Stage 2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Aux Shoot"
+            "name": "Angle Shoot"
           }
         },
         {
@@ -112,7 +100,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Angled to Zero Space"
+            "pathName": "Angled to Note"
           }
         },
         {

@@ -33,11 +33,11 @@ public class PivotShootVertically extends Command{
     public void execute() {
         double speakerHeight = 70;
         double shooterHeight = 30;
-        double angularOffset = -39;
+        double angularOffset = -41.2;
         // double angularOffset = -42.8;
 
         double angle = Math.toDegrees(Math.atan((speakerHeight - shooterHeight) / Units.metersToInches(vision.getDistanceMethod())));
-        // double angle = Math.toDegrees(Math.atan((speakerHeight - shooterHeight) / Units.metersToInches(2.3)));
+        //  double angle = Math.toDegrees(Math.atan((speakerHeight - shooterHeight) / Units.metersToInches(2.3622)));
         double angModulus = Math.toDegrees(MathUtil.angleModulus(Math.toRadians(angle + angularOffset)));
 
         pidController.setSetpoint(MathUtil.clamp(angModulus, -30, -0.1));
