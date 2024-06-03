@@ -12,21 +12,34 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Zero All"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Zero Intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Zero Pivot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Wait Command 1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Aux Shoot"
+            "name": "Angle Shoot"
           }
         },
         {

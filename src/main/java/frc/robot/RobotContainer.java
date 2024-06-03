@@ -19,6 +19,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -49,6 +50,7 @@ import frc.robot.commands.Shoot.PivotShootVertically;
 import frc.robot.commands.Shoot.PulseNote;
 import frc.robot.commands.Shoot.ResetShooter;
 import frc.robot.commands.Shoot.RevShooter;
+import frc.robot.commands.Shoot.TrapShoot;
 import frc.robot.commands.Vision.RotateToTarget;
 import frc.robot.commands.Vision.VisionTranslate;
 // import frc.robot.subsystems.Candle;
@@ -90,6 +92,8 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
+        RobotController.setBrownoutVoltage(6.3);
+
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
@@ -123,7 +127,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Reset Shooter", new ResetShooter(intake, shoot).withTimeout(0.2)); //stops the shooter and index
         NamedCommands.registerCommand("Amp Shoot", new AmpShoot(shoot, intake).withTimeout(3)); //runs the amp shooting command; this involves the pivot which needs to be returned to store at the end
         NamedCommands.registerCommand("Intake Store", new IntakeSetpointCommand(intake, -2.5).withTimeout(1.5)); //bring the intake to the store position
-        NamedCommands.registerCommand("Zero Swerve", new InstantCommand(() -> s_Swerve.zeroHeading()).withTimeout(0.2)); // use this at the end of the routine so that we are zeroed for teleop
+        NamedCommands.registerCommand("Zero Swerve", new InstantCommand(() -> s_Swerve.zeroHeading()).withTimeout(0.3)); // use this at the end of the routine so that we are zeroed for teleop
         NamedCommands.registerCommand("Zero All", new ParallelCommandGroup( //use only when we start facing the center of the field
             new InstantCommand(() -> s_Swerve.zeroHeading()),
             new InstantCommand(() -> intake.zeroPivotEncoder()),
@@ -189,7 +193,7 @@ public class RobotContainer {
         driver.x().onTrue(new ParallelCommandGroup(
             new IntakeSetpointCommand(intake, Constants.IntakeConstants.indexFeedingSetpoint),
             new PivotPIDCommandNonDegrees(shoot, Constants.ShootingConstants.pivotStore),
-            new IntakePowerCommand(intake, -1)
+            new IntakePowerCommand(intake, -0.5)
         ));
 
         driver.a().onTrue(new ParallelCommandGroup(
@@ -259,10 +263,7 @@ public class RobotContainer {
         // driver.povDown().whileTrue(new PivotShootVertically(shoot, vision));
         driver.povDown().whileFalse(new ResetShooter(intake, shoot));
 
-        driver.povDown().onTrue(new ParallelCommandGroup(
-            new RotateToTarget(s_Swerve, vision),
-            new DistanceShoot(intake, shoot, vision)
-        ));
+        driver.povDown().onTrue(new TrapShoot(s_Swerve, vision, shoot, intake));
 
         driver.povUp().whileTrue(new FeedingShoot(shoot, intake, vision));
         driver.povUp().whileFalse(new ResetShooter(intake, shoot));
@@ -279,7 +280,11 @@ public class RobotContainer {
         operator.start().toggleOnTrue(new ElevatorClimbCommand(elevator));
 
         operator.a().onTrue(new PivotPIDCommandNonDegrees(shoot, 15));
-        operator.x().onTrue(new PivotPIDCommandNonDegrees(shoot, 30));
+        operator.x().onTrue(new ParallelCommandGroup(
+            new PivotPIDCommandNonDegrees(shoot, 30),
+            new IntakeSetpointCommand(intake, Constants.IntakeConstants.sourceSetpoint)
+        ));
+            
 
         // operator.a().whileTrue(new TagToPoseTrajectoryGenerator(s_Swerve, vision, vision.getBestTargetID(), 24));
 
